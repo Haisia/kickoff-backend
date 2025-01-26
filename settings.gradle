@@ -1,8 +1,12 @@
 rootProject.name = 'backend'
-include 'membership-service'
-include 'board-service'
-include 'match-service'
-include 'prediction-service'
-include 'chat-service'
-include 'point-service'
 
+include 'membership-service'
+include 'membership-service:membership-container'
+include 'membership-service:membership-dataaccess'
+include 'membership-service:membership-application'
+include 'membership-service:membership-messaging'
+
+include 'order-service'
+include 'customer-service'
+include 'payment-service'
+include 'restaurant-service'
