@@ -2,6 +2,7 @@ rootProject.name = 'backend'
 
 include 'common'
 include 'common:common-domain'
+include 'common:common-constant'
 
 include 'membership-service'
 include 'membership-service:membership-container'
@@ -15,5 +16,4 @@ include 'chat-service'
 include 'match-service'
 include 'point-service'
 include 'prediction-service'
-
 
