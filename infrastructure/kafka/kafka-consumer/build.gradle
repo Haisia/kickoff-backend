@@ -1,0 +1,16 @@
+plugins {
+  id 'java'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation "org.springframework.kafka:spring-kafka:${springframeworkKafka_version}"
+  implementation "org.apache.avro:avro:${apacheAvro_version}"
+}
+
+test {
+  useJUnitPlatform()
+}
