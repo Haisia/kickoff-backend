@@ -1,8 +1,7 @@
-package domain.entity;
+package com.kickoff.domain.entity;
 
-import com.kickoff.domain.entity.AggregateRoot;
-import domain.valueobject.Email;
-import domain.valueobject.Password;
+import com.kickoff.domain.valueobject.Email;
+import com.kickoff.domain.valueobject.Password;
 import com.kickoff.domain.valuobject.MembershipId;
 import com.kickoff.domain.valuobject.Point;
 

@@ -1,4 +1,4 @@
-package domain.valueobject;
+package com.kickoff.domain.valueobject;
 
 import com.kickoff.constant.Constant;
 import com.kickoff.domain.exception.VoException;

@@ -1,4 +1,4 @@
-package domain.util;
+package com.kickoff.domain.util;
 
 public interface PasswordEncoder {
 
