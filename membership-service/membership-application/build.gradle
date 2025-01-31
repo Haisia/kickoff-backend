@@ -7,6 +7,14 @@ repositories {
 }
 
 dependencies {
+  implementation "org.springframework.boot:spring-boot-starter-web:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-validation:${springboot_version}"
+
+  compileOnly "org.projectlombok:lombok:${projectlombok_version}"
+  annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
+
+  implementation project(':membership-service:membership-domain:membership-application-service')
+
   testImplementation "org.junit.jupiter:junit-jupiter"
 }
 

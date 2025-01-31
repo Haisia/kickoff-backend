@@ -7,6 +7,8 @@ public class Point extends BaseVo<BigDecimal>{
     super(point);
   }
 
+  public static final Point ZERO = new Point(BigDecimal.ZERO);
+
   public Point add(Point Point) {
     return new Point(this.value.add(Point.getValue()));
   }

@@ -5,11 +5,6 @@ include 'common:common-domain'
 include 'common:common-constant'
 
 include 'infrastructure'
-include 'infrastructure:kafka'
-include 'infrastructure:kafka:kafka-config-data'
-include 'infrastructure:kafka:kafka-consumer'
-include 'infrastructure:kafka:kafka-model'
-include 'infrastructure:kafka:kafka-producer'
 
 include 'membership-service'
 include 'membership-service:membership-container'

@@ -20,10 +20,7 @@ public class Password extends BaseVo<String> {
     return "****";  // 비밀번호 출력 방지
   }
 
-  public static Password of(String rawPassword, PasswordEncoder passwordEncoder) {
-    if (rawPassword == null || !PASSWORD_PATTERN.matcher(rawPassword).matches()) {
-      throw new VoException("패스워드 형식이 올바르지 않습니다.");
-    }
-    return new Password(passwordEncoder.encode(rawPassword));
+  public static Password of(String hashedPassword) {
+    return new Password(hashedPassword);
   }
 }
