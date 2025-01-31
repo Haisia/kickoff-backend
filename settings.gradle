@@ -17,11 +17,12 @@ include 'membership-service:membership-dataaccess'
 include 'membership-service:membership-application'
 include 'membership-service:membership-messaging'
 include 'membership-service:membership-domain'
+include 'membership-service:membership-domain:membership-domain-core'
+include 'membership-service:membership-domain:membership-application-service'
 
 include 'board-service'
 include 'chat-service'
 include 'match-service'
 include 'point-service'
 include 'prediction-service'
-
 

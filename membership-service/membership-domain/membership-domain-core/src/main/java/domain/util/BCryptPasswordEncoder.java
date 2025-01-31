@@ -1,4 +1,4 @@
-package com.kickoff.domain.util;
+package domain.util;
 
 import org.mindrot.jbcrypt.BCrypt;
 

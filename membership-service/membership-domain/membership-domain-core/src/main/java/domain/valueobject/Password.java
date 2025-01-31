@@ -1,8 +1,8 @@
-package com.kickoff.domain.valueobject;
+package domain.valueobject;
 
 import com.kickoff.constant.Constant;
 import com.kickoff.domain.exception.VoException;
-import com.kickoff.domain.util.PasswordEncoder;
+import domain.util.PasswordEncoder;
 import com.kickoff.domain.valuobject.BaseVo;
 
 import java.util.regex.Pattern;

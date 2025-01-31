@@ -3,8 +3,4 @@ plugins {
 }
 
 dependencies {
-  implementation project(':membership-service:membership-container')
-  implementation project(':membership-service:membership-dataaccess')
-  implementation project(':membership-service:membership-application')
-  implementation project(':membership-service:membership-messaging')
 }
