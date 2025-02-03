@@ -2,6 +2,15 @@ plugins {
   id 'java-library'
 }
 
+group = rootProject.group
+version = rootProject.version
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(java_version.toInteger())
+  }
+}
+
 repositories {
   mavenCentral()
 }
