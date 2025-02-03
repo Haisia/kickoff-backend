@@ -1,16 +1,32 @@
 package com.kickoff.membership.service.domain.entity;
 
+import com.kickoff.membership.service.domain.exception.MemberDomainException;
 import com.kickoff.membership.service.domain.valueobject.Email;
 import com.kickoff.membership.service.domain.valueobject.Password;
 import com.kickoff.membership.service.domain.valuobject.MemberId;
 import com.kickoff.membership.service.domain.valuobject.Point;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.UUID;
+
+@Getter @Setter
 public class Member extends AggregateRoot<MemberId> {
   private Email email;
   private Password password;
   private Point point;
 
+  public void validateMember() {
+    validateEmail();
+    validatePassword();
+  }
+
+  public void initializeMember() {
+    setId(MemberId.of(UUID.randomUUID()));
+  }
+
   private Member(Builder builder) {
+    id = builder.id;
     email = builder.email;
     password = builder.password;
     point = builder.point;
@@ -21,11 +37,17 @@ public class Member extends AggregateRoot<MemberId> {
   }
 
   public static final class Builder {
+    private MemberId id;
     private Email email;
     private Password password;
     private Point point = Point.ZERO;
 
     private Builder() {
+    }
+
+    public Builder id(MemberId id) {
+      this.id = id;
+      return this;
     }
 
     public Builder email(Email email) {
@@ -52,4 +74,13 @@ public class Member extends AggregateRoot<MemberId> {
       return new Member(this);
     }
   }
+
+  private void validateEmail() {
+    if (email == null) throw new MemberDomainException("email is null");
+  }
+
+  private void validatePassword() {
+    if (password == null) throw new MemberDomainException("password is null");
+  }
+
 }

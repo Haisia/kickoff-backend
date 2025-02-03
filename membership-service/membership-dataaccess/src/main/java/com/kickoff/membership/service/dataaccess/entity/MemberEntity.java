@@ -1,25 +1,30 @@
 package com.kickoff.membership.service.dataaccess.entity;
 
 import entity.BaseJpaEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "members")
 @Entity
-public class Member extends BaseJpaEntity {
+public class MemberEntity extends BaseJpaEntity {
   @Id
   private UUID id;
+  @Column(unique = true)
   private String email;
   private String password;
   private BigDecimal point;
 
-  public Member(UUID id) {
+  public MemberEntity(UUID id) {
     this.id = id;
   }
 }

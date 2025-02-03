@@ -9,8 +9,6 @@ repositories {
 dependencies {
   api project(':common:common-domain')
   implementation project(':common:common-constant')
-
-  implementation "org.mindrot:jbcrypt:${bcrypt_version}"
 }
 
 test {

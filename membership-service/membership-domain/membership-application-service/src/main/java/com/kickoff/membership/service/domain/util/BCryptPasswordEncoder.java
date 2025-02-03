@@ -1,7 +1,9 @@
 package com.kickoff.membership.service.domain.util;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BCryptPasswordEncoder implements PasswordEncoder {
 
   @Override

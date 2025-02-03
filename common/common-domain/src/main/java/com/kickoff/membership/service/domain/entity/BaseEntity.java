@@ -3,7 +3,7 @@ package com.kickoff.membership.service.domain.entity;
 import java.util.Objects;
 
 public abstract class BaseEntity<ID> {
-  private ID id;
+  protected ID id;
 
   public ID getId() {
     return id;

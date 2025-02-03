@@ -1,8 +1,6 @@
 package com.kickoff.membership.service.domain.valueobject;
 
 import com.kickoff.membership.service.constant.Constant;
-import com.kickoff.membership.service.domain.exception.VoException;
-import com.kickoff.membership.service.domain.util.PasswordEncoder;
 import com.kickoff.membership.service.domain.valuobject.BaseVo;
 
 import java.util.regex.Pattern;
