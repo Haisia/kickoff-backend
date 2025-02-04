@@ -8,14 +8,10 @@ repositories {
 
 dependencies {
   api project(":common:common-dataaccess")
+  api project(":common:common-domain")
+
   implementation project(":membership-service:membership-domain:membership-application-service")
   implementation project(":membership-service:membership-domain:membership-domain-core")
 
   implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springboot_version}"
-
-  testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-test {
-  useJUnitPlatform()
 }

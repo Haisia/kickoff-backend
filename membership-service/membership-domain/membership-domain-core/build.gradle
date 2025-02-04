@@ -2,22 +2,12 @@ plugins {
   id 'java-library'
 }
 
-group = rootProject.group
-version = rootProject.version
-
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(java_version.toInteger())
-  }
-}
-
-repositories {
-  mavenCentral()
-}
-
 dependencies {
-  api project(':common:common-domain')
   implementation project(':common:common-constant')
+  implementation project(':common:common-domain')
+
+  annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
+  compileOnly "org.projectlombok:lombok:${projectlombok_version}"
 }
 
 test {

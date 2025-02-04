@@ -2,23 +2,17 @@ plugins {
   id 'java'
 }
 
-repositories {
-  mavenCentral()
-}
-
 dependencies {
-  implementation "org.springframework.boot:spring-boot-starter:${springboot_version}"
-  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springboot_version}"
-
   implementation project(':membership-service:membership-application')
   implementation project(':membership-service:membership-domain:membership-domain-core')
   implementation project(':membership-service:membership-dataaccess')
 
+  implementation "org.springframework.boot:spring-boot-starter:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springboot_version}"
+
   implementation "org.postgresql:postgresql:${postgresql_version}"
-
-  testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
-test {
-  useJUnitPlatform()
-}
+//test {
+//  useJUnitPlatform()
+//}

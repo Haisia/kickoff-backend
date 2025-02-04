@@ -1,25 +1,31 @@
 plugins {
-  id 'java-platform'
+  id 'base'
 }
 
 group = 'com.kickoff'
 version = '0.0.1-SNAPSHOT'
 
-repositories {
-  mavenCentral() // 의존성 다운을 위한 중앙 Maven
-}
+allprojects {
+  group = rootProject.group
+  version = rootProject.version
 
-dependencies {
-  constraints { // constraints 블록은 BOM의 의존성 버전 관리를 나타냄.
-    api("org.springframework.boot:spring-boot-dependencies:${springboot_version}") // Spring Boot 버전 관리
-    api("org.springframework.boot:spring-boot-starter-logging:${springboot_version}") // 로깅
-    api("org.projectlombok:lombok:${projectlombok_version}") // Lombok
-
+  repositories {
+    mavenCentral()
   }
 }
 
-//java {
-//  toolchain {
-//    languageVersion = JavaLanguageVersion.of(21) // JDK 강제 설정
-//  }
-//}
+subprojects {
+  plugins.withId('java') {
+    java {
+      toolchain {
+        languageVersion = JavaLanguageVersion.of(java_version.toInteger())
+      }
+    }
+
+    dependencies {
+      implementation "org.projectlombok:lombok:${projectlombok_version}"
+      annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
+      implementation "org.springframework.boot:spring-boot-starter-logging:${springboot_version}"
+    }
+  }
+}

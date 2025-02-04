@@ -7,12 +7,11 @@ repositories {
 }
 
 dependencies {
-  implementation "org.springframework.boot:spring-boot-starter-web:${springboot_version}"
-  implementation "org.springframework.boot:spring-boot-starter-validation:${springboot_version}"
-
   implementation project(':membership-service:membership-domain:membership-application-service')
 
-  testImplementation "org.junit.jupiter:junit-jupiter"
+  implementation "org.springframework.boot:spring-boot-starter-web:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-validation:${springboot_version}"
+  implementation "org.springframework:spring-tx:${spring_version}"
 }
 
 test {

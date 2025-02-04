@@ -2,13 +2,5 @@ plugins {
   id 'java-library'
 }
 
-repositories {
-  mavenCentral()
-}
-
 dependencies {
-}
-
-test {
-  useJUnitPlatform()
 }
