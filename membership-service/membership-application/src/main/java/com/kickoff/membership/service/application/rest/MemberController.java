@@ -1,7 +1,11 @@
 package com.kickoff.membership.service.application.rest;
 
-import com.kickoff.membership.service.domain.dto.create.CreateMemberRequest;
-import com.kickoff.membership.service.domain.port.input.MemberCreateUseCase;
+import com.kickoff.common.domain.dto.create.CreateMemberRequest;
+import com.kickoff.common.domain.dto.create.CreateMemberResponse;
+import com.kickoff.common.domain.dto.login.LoginMemberRequest;
+import com.kickoff.common.domain.dto.login.LoginMemberResponse;
+import com.kickoff.common.domain.port.input.MemberCreateUseCase;
+import com.kickoff.common.domain.port.input.MemberLoginUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
   private final MemberCreateUseCase memberCreateUseCase;
+  private final MemberLoginUseCase memberLoginUseCase;
 
   @PostMapping("/create")
-  public ResponseEntity<?> createMember(@Valid @RequestBody CreateMemberRequest request) {
+  public ResponseEntity<CreateMemberResponse> createMember(@Valid @RequestBody CreateMemberRequest request) {
     return ResponseEntity.ok().body(memberCreateUseCase.createMember(request));
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<LoginMemberResponse> loginMember(@Valid @RequestBody LoginMemberRequest request) {
+    return ResponseEntity.ok().body(memberLoginUseCase.loginMember(request));
   }
 }

@@ -1,7 +1,7 @@
 package com.kickoff.membership.service;
 
-import com.kickoff.membership.service.domain.MemberDomainService;
-import com.kickoff.membership.service.domain.MemberDomainServiceImpl;
+import com.kickoff.common.domain.MemberDomainService;
+import com.kickoff.common.domain.MemberDomainServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

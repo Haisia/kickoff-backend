@@ -1,8 +1,8 @@
 package com.kickoff.membership.service.dataaccess.mapper;
 
 import com.kickoff.membership.service.dataaccess.entity.MemberEntity;
-import com.kickoff.membership.service.domain.entity.Member;
-import com.kickoff.membership.service.domain.valuobject.MemberId;
+import com.kickoff.common.domain.entity.Member;
+import com.kickoff.common.domain.valuobject.MemberId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,6 +11,9 @@ public class MembershipDataAccessMapper {
   public Member memberEntityToMember(MemberEntity memberEntity) {
     return Member.builder()
       .id(MemberId.of(memberEntity.getId()))
+      .email(memberEntity.getEmail())
+      .password(memberEntity.getPassword(), true)
+      .point(memberEntity.getPoint())
       .build();
   }
 

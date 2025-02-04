@@ -27,3 +27,7 @@ spring:
     port: 5672
     username: root
     password: root
+
+value:
+  jwt:
+    secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
