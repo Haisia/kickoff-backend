@@ -15,7 +15,7 @@ public class Password extends BaseVo<String> {
 
   @Override
   public String toString() {
-    return "****";  // 비밀번호 출력 방지
+    return Constant.PASSWORD_ALL_MASKED;  // 비밀번호 출력 방지
   }
 
   public static Password of(String hashedPassword) {
