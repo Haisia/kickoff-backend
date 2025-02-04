@@ -19,7 +19,6 @@ public class MemberController {
 
   @PostMapping("/create")
   public ResponseEntity<?> createMember(@Valid @RequestBody CreateMemberRequest request) {
-    memberCreateUseCase.createMember(request);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok().body(memberCreateUseCase.createMember(request));
   }
 }
