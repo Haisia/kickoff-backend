@@ -76,11 +76,11 @@ public class Member extends AggregateRoot<MemberId> {
   }
 
   private void validateEmail() {
-    if (email == null) throw new MemberDomainException("email is null");
+    if (email == null) throw new MemberDomainException("이메일은 null 일 수 없습니다.");
   }
 
   private void validatePassword() {
-    if (password == null) throw new MemberDomainException("password is null");
+    if (password == null) throw new MemberDomainException("비밀번호는 null 일 수 없습니다.");
   }
 
 }
