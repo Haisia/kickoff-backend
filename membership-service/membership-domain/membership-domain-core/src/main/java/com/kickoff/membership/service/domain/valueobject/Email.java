@@ -14,11 +14,16 @@ public class Email extends BaseVo<String> {
     super(value);
   }
 
-  public static Email of(String email) {
-    if (email == null || !EMAIL_PATTERN.matcher(email).matches()) {
+  @Override
+  public void validate() {
+    if (value == null || !EMAIL_PATTERN.matcher(value).matches()) {
       throw new VoException("이메일 형식이 올바르지 않습니다.");
     }
-    return new Email(email);
   }
 
+  public static Email of(String email) {
+    Email createdEmail = new Email(email);
+    createdEmail.validate();
+    return createdEmail;
+  }
 }

@@ -10,8 +10,11 @@ public class MemberId extends BaseId<UUID> {
     super(value);
   }
 
+  @Override
+  public void validate() {
+  }
+
   public static MemberId of(UUID value) {
     return new MemberId(value);
   }
-
 }

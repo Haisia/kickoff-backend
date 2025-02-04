@@ -17,14 +17,20 @@ public class Password extends BaseVo<String> {
   }
 
   @Override
+  public void validate() {
+    if (value == null || !PASSWORD_PATTERN.matcher(value).matches()) {
+      throw new VoException("비밀번호 형식이 올바르지 않습니다.");
+    }
+  }
+
+  @Override
   public String toString() {
     return Constant.PASSWORD_ALL_MASKED;  // 비밀번호 출력 방지
   }
 
   public static Password of(String password, boolean isHashed) {
-    if (password == null || !PASSWORD_PATTERN.matcher(password).matches()) {
-      throw new VoException("비밀번호 형식이 올바르지 않습니다.");
-    }
-    return new Password(password, isHashed);
+    Password createdPassword = new Password(password, isHashed);
+    createdPassword.validate();
+    return createdPassword;
   }
 }

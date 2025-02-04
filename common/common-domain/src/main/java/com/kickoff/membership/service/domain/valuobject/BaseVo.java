@@ -13,6 +13,8 @@ public abstract class BaseVo<T> {
     return value;
   }
 
+  public abstract void validate();
+
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;

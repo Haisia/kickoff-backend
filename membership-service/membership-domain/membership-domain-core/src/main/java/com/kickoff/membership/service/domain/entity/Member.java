@@ -1,6 +1,5 @@
 package com.kickoff.membership.service.domain.entity;
 
-import com.kickoff.membership.service.domain.exception.MemberDomainException;
 import com.kickoff.membership.service.domain.valueobject.Email;
 import com.kickoff.membership.service.domain.valueobject.Password;
 import com.kickoff.membership.service.domain.valuobject.MemberId;
@@ -76,11 +75,10 @@ public class Member extends AggregateRoot<MemberId> {
   }
 
   private void validateEmail() {
-    if (email == null) throw new MemberDomainException("이메일은 null 일 수 없습니다.");
+    email.validate();
   }
 
   private void validatePassword() {
-    if (password == null) throw new MemberDomainException("비밀번호는 null 일 수 없습니다.");
+    password.validate();
   }
-
 }
