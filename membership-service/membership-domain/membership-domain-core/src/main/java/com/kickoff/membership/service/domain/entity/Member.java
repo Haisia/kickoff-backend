@@ -1,5 +1,6 @@
 package com.kickoff.membership.service.domain.entity;
 
+import com.kickoff.membership.service.domain.exception.DomainException;
 import com.kickoff.membership.service.domain.valueobject.Email;
 import com.kickoff.membership.service.domain.valueobject.Password;
 import com.kickoff.membership.service.domain.valuobject.MemberId;
@@ -7,6 +8,8 @@ import com.kickoff.membership.service.domain.valuobject.Point;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter @Setter
@@ -16,8 +19,13 @@ public class Member extends AggregateRoot<MemberId> {
   private Point point;
 
   public void validateMember() {
-    validateEmail();
-    validatePassword();
+    List<String> errors = new ArrayList<>();
+    validateEmail(errors);
+    validatePassword(errors);
+
+    if (!errors.isEmpty()) {
+      throw new DomainException(String.join(" ", errors));
+    }
   }
 
   public void initializeMember() {
@@ -74,11 +82,19 @@ public class Member extends AggregateRoot<MemberId> {
     }
   }
 
-  private void validateEmail() {
-    email.validate();
+  private void validateEmail(List<String> errors) {
+    try {
+      email.validate();
+    } catch(Exception e) {
+      errors.add(e.getMessage());
+    }
   }
 
-  private void validatePassword() {
-    password.validate();
+  private void validatePassword(List<String> errors) {
+    try {
+      password.validate();
+    } catch(Exception e) {
+      errors.add(e.getMessage());
+    }
   }
 }

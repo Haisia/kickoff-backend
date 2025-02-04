@@ -1,5 +1,6 @@
 package com.kickoff.membership.service.domain.entity;
 
+import com.kickoff.membership.service.domain.exception.DomainException;
 import com.kickoff.membership.service.domain.exception.VoException;
 import com.kickoff.membership.service.domain.valueobject.Email;
 import com.kickoff.membership.service.domain.valueobject.Password;
@@ -52,8 +53,8 @@ class MemberTest {
     Email mockEmail = mock(Email.class);
     Password mockPassword = mock(Password.class);
 
-    doThrow(new VoException("이메일 유효성 검증 실패")).when(mockEmail).validate();
-    doThrow(new VoException("비밀번호 유효성 검증 실패")).when(mockPassword).validate();
+    doThrow(new VoException("이메일 형식이 올바르지 않습니다.")).when(mockEmail).validate();
+    doThrow(new VoException("비밀번호 형식이 올바르지 않습니다.")).when(mockPassword).validate();
 
     Member member = Member.builder()
       .email(mockEmail)
@@ -61,6 +62,8 @@ class MemberTest {
       .build();
 
     // when, then
-    assertThrows(Exception.class, member::validateMember);
+    DomainException exception = assertThrows(DomainException.class, member::validateMember);
+    assertTrue(exception.getMessage().contains("이메일 형식이 올바르지 않습니다."));
+    assertTrue(exception.getMessage().contains("비밀번호 형식이 올바르지 않습니다."));
   }
 }
