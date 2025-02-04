@@ -2,9 +2,9 @@ package com.kickoff.membership.service.application.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kickoff.membership.service.MembershipServiceApplication;
-import com.kickoff.membership.service.domain.dto.create.CreateMemberRequest;
-import com.kickoff.membership.service.domain.dto.create.CreateMemberResponse;
-import com.kickoff.membership.service.domain.port.input.MemberCreateUseCase;
+import com.kickoff.membership.service.dto.create.CreateMemberRequest;
+import com.kickoff.membership.service.dto.create.CreateMemberResponse;
+import com.kickoff.membership.service.port.input.MemberCreateUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

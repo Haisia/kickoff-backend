@@ -1,11 +1,11 @@
 package com.kickoff.membership.service.application.rest;
 
-import com.kickoff.common.domain.dto.create.CreateMemberRequest;
-import com.kickoff.common.domain.dto.create.CreateMemberResponse;
-import com.kickoff.common.domain.dto.login.LoginMemberRequest;
-import com.kickoff.common.domain.dto.login.LoginMemberResponse;
-import com.kickoff.common.domain.port.input.MemberCreateUseCase;
-import com.kickoff.common.domain.port.input.MemberLoginUseCase;
+import com.kickoff.membership.service.dto.create.CreateMemberRequest;
+import com.kickoff.membership.service.dto.create.CreateMemberResponse;
+import com.kickoff.membership.service.dto.login.LoginMemberRequest;
+import com.kickoff.membership.service.dto.login.LoginMemberResponse;
+import com.kickoff.membership.service.port.input.MemberCreateUseCase;
+import com.kickoff.membership.service.port.input.MemberLoginUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

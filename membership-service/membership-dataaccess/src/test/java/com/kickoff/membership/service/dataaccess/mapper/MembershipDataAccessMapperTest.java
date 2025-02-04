@@ -1,10 +1,10 @@
 package com.kickoff.membership.service.dataaccess.mapper;
 
 import com.kickoff.membership.service.dataaccess.entity.MemberEntity;
-import com.kickoff.membership.service.domain.entity.Member;
-import com.kickoff.membership.service.domain.valueobject.Email;
-import com.kickoff.membership.service.domain.valueobject.Password;
-import com.kickoff.membership.service.domain.valuobject.MemberId;
+import com.kickoff.common.domain.entity.Member;
+import com.kickoff.common.domain.valueobject.Email;
+import com.kickoff.common.domain.valueobject.Password;
+import com.kickoff.common.domain.valuobject.MemberId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

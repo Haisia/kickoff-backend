@@ -4,7 +4,7 @@ import com.kickoff.membership.service.dataaccess.entity.MemberEntity;
 import com.kickoff.membership.service.dataaccess.mapper.MembershipDataAccessMapper;
 import com.kickoff.membership.service.dataaccess.repository.MemberJpaRepository;
 import com.kickoff.common.domain.entity.Member;
-import com.kickoff.common.domain.port.output.repository.MemberRepository;
+import com.kickoff.membership.service.port.output.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
