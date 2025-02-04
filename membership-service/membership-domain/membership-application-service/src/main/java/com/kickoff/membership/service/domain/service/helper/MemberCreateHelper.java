@@ -28,7 +28,7 @@ public class MemberCreateHelper {
   @Transactional
   public MemberCreatedEvent persistMember(CreateMemberRequest request) {
     Member member = memberDataMapper.createMemberRequestToMember(request);
-    member.setPassword(Password.of(passwordEncoder.encode(request.password)));
+    member.setPassword(Password.of(passwordEncoder.encode(request.password), true));
     MemberCreatedEvent memberCreatedEvent = memberDomainService.validateAndInitiateMember(member);
     saveMember(member);
     log.info("[*] 회원가입에 성공하였습니다. id : {}", member.getId());

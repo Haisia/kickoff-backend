@@ -8,9 +8,11 @@ import java.util.regex.Pattern;
 public class Password extends BaseVo<String> {
 
   private static final Pattern PASSWORD_PATTERN = Pattern.compile(Constant.PASSWORD_REGEX);
+  private final boolean isHashed;
 
-  protected Password(String hashedPassword) {
-    super(hashedPassword);
+  protected Password(String password, boolean isHashed) {
+    super(password);
+    this.isHashed = isHashed;
   }
 
   @Override
@@ -18,7 +20,7 @@ public class Password extends BaseVo<String> {
     return Constant.PASSWORD_ALL_MASKED;  // 비밀번호 출력 방지
   }
 
-  public static Password of(String hashedPassword) {
-    return new Password(hashedPassword);
+  public static Password of(String password, boolean isHashed) {
+    return new Password(password, isHashed);
   }
 }

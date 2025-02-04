@@ -66,7 +66,7 @@ public class Member extends AggregateRoot<MemberId> {
     }
 
     public Builder password(String password) {
-      this.password = Password.of(password);
+      this.password = Password.of(password, false);
       return this;
     }
 
