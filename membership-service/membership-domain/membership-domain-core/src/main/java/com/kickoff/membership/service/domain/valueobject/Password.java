@@ -1,6 +1,7 @@
 package com.kickoff.membership.service.domain.valueobject;
 
 import com.kickoff.membership.service.constant.Constant;
+import com.kickoff.membership.service.domain.exception.VoException;
 import com.kickoff.membership.service.domain.valuobject.BaseVo;
 
 import java.util.regex.Pattern;
@@ -21,6 +22,9 @@ public class Password extends BaseVo<String> {
   }
 
   public static Password of(String password, boolean isHashed) {
+    if (password == null || !PASSWORD_PATTERN.matcher(password).matches()) {
+      throw new VoException("비밀번호 형식이 올바르지 않습니다.");
+    }
     return new Password(password, isHashed);
   }
 }
