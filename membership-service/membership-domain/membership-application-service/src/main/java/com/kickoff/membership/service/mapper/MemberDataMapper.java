@@ -2,7 +2,7 @@ package com.kickoff.membership.service.mapper;
 
 import com.kickoff.membership.service.dto.create.CreateMemberRequest;
 import com.kickoff.membership.service.dto.create.CreateMemberResponse;
-import com.kickoff.common.domain.entity.Member;
+import com.kickoff.membership.domain.entity.Member;
 import org.springframework.stereotype.Component;
 
 @Component

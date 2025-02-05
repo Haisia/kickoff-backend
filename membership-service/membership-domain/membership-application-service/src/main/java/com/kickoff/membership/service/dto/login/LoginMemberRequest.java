@@ -1,6 +1,6 @@
 package com.kickoff.membership.service.dto.login;
 
-import com.kickoff.membership.service.constant.Constant;
+import com.kickoff.common.constant.Constant;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 

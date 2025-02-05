@@ -1,6 +1,6 @@
 package com.kickoff.membership.service.port.output.repository;
 
-import com.kickoff.common.domain.entity.Member;
+import com.kickoff.membership.domain.entity.Member;
 
 import java.util.Optional;
 
