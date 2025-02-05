@@ -2,6 +2,7 @@ package com.kickoff.membership.domain.entity;
 
 import com.kickoff.common.domain.entity.AggregateRoot;
 import com.kickoff.common.domain.exception.DomainException;
+import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.membership.domain.valueobject.Email;
 import com.kickoff.membership.domain.valueobject.Password;
 import com.kickoff.common.domain.valuobject.MemberId;
@@ -26,7 +27,7 @@ public class Member extends AggregateRoot<MemberId> {
     validatePassword(errors);
 
     if (!errors.isEmpty()) {
-      throw new DomainException(String.join(" ", errors));
+      throw new DomainException(String.join(" ", errors), CustomHttpStatus.BAD_REQUEST);
     }
   }
 

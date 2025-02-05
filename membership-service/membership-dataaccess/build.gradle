@@ -8,7 +8,7 @@ repositories {
 
 dependencies {
   api project(":common:common-dataaccess")
-  api project(":common:common-domain")
+  api project(":common:common-domain:common-domain-core")
 
   implementation project(":membership-service:membership-domain:membership-application-service")
   implementation project(":membership-service:membership-domain:membership-domain-core")

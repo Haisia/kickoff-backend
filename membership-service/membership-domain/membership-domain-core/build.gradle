@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
   implementation project(':common:common-constant')
-  implementation project(':common:common-domain')
+  implementation project(':common:common-domain:common-domain-core')
 
   annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
   compileOnly "org.projectlombok:lombok:${projectlombok_version}"

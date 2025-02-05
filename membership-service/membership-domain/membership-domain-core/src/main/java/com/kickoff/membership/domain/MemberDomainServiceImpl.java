@@ -13,7 +13,7 @@ public class MemberDomainServiceImpl implements MemberDomainService {
     member.validateMember();
     member.initializeMember();
 
-    log.info("[*] domain - member 객체를 초기화하였습니다. : id={}", member.getId());
+    log.info("[*] domain - member 객체를 초기화하였습니다. : memberId={}", member.getId());
     return new MemberCreatedEvent(member, ZonedDateTime.now());
   }
 

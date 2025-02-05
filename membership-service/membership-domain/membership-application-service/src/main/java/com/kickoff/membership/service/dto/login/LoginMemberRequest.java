@@ -2,8 +2,11 @@ package com.kickoff.membership.service.dto.login;
 
 import com.kickoff.common.constant.Constant;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor @AllArgsConstructor
 @Data
 public class LoginMemberRequest {
   @Pattern(regexp = Constant.EMAIL_REGEX, message = Constant.EMAIL_FAULT_MESSAGE)

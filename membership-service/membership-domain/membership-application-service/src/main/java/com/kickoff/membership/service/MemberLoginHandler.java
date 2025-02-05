@@ -3,7 +3,7 @@ package com.kickoff.membership.service;
 import com.kickoff.membership.service.dto.login.LoginMemberRequest;
 import com.kickoff.membership.service.dto.login.LoginMemberResponse;
 import com.kickoff.membership.domain.entity.Member;
-import com.kickoff.membership.domain.exception.MemberDomainException;
+import com.kickoff.membership.service.exception.LoginFailureException;
 import com.kickoff.membership.service.infrastructure.auth.JwtTokenProvider;
 import com.kickoff.membership.service.port.output.repository.MemberRepository;
 import com.kickoff.membership.service.util.PasswordEncoder;
@@ -23,11 +23,10 @@ public class MemberLoginHandler {
 
   @Transactional
   public LoginMemberResponse loginMember(LoginMemberRequest request) {
-    final String loginFailMessage = String.format("이메일 또는 패스워드가 다릅니다. : email=%s", request.email);
     Member findMember = memberRepository.findByEmail(request.getEmail())
-      .orElseThrow(() -> new MemberDomainException(loginFailMessage));
+      .orElseThrow(() -> new LoginFailureException(request.email));
     if (!passwordEncoder.matches(request.getPassword(), findMember.getPassword().getValue())) {
-      throw new MemberDomainException(loginFailMessage);
+      throw new LoginFailureException(request.email);
     }
 
     String token = jwtTokenProvider.generateToken(findMember.getId());

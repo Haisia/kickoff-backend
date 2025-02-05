@@ -21,7 +21,7 @@ public class MemberCreateHandler {
   @Transactional
   public CreateMemberResponse createMember(CreateMemberRequest request) {
     MemberCreatedEvent memberCreatedEvent = memberCreateHelper.persistMember(request);
-    log.info("[*] 회원가입에 성공하였습니다. 유저 ID : {}", memberCreatedEvent.getMember().getId());
+    log.info("[*] 회원가입에 성공하였습니다. : memberId={}", memberCreatedEvent.getMember().getId());
     return memberDataMapper.memberToCreateMemberResponse(memberCreatedEvent.getMember(), "회원가입에 성공하였습니다.");
   }
 }
