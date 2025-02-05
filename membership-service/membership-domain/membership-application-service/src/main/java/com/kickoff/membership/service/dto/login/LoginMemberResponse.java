@@ -1,11 +1,17 @@
 package com.kickoff.membership.service.dto.login;
 
-import lombok.Builder;
-import lombok.Data;
+import com.kickoff.common.service.dto.BaseResponse;
+import lombok.*;
 
-@Builder
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class LoginMemberResponse {
+public class LoginMemberResponse extends BaseResponse {
   public String token;
-  public String responseMessage;
+
+  @Builder
+  public LoginMemberResponse(String message, String token) {
+    super(message);
+    this.token = token;
+  }
 }
+

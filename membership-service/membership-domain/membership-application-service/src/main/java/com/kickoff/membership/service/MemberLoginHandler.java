@@ -32,7 +32,7 @@ public class MemberLoginHandler {
     String token = jwtTokenProvider.generateToken(findMember.getId());
     return LoginMemberResponse.builder()
       .token(token)
-      .responseMessage("로그인에 성공하였습니다.")
+      .message("로그인에 성공하였습니다.")
       .build();
   }
 }
