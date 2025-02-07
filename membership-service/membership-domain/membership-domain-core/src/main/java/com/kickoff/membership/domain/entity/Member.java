@@ -24,7 +24,7 @@ public class Member extends AggregateRoot<MemberId> {
   private Password password;
   private Point point;
 
-  private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
+  private List<AttendanceRecord> attendanceRecords;
 
   public void checkAttendance() {
     LocalDate today = LocalDate.now();
@@ -62,6 +62,7 @@ public class Member extends AggregateRoot<MemberId> {
     email = builder.email;
     password = builder.password;
     point = builder.point;
+    attendanceRecords = builder.attendanceRecords;
   }
 
   public static Builder builder() {
@@ -73,6 +74,7 @@ public class Member extends AggregateRoot<MemberId> {
     private Email email;
     private Password password;
     private Point point = Point.ZERO;
+    private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
 
     private Builder() {
     }
@@ -104,6 +106,11 @@ public class Member extends AggregateRoot<MemberId> {
 
     public Builder point(BigDecimal point) {
       this.point = Point.of(point);
+      return this;
+    }
+
+    public Builder attendanceRecords(List<AttendanceRecord> attendanceRecords) {
+      this.attendanceRecords = attendanceRecords;
       return this;
     }
 

@@ -2,6 +2,7 @@ package com.kickoff.membership.domain.entity;
 
 import com.kickoff.common.domain.entity.BaseEntity;
 import com.kickoff.common.domain.valuobject.MemberId;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,13 @@ public class AttendanceRecord extends BaseEntity<Long> {
   private LocalDate attendanceDate;
 
   public AttendanceRecord(MemberId memberId, LocalDate attendanceDate) {
+    this.memberId = memberId;
+    this.attendanceDate = attendanceDate;
+  }
+
+  @Builder
+  public AttendanceRecord(Long id, MemberId memberId, LocalDate attendanceDate) {
+    this.id = id;
     this.memberId = memberId;
     this.attendanceDate = attendanceDate;
   }

@@ -6,7 +6,6 @@ import com.kickoff.membership.domain.entity.AttendanceRecord;
 import com.kickoff.membership.domain.entity.Member;
 import com.kickoff.membership.service.dto.attend.AttendMemberCommand;
 import com.kickoff.membership.service.exception.NotFoundMemberException;
-import com.kickoff.membership.service.port.input.MemberAttendanceUseCase;
 import com.kickoff.membership.service.port.output.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class MemberAttendanceHandler implements MemberAttendanceUseCase {
+public class MemberAttendanceHandler {
 
   private final MemberRepository memberRepository;
   private final LogEntryPersistPublisher logEntryPersistPublisher;
 
   @Transactional
-  @Override
   public void attendMember(AttendMemberCommand command) {
     Member member = memberRepository.findById(command.getMemberId())
       .orElseThrow(() -> new NotFoundMemberException("memberId", command.getMemberId().getValue().toString()));
