@@ -6,6 +6,7 @@ dependencies {
   implementation project(':common:common-domain:common-domain-core')
 
   implementation "org.springframework.boot:spring-boot-starter:${springboot_version}"
+
   // jwt
   implementation "io.jsonwebtoken:jjwt-api:${jsonwebtoken_version}"
   implementation "io.jsonwebtoken:jjwt-impl:${jsonwebtoken_version}"

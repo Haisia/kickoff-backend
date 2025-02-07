@@ -4,7 +4,7 @@ import com.kickoff.membership.service.dto.login.LoginMemberRequest;
 import com.kickoff.membership.service.dto.login.LoginMemberResponse;
 import com.kickoff.membership.domain.entity.Member;
 import com.kickoff.membership.service.exception.LoginFailureException;
-import com.kickoff.membership.service.infrastructure.auth.JwtTokenProvider;
+import com.kickoff.common.service.jwt.JwtTokenProvider;
 import com.kickoff.membership.service.port.output.repository.MemberRepository;
 import com.kickoff.membership.service.util.PasswordEncoder;
 import lombok.RequiredArgsConstructor;

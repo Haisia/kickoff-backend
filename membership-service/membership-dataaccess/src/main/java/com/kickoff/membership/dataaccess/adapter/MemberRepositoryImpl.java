@@ -1,5 +1,6 @@
 package com.kickoff.membership.dataaccess.adapter;
 
+import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.membership.dataaccess.entity.MemberEntity;
 import com.kickoff.membership.dataaccess.mapper.MembershipDataAccessMapper;
 import com.kickoff.membership.dataaccess.repository.MemberJpaRepository;
@@ -29,6 +30,12 @@ public class MemberRepositoryImpl implements MemberRepository {
   @Override
   public Optional<Member> findByEmail(String email) {
     return memberJpaRepository.findByEmail(email)
+      .map(membershipDataAccessMapper::memberEntityToMember);
+  }
+
+  @Override
+  public Optional<Member> findById(MemberId memberId) {
+    return memberJpaRepository.findById(memberId.getValue())
       .map(membershipDataAccessMapper::memberEntityToMember);
   }
 

@@ -1,5 +1,6 @@
 package com.kickoff.membership.service.helper;
 
+import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.membership.domain.MemberDomainService;
 import com.kickoff.membership.service.dto.create.CreateMemberRequest;
 import com.kickoff.membership.domain.entity.Member;
@@ -43,7 +44,7 @@ public class MemberCreateHelper {
 
     if (savedMember == null) {
       log.error("[*] member 저장에 실패하였습니다.");
-      throw new MemberDomainException("member 저장에 실패하였습니다.");
+      throw new MemberDomainException("member 저장에 실패하였습니다.", CustomHttpStatus.CONFLICT);
     }
     log.info("member 를 저장하였습니다. : memberId={}", savedMember.getId());
     return savedMember;

@@ -3,6 +3,7 @@ package com.kickoff.membership.domain.entity;
 import com.kickoff.common.domain.entity.AggregateRoot;
 import com.kickoff.common.domain.exception.DomainException;
 import com.kickoff.common.enums.CustomHttpStatus;
+import com.kickoff.membership.domain.exception.MemberDomainException;
 import com.kickoff.membership.domain.valueobject.Email;
 import com.kickoff.membership.domain.valueobject.Password;
 import com.kickoff.common.domain.valuobject.MemberId;
@@ -11,15 +12,36 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
 public class Member extends AggregateRoot<MemberId> {
   private Email email;
   private Password password;
   private Point point;
+
+  private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
+
+  public void checkAttendance() {
+    LocalDate today = LocalDate.now();
+    boolean alreadyChecked = attendanceRecords.stream()
+      .anyMatch(record -> record.getAttendanceDate().equals(today));
+    if (alreadyChecked) {
+      throw new MemberDomainException(
+        String.format("오늘은 이미 출석 체크를 완료했습니다. : memberId=%s", getId().getValue())
+        , CustomHttpStatus.BAD_REQUEST
+      );
+    }
+    attendanceRecords.add(new AttendanceRecord(getId(), today));
+  }
+
+  public void addPoint(BigDecimal point) {
+    this.point = this.point.add(Point.of(point));
+  }
 
   public void validateMember() {
     List<String> errors = new ArrayList<>();
@@ -93,7 +115,7 @@ public class Member extends AggregateRoot<MemberId> {
   private void validateEmail(List<String> errors) {
     try {
       email.validate();
-    } catch(Exception e) {
+    } catch (Exception e) {
       errors.add(e.getMessage());
     }
   }
@@ -101,7 +123,7 @@ public class Member extends AggregateRoot<MemberId> {
   private void validatePassword(List<String> errors) {
     try {
       password.validate();
-    } catch(Exception e) {
+    } catch (Exception e) {
       errors.add(e.getMessage());
     }
   }

@@ -1,4 +1,4 @@
-package com.kickoff.common.domain.util;
+package com.kickoff.common.service.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

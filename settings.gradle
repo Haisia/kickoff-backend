@@ -38,4 +38,6 @@ include 'log-service:log-container'
 include 'log-service:log-application'
 include 'common:common-log'
 findProject(':common:common-log')?.name = 'common-log'
+include 'infrastructure:auth'
+findProject(':infrastructure:auth')?.name = 'auth'
 

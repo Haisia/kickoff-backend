@@ -1,15 +1,11 @@
 plugins {
-    id 'java-library'
+  id 'java-library'
 }
 
 dependencies {
-    implementation project(":common:common-constant")
-    // jwt
-    implementation "io.jsonwebtoken:jjwt-api:${jsonwebtoken_version}"
-    implementation "io.jsonwebtoken:jjwt-impl:${jsonwebtoken_version}"
-    implementation "io.jsonwebtoken:jjwt-jackson:${jsonwebtoken_version}"
+  implementation project(":common:common-constant")
 }
 
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }

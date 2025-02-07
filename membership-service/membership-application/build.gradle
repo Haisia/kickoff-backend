@@ -10,6 +10,7 @@ dependencies {
   implementation project(':common:common-log')
   implementation project(':membership-service:membership-domain:membership-application-service')
 
+  implementation "org.springframework.boot:spring-boot-starter-security:${springboot_version}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springboot_version}"
   implementation "org.springframework.boot:spring-boot-starter-validation:${springboot_version}"
   implementation "org.springframework:spring-tx:${spring_version}"
