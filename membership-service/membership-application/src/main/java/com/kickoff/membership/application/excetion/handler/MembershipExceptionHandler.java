@@ -1,7 +1,6 @@
 package com.kickoff.membership.application.excetion.handler;
 
 import com.kickoff.common.application.exception.handler.BaseExceptionHandler;
-import com.kickoff.common.domain.valuobject.KickoffApplicationName;
 import com.kickoff.common.service.dto.ErrorResponse;
 import com.kickoff.common.service.logentry.LogEntryPersistPublisher;
 import com.kickoff.membership.service.exception.AlreadyExistEmailException;
@@ -23,11 +22,11 @@ public class MembershipExceptionHandler extends BaseExceptionHandler {
 
   @ExceptionHandler(LoginFailureException.class)
   public ResponseEntity<ErrorResponse> handleLoginFailure(LoginFailureException exception) {
-    return handleException(exception, KickoffApplicationName.MEMBERSHIP, exception.getHttpStatus().getCode());
+    return handleException(exception, exception.getHttpStatus().getCode());
   }
 
   @ExceptionHandler(AlreadyExistEmailException.class)
   public ResponseEntity<ErrorResponse> handleAlreadyExistEmail(AlreadyExistEmailException exception) {
-    return handleException(exception, KickoffApplicationName.MEMBERSHIP, exception.getHttpStatus().getCode());
+    return handleException(exception, exception.getHttpStatus().getCode());
   }
 }

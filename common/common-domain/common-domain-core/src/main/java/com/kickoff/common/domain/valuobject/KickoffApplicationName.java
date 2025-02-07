@@ -1,5 +1,7 @@
 package com.kickoff.common.domain.valuobject;
 
+import java.util.Arrays;
+
 public enum KickoffApplicationName {
   UNKNOWN("unknown"),
   MEMBERSHIP("membership-service"),
@@ -19,5 +21,12 @@ public enum KickoffApplicationName {
   @Override
   public String toString() {
     return applicationName;
+  }
+
+  public static KickoffApplicationName fromApplicationName(String appName) {
+    return Arrays.stream(KickoffApplicationName.values())
+      .filter(name -> name.getApplicationName().equals(appName))
+      .findFirst()
+      .orElse(KickoffApplicationName.UNKNOWN);
   }
 }
