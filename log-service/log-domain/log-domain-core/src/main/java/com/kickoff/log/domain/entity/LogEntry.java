@@ -15,7 +15,7 @@ import java.util.UUID;
 @Getter @Setter
 public class LogEntry extends AggregateRoot<LogEntryId> {
 
-  private static final LogEntryLevel PERSIST_LOG_LEVEL = LogEntryLevel.TRACE;
+  private static final LogEntryLevel PERSIST_LOG_LEVEL = LogEntryLevel.ERROR;
 
   private LogEntryId id;
   private LogEntryLevel level;

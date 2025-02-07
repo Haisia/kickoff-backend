@@ -17,6 +17,7 @@ public class LogEntryRepositoryImpl implements LogEntryRepository {
 
   @Override
   public LogEntry save(LogEntry logEntry) {
+    if (!logEntry.isPersistableLevel()) return logEntry;
     LogEntryEntity entity = logEntryDataaccessMapper.logEntryToLogEntryEntity(logEntry);
     return logEntryDataaccessMapper.logEntryEntityToLogEntry(logEntryJpaRepository.save(entity));
   }
