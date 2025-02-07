@@ -1,4 +1,4 @@
-package com.kickoff.log.service.dto;
+package com.kickoff.common.service.dto;
 
 import com.kickoff.common.domain.valuobject.KickoffApplicationName;
 import com.kickoff.common.domain.valuobject.LogEntryLevel;

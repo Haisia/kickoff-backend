@@ -1,7 +1,7 @@
-package com.kickoff.log.service.messaging;
+package com.kickoff.common.service.messaging;
 
-import com.kickoff.log.service.dto.PublishLogEntryCommand;
-import com.kickoff.log.service.port.output.message.publisher.logentry.LogEntryPersistPublisher;
+import com.kickoff.common.service.dto.PublishLogEntryCommand;
+import com.kickoff.common.service.logentry.LogEntryPersistPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
