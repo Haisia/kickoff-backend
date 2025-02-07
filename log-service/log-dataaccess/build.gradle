@@ -1,6 +1,13 @@
 plugins {
-  id 'java'
+  id 'java-library'
 }
 
 dependencies {
+  api project(":common:common-dataaccess")
+  api project(":common:common-domain:common-domain-core")
+
+  implementation project(":log-service:log-domain:log-application-service")
+  implementation project(":log-service:log-domain:log-domain-core")
+
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springboot_version}"
 }

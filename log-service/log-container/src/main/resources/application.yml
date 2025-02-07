@@ -1,0 +1,34 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    org.springframework.amqp: DEBUG
+    com.kickoff: DEBUG
+
+spring:
+  application:
+    name: log-service
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/log_service
+    driver-class-name: org.postgresql.Driver
+    username: root
+    password: root
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guestuser
+    password: guestuser
+
+value:
+  jwt:
+    secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest

@@ -1,7 +1,12 @@
 plugins {
-  id 'java'
+  id 'java-library'
 }
 
 dependencies {
+  implementation project(":common:common-constant")
+  implementation project(":infrastructure:rabbitmq:rabbitmq-config-data")
 
+  implementation project(":log-service:log-domain:log-application-service")
+
+  implementation "org.springframework.boot:spring-boot-starter-amqp:${springboot_version}"
 }

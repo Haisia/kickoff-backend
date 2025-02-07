@@ -2,10 +2,6 @@ plugins {
   id 'java-library'
 }
 
-repositories {
-  mavenCentral()
-}
-
 dependencies {
   api project(":common:common-dataaccess")
   api project(":common:common-domain:common-domain-core")

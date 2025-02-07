@@ -3,6 +3,7 @@ server:
 
 logging:
   level:
+    org.springframework.amqp: DEBUG
     com.kickoff: DEBUG
 
 spring:
@@ -25,8 +26,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: root
-    password: root
+    username: guestuser
+    password: guestuser
 
 value:
   jwt:

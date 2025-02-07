@@ -1,6 +1,15 @@
 plugins {
-  id 'java'
+  id 'java-library'
 }
 
 dependencies {
+  implementation project(':common:common-constant')
+  implementation project(':common:common-domain:common-domain-core')
+  implementation project(':common:common-domain:common-application-service')
+  implementation project(':log-service:log-domain:log-domain-core')
+
+  // spring
+  implementation "org.springframework.boot:spring-boot-dependencies:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-validation:${springboot_version}"
+  implementation "org.springframework:spring-tx:${spring_version}"
 }

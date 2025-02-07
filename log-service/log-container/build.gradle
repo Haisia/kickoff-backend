@@ -3,4 +3,15 @@ plugins {
 }
 
 dependencies {
+  implementation project(':log-service:log-domain:log-domain-core')
+  implementation project(':log-service:log-dataaccess')
+  implementation project(':log-service:log-application')
+  implementation project(':log-service:log-messaging')
+  implementation project(":infrastructure:rabbitmq:rabbitmq-config-data")
+
+  implementation "org.springframework.boot:spring-boot-starter:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springboot_version}"
+  implementation "org.springframework.boot:spring-boot-starter-amqp:${springboot_version}"
+
+  implementation "org.postgresql:postgresql:${postgresql_version}"
 }

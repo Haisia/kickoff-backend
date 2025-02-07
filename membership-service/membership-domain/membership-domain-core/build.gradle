@@ -9,7 +9,3 @@ dependencies {
   annotationProcessor "org.projectlombok:lombok:${projectlombok_version}"
   compileOnly "org.projectlombok:lombok:${projectlombok_version}"
 }
-
-test {
-  useJUnitPlatform()
-}
