@@ -3,6 +3,7 @@ package com.kickoff.membership.application.excetion.handler;
 import com.kickoff.common.application.exception.handler.BaseExceptionHandler;
 import com.kickoff.common.service.dto.ErrorResponse;
 import com.kickoff.common.service.logentry.LogEntryPersistPublisher;
+import com.kickoff.membership.domain.exception.MemberDomainException;
 import com.kickoff.membership.service.exception.AlreadyExistEmailException;
 import com.kickoff.membership.service.exception.LoginFailureException;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,11 @@ public class MembershipExceptionHandler extends BaseExceptionHandler {
   @Autowired
   public MembershipExceptionHandler(LogEntryPersistPublisher logEntryPersistPublisher) {
     super(logEntryPersistPublisher);
+  }
+
+  @ExceptionHandler(MemberDomainException.class)
+  public ResponseEntity<ErrorResponse> handleMemberDomain(MemberDomainException exception) {
+    return handleException(exception, exception.getHttpStatus().getCode());
   }
 
   @ExceptionHandler(LoginFailureException.class)
