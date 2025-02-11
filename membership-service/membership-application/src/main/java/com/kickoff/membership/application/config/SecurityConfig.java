@@ -2,6 +2,7 @@ package com.kickoff.membership.application.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +20,7 @@ public class SecurityConfig {
       .formLogin(AbstractHttpConfigurer::disable)
       .anonymous(AbstractHttpConfigurer::disable)
 //      .cors(AbstractHttpConfigurer::disable)
+      .cors(Customizer.withDefaults()) // CORS 설정 활성화
     ;
 
     return http.build();
