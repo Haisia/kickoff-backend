@@ -12,6 +12,7 @@ include 'common:common-log'
 include 'infrastructure'
 include 'infrastructure:rabbitmq'
 include 'infrastructure:rabbitmq:rabbitmq-config-data'
+include 'infrastructure:auth'
 
 include 'membership-service'
 include 'membership-service:membership-domain'
@@ -24,7 +25,10 @@ include 'membership-service:membership-container'
 
 include 'board-service'
 include 'chat-service'
+
 include 'match-service'
+include 'match-service:match-temp'
+
 include 'point-service'
 include 'prediction-service'
 
@@ -36,8 +40,4 @@ include 'log-service:log-dataaccess'
 include 'log-service:log-messaging'
 include 'log-service:log-container'
 include 'log-service:log-application'
-include 'common:common-log'
-findProject(':common:common-log')?.name = 'common-log'
-include 'infrastructure:auth'
-findProject(':infrastructure:auth')?.name = 'auth'
 
