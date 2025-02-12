@@ -25,7 +25,7 @@ public enum KickoffApplicationName {
 
   public static KickoffApplicationName fromApplicationName(String appName) {
     return Arrays.stream(KickoffApplicationName.values())
-      .filter(name -> name.getApplicationName().equals(appName))
+      .filter(name -> name.getApplicationName().equalsIgnoreCase(appName))
       .findFirst()
       .orElse(KickoffApplicationName.UNKNOWN);
   }

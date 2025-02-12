@@ -1,11 +1,21 @@
 package com.kickoff.common.domain.entity;
 
+import com.kickoff.common.domain.valuobject.BaseId;
+
 import java.util.Objects;
 
 public abstract class BaseEntity<ID> {
   protected ID id;
 
   public ID getId() {
+    return id;
+  }
+
+  public Object getIdValue() {
+    if (id == null) return null;
+    if (id instanceof BaseId<?>) {
+      return ((BaseId<?>) id).getValue();
+    }
     return id;
   }
 
