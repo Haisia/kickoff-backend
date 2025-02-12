@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface LeagueExternalApiClient {
   List<League> pullLeagues();
+  League pullTeam(League league);
 }

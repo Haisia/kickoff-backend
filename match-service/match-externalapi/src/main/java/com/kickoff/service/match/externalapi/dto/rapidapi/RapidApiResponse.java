@@ -5,11 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class RapidApiResponse<T> {
   public String get;
-  public List<String> errors;
+//  public Map<String, String> errors;
   public Long results;
   public Paging paging;
   public List<T> response;

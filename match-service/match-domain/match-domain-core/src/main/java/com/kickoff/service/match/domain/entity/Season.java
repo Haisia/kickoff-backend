@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.List;
 
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
@@ -14,6 +15,8 @@ public class Season extends BaseEntity<Long> {
   private Year year;
   private LocalDate startDate;
   private LocalDate endDate;
+
+  private List<Team> teams;
 
   @Builder
   public Season(Long id, LeagueId leagueId, Year year, LocalDate startDate, LocalDate endDate) {

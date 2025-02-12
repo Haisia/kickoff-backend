@@ -8,6 +8,7 @@ import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,5 +34,12 @@ public class LeagueRepositoryImpl implements LeagueRepository {
       .map(this::save)
       .collect(Collectors.toList())
       ;
+  }
+
+  @Transactional
+  @Override
+  public List<League> findByApiFootballLeagueIdIn(List<Long> apiFootballLeagueIds) {
+    List<LeagueEntity> entities = leagueJpaRepository.findByApiFootballLeagueIdIn(apiFootballLeagueIds);
+    return leagueDataaccessMapper.leagueEntitiesToLeagues(entities);
   }
 }

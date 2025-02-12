@@ -6,8 +6,9 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor @AllArgsConstructor
 @Data
-public class Country {
+public class LeagueDto {
+  public Long id;
   public String name;
-  public String code;
-  public String flag;
+  public String type;
+  public String logo;
 }

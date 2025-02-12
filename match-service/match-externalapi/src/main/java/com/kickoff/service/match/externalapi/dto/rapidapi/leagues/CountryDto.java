@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @NoArgsConstructor @AllArgsConstructor
 @Data
-public class LeaguesResponse {
-  public LeagueDto league;
-  public CountryDto country;
-  public List<SeasonDto> seasons;
+public class CountryDto {
+  public String name;
+  public String code;
+  public String flag;
 }

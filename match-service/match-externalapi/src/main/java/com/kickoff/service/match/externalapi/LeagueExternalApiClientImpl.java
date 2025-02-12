@@ -1,9 +1,11 @@
 package com.kickoff.service.match.externalapi;
 
 import com.kickoff.service.match.domain.entity.League;
+import com.kickoff.service.match.domain.entity.Season;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiClient;
 import com.kickoff.service.match.externalapi.dto.rapidapi.RapidApiResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.leagues.LeaguesResponse;
+import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamsResponse;
 import com.kickoff.service.match.externalapi.mapper.LeagueExternalApiMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -24,28 +26,36 @@ public class LeagueExternalApiClientImpl implements LeagueExternalApiClient {
   public List<League> pullLeagues() {
     ParameterizedTypeReference<RapidApiResponse<LeaguesResponse>> responseType = new ParameterizedTypeReference<>() {};
 
-    List<LeaguesResponse> response = Objects.requireNonNull(webClient.get()
-        .uri("/leagues")
-        .retrieve()
-        .bodyToMono(responseType)
-        .block())
-      .getResponse();
-
-//    List<Long> leagueFilter = List.of(
-//      2L  // UEFA
-//      , 39L  // EPL
-//      , 140L  // LaLiga
-//      , 135L  // Serie A
-//      , 78L // Bundesliga
-//      , 61L // Ligue 1
-//      , 292L // K League 1
-//    );
-//    return leagueExternalApiMapper.leaguesResponsesToLeagues(response)
-//      .stream()
-//      .filter(l -> leagueFilter.contains(l.getApiFootballLeagueId()))
-//      .collect(Collectors.toList())
-//      ;
+    List<LeaguesResponse> response = Objects.requireNonNull(
+        webClient.get()
+          .uri("/leagues")
+          .retrieve()
+          .bodyToMono(responseType)
+          .block()
+      ).getResponse();
 
     return leagueExternalApiMapper.leaguesResponsesToLeagues(response);
+  }
+
+  @Override
+  public League pullTeam(League league) {
+    ParameterizedTypeReference<RapidApiResponse<TeamsResponse>> responseType = new ParameterizedTypeReference<>() {};
+
+    for (Season season : league.getSeasons()) {
+      List<TeamsResponse> response = Objects.requireNonNull(
+        webClient.get()
+          .uri(uriBuilder -> uriBuilder
+            .path("/teams")
+            .queryParam("league", league.getApiFootballLeagueId())
+            .queryParam("season", season.getYear())
+            .build())
+          .retrieve()
+          .bodyToMono(responseType)
+          .block()
+      ).getResponse();
+      season.setTeams(leagueExternalApiMapper.teamsResponsesToTeams(response));
+    }
+
+    return league;
   }
 }

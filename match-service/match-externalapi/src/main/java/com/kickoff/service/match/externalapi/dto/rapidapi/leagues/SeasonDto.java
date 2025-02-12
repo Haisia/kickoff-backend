@@ -8,15 +8,15 @@ import java.time.LocalDate;
 
 @NoArgsConstructor @AllArgsConstructor
 @Data
-public class Season {
+public class SeasonDto {
   public Integer year;
   public LocalDate start;
   public LocalDate end;
   public Boolean current;
-  public Coverage coverage;
+  public CoverageDto coverage;
 
-  public static class Coverage {
-    public Fixtures fixtures;
+  public static class CoverageDto {
+    public FixturesDto fixtures;
 
     public Boolean standings;
     public Boolean players;
@@ -27,7 +27,7 @@ public class Season {
     public Boolean predictions;
     public Boolean odds;
 
-    public static class Fixtures{
+    public static class FixturesDto {
       public Boolean events;
       public Boolean lineups;
       public Boolean statistics_fixtures;
