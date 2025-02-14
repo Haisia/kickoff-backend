@@ -4,6 +4,7 @@ import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalAp
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component

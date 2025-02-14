@@ -14,7 +14,7 @@ public class LogEntryMetadataEntity extends BaseJpaEntity {
   @Id
   private Long id;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "log_entry_id")
   private LogEntryEntity logEntry;
   private String key;

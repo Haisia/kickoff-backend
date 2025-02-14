@@ -3,35 +3,65 @@ package com.kickoff.service.match.domain.entity;
 import com.kickoff.common.domain.entity.AggregateRoot;
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.domain.valuobject.LeagueType;
+import com.kickoff.service.match.domain.valueobject.Country;
+import com.kickoff.service.match.domain.valueobject.Logo;
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
-public class League extends AggregateRoot<LeagueId> {
-
+@Entity
+public class League extends AggregateRoot {
+  @EmbeddedId
+  private LeagueId id;
   private Long apiFootballLeagueId;
   private String name;
+  @Enumerated(EnumType.STRING)
   private LeagueType type;
-  private Logo logo;
+
+  @ElementCollection
+  @CollectionTable(name = "league_logos", joinColumns = @JoinColumn(name = "league_id"))
+  private List<Logo> logos = new ArrayList<>();
+
+  @Embedded
   private Country country;
 
-  private List<Season> seasons;
+  @ElementCollection
+  @CollectionTable(name = "season_map_team", joinColumns = @JoinColumn(name = "league_id"))
+  private List<SeasonMapTeam> seasonMapTeams = new ArrayList<>();
 
   @Builder
-  public League(LeagueId id, Long apiFootballLeagueId, String name, LeagueType type, Logo logo, Country country, List<Season> seasons) {
-    if(id == null || id.getValue() == null) id = LeagueId.of(UUID.randomUUID());
+  public League(LeagueId id, Long apiFootballLeagueId, String name, LeagueType type, Country country) {
+    if (id == null) id = LeagueId.generate();
     this.id = id;
-
     this.apiFootballLeagueId = apiFootballLeagueId;
     this.name = name;
     this.type = type;
-    this.logo = logo;
     this.country = country;
+  }
 
-    seasons.forEach(season -> season.setLeagueId(this.id));
-    this.seasons = seasons;
+  public void addLogo(Logo logo) {
+    logos.add(logo);
+  }
+
+  public void addSeason(Season season) {
+    season.setLeagueId(id);
+    seasonMapTeams.add(new SeasonMapTeam(season, null));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    League league = (League) o;
+    return Objects.equals(id, league.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
   }
 }

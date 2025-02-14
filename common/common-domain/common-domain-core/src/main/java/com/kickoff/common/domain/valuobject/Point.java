@@ -1,12 +1,17 @@
 package com.kickoff.common.domain.valuobject;
 
 import com.kickoff.common.domain.exception.VoException;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
-public class Point extends BaseVo<BigDecimal>{
+@Getter
+public class Point extends BaseVo{
+
+  private final BigDecimal value;
+
   protected Point(BigDecimal point) {
-    super(point);
+    value = point;
   }
 
   public static Point of(BigDecimal point) {

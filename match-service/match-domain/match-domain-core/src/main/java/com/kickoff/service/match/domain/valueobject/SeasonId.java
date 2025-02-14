@@ -1,5 +1,6 @@
-package com.kickoff.common.domain.valuobject;
+package com.kickoff.service.match.domain.valueobject;
 
+import com.kickoff.common.domain.valuobject.BaseId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -13,11 +14,11 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = true)
 @Embeddable
-public class LeagueId extends BaseId<UUID> {
-  @Column(name = "league_id")
+public class SeasonId extends BaseId<UUID> {
+  @Column(name = "season_id")
   private UUID id;
 
-  protected LeagueId(UUID id) {
+  protected SeasonId(UUID id) {
     this.id = id;
   }
 
@@ -25,11 +26,12 @@ public class LeagueId extends BaseId<UUID> {
   public void validate() {
   }
 
-  public static LeagueId of(UUID value) {
-    return new LeagueId(value);
+  public static SeasonId of(UUID value) {
+    return new SeasonId(value);
   }
 
-  public static LeagueId generate() {
-    return of(UUID.randomUUID());
+  public static SeasonId generate() {
+    return new SeasonId(UUID.randomUUID());
   }
+
 }

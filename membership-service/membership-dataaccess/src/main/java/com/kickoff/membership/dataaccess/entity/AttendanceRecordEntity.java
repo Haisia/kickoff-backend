@@ -18,7 +18,7 @@ public class AttendanceRecordEntity extends BaseJpaEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "member_id")
   private MemberEntity member;
   private LocalDate attendanceDate;

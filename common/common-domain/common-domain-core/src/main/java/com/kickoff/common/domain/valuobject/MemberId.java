@@ -1,13 +1,16 @@
 package com.kickoff.common.domain.valuobject;
 
+import lombok.Getter;
+
 import java.util.UUID;
 
+@Getter
 public class MemberId extends BaseId<UUID> {
 
   private UUID value;
 
   protected MemberId(UUID value) {
-    super(value);
+    this.value = value;
   }
 
   @Override

@@ -26,7 +26,7 @@ public class LogEntryEntity extends BaseJpaEntity {
   @Enumerated(EnumType.STRING)
   private KickoffApplicationName source;
 
-  @OneToMany(mappedBy = "logEntry", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "logEntry", cascade = CascadeType.PERSIST)
   private List<LogEntryMetadataEntity> metadata;
 
   @Override

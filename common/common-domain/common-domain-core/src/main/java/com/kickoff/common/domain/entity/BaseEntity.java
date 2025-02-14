@@ -1,37 +1,22 @@
 package com.kickoff.common.domain.entity;
 
-import com.kickoff.common.domain.valuobject.BaseId;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Objects;
+import java.time.LocalDateTime;
 
-public abstract class BaseEntity<ID> {
-  protected ID id;
+@EntityListeners(AuditingEntityListener.class)
+@MappedSuperclass
+public abstract class BaseEntity {
+  @CreatedDate
+  @Column(updatable = false)
+  protected LocalDateTime createdAt;
 
-  public ID getId() {
-    return id;
-  }
-
-  public Object getIdValue() {
-    if (id == null) return null;
-    if (id instanceof BaseId<?>) {
-      return ((BaseId<?>) id).getValue();
-    }
-    return id;
-  }
-
-  public void setId(ID id) {
-    this.id = id;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (o == null || getClass() != o.getClass()) return false;
-    BaseEntity<?> that = (BaseEntity<?>) o;
-    return Objects.equals(id, that.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(id);
-  }
+  @LastModifiedDate
+  @Column(insertable = false)
+  protected LocalDateTime updatedAt;
 }

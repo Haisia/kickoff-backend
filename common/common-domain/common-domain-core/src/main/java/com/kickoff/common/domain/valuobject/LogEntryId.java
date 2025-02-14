@@ -7,7 +7,7 @@ public class LogEntryId extends BaseId<UUID> {
   private UUID value;
 
   protected LogEntryId(UUID value) {
-    super(value);
+    this.value = value;
   }
 
   @Override

@@ -1,45 +1,31 @@
 package com.kickoff.service.match.dataaccess.adapter;
 
-import com.kickoff.service.match.dataaccess.entity.LeagueEntity;
-import com.kickoff.service.match.dataaccess.mapper.LeagueDataaccessMapper;
-import com.kickoff.service.match.dataaccess.repository.CountryJpaRepository;
 import com.kickoff.service.match.dataaccess.repository.LeagueJpaRepository;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class LeagueRepositoryImpl implements LeagueRepository {
 
   private final LeagueJpaRepository leagueJpaRepository;
-  private final LeagueDataaccessMapper leagueDataaccessMapper;
-  private final CountryJpaRepository countryJpaRepository;
 
   @Override
   public League save(League league) {
-    LeagueEntity entity = leagueDataaccessMapper.leagueToLeagueEntity(league);
-    countryJpaRepository.findByName(entity.getCountry().getName()).ifPresent(entity::setCountry);
-    return leagueDataaccessMapper.leagueEntityToLeague(leagueJpaRepository.save(entity));
+    return leagueJpaRepository.save(league);
   }
 
   @Override
   public List<League> saveAll(List<League> leagues) {
-    return leagues.stream()
-      .map(this::save)
-      .collect(Collectors.toList())
-      ;
+    return leagueJpaRepository.saveAll(leagues);
   }
 
-  @Transactional
   @Override
   public List<League> findByApiFootballLeagueIdIn(List<Long> apiFootballLeagueIds) {
-    List<LeagueEntity> entities = leagueJpaRepository.findByApiFootballLeagueIdIn(apiFootballLeagueIds);
-    return leagueDataaccessMapper.leagueEntitiesToLeagues(entities);
+    return leagueJpaRepository.findByApiFootballLeagueIdIn(apiFootballLeagueIds);
   }
 }

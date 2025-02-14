@@ -24,7 +24,7 @@ public class MemberEntity extends BaseJpaEntity {
   private String password;
   private BigDecimal point;
 
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
   List<AttendanceRecordEntity> attendanceRecords = new ArrayList<>();
 
   public MemberEntity(UUID id) {
