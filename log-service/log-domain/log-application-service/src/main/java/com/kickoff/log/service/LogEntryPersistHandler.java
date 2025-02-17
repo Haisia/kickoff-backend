@@ -18,7 +18,6 @@ public class LogEntryPersistHandler {
       .message(command.getMessage())
       .timestamp(command.getTimestamp())
       .source(command.getSource())
-      .metadata(command.getMetadata())
       .build();
 
     logEntryRepository.save(logEntry);

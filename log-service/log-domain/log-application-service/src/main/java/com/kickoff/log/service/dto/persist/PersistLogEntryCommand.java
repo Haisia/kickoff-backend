@@ -5,7 +5,6 @@ import com.kickoff.common.domain.valuobject.LogEntryLevel;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Data
 public class PersistLogEntryCommand {
@@ -13,5 +12,4 @@ public class PersistLogEntryCommand {
   public String message;
   public LocalDateTime timestamp;
   public KickoffApplicationName source;
-  public Map<String, Object> metadata;
 }

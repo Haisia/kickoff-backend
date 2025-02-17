@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = {"com.kickoff.log.dataaccess.repository"})
-@EntityScan(basePackages = {"com.kickoff.log.dataaccess.entity"})
+@EntityScan(basePackages = {"com.kickoff.log"})
 @SpringBootApplication(scanBasePackages = "com.kickoff")
 public class LogServiceApplication {
   public static void main(String[] args) {

@@ -1,7 +1,5 @@
 package com.kickoff.log.dataaccess.adapter;
 
-import com.kickoff.log.dataaccess.entity.LogEntryEntity;
-import com.kickoff.log.dataaccess.mapper.LogEntryDataaccessMapper;
 import com.kickoff.log.dataaccess.repository.LogEntryJpaRepository;
 import com.kickoff.log.domain.entity.LogEntry;
 import com.kickoff.log.service.port.output.LogEntryRepository;
@@ -13,12 +11,10 @@ import org.springframework.stereotype.Component;
 public class LogEntryRepositoryImpl implements LogEntryRepository {
 
   private final LogEntryJpaRepository logEntryJpaRepository;
-  private final LogEntryDataaccessMapper logEntryDataaccessMapper;
 
   @Override
   public LogEntry save(LogEntry logEntry) {
     if (!logEntry.isPersistableLevel()) return logEntry;
-    LogEntryEntity entity = logEntryDataaccessMapper.logEntryToLogEntryEntity(logEntry);
-    return logEntryDataaccessMapper.logEntryEntityToLogEntry(logEntryJpaRepository.save(entity));
+    return logEntryJpaRepository.save(logEntry);
   }
 }
