@@ -8,8 +8,8 @@ import com.kickoff.membership.domain.valueobject.Email;
 import com.kickoff.membership.domain.valueobject.Password;
 import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.common.domain.valuobject.Point;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,14 +17,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
-public class Member extends AggregateRoot<MemberId> {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @Setter
+@Table(name = "members")
+@Entity
+public class Member extends AggregateRoot {
+  @EmbeddedId
+  private MemberId id;
+  @Embedded
   private Email email;
+  @Embedded
   private Password password;
+  @Embedded
   private Point point;
 
-  private List<AttendanceRecord> attendanceRecords;
+  @ElementCollection
+  @CollectionTable(name = "member_attendance_record", joinColumns = @JoinColumn(name = "member_id"))
+  private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
 
   public void checkAttendance() {
     LocalDate today = LocalDate.now();
@@ -32,11 +41,12 @@ public class Member extends AggregateRoot<MemberId> {
       .anyMatch(record -> record.getAttendanceDate().equals(today));
     if (alreadyChecked) {
       throw new MemberDomainException(
-        String.format("오늘은 이미 출석 체크를 완료했습니다. : memberId=%s", getId().getValue())
+        String.format("오늘은 이미 출석 체크를 완료했습니다. : memberId=%s", getId().getId())
         , CustomHttpStatus.BAD_REQUEST
       );
     }
-    attendanceRecords.add(new AttendanceRecord(getId(), today));
+
+    attendanceRecords.add(AttendanceRecord.generateToday());
   }
 
   public void addPoint(BigDecimal point) {
@@ -57,66 +67,14 @@ public class Member extends AggregateRoot<MemberId> {
     setId(MemberId.of(UUID.randomUUID()));
   }
 
-  private Member(Builder builder) {
-    id = builder.id;
-    email = builder.email;
-    password = builder.password;
-    point = builder.point;
-    attendanceRecords = builder.attendanceRecords;
-  }
-
-  public static Builder builder() {
-    return new Builder();
-  }
-
-  public static final class Builder {
-    private MemberId id;
-    private Email email;
-    private Password password;
-    private Point point = Point.ZERO;
-    private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
-
-    private Builder() {
-    }
-
-    public Builder id(MemberId id) {
-      this.id = id;
-      return this;
-    }
-
-    public Builder email(Email email) {
-      this.email = email;
-      return this;
-    }
-
-    public Builder email(String email) {
-      this.email = Email.of(email);
-      return this;
-    }
-
-    public Builder password(Password password) {
-      this.password = password;
-      return this;
-    }
-
-    public Builder password(String password, boolean isHashed) {
-      this.password = Password.of(password, isHashed);
-      return this;
-    }
-
-    public Builder point(BigDecimal point) {
-      this.point = Point.of(point);
-      return this;
-    }
-
-    public Builder attendanceRecords(List<AttendanceRecord> attendanceRecords) {
-      this.attendanceRecords = attendanceRecords;
-      return this;
-    }
-
-    public Member build() {
-      return new Member(this);
-    }
+  @Builder
+  public Member(MemberId id, Email email, Password password, Point point) {
+    if (id == null) id = MemberId.generate();
+    this.id = id;
+    this.email = email;
+    this.password = password;
+    if (point == null) point = Point.of(BigDecimal.ZERO);
+    this.point = point;
   }
 
   private void validateEmail(List<String> errors) {

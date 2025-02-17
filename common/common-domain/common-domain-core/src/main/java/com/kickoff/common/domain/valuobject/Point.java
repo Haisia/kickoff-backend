@@ -1,17 +1,24 @@
 package com.kickoff.common.domain.valuobject;
 
 import com.kickoff.common.domain.exception.VoException;
-import lombok.Getter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Point extends BaseVo{
+@EqualsAndHashCode(callSuper = true)
+@Embeddable
+public class Point extends BaseVo {
 
-  private final BigDecimal value;
+  @Column(nullable = false)
+  private BigDecimal point;
 
   protected Point(BigDecimal point) {
-    value = point;
+    this.point = point == null ? BigDecimal.ZERO : point;
   }
 
   public static Point of(BigDecimal point) {
@@ -22,20 +29,20 @@ public class Point extends BaseVo{
 
   @Override
   public void validate() {
-    if(value.compareTo(BigDecimal.ZERO) < 0) throw new VoException("point 는 0보다 작을 수 없습니다.");
+    if (point.compareTo(BigDecimal.ZERO) < 0) throw new VoException("point 는 0보다 작을 수 없습니다.");
   }
 
   public static final Point ZERO = new Point(BigDecimal.ZERO);
 
   public Point add(Point Point) {
-    return new Point(this.value.add(Point.getValue()));
+    return new Point(this.point.add(Point.getPoint()));
   }
 
   public Point subtract(Point Point) {
-    return new Point(this.value.subtract(Point.getValue()));
+    return new Point(this.point.subtract(Point.getPoint()));
   }
 
   public Point multiply(int multiplier) {
-    return new Point(this.value.multiply(new BigDecimal(multiplier)));
+    return new Point(this.point.multiply(new BigDecimal(multiplier)));
   }
 }

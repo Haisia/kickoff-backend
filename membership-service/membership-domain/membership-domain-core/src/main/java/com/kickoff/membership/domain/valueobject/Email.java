@@ -3,20 +3,26 @@ package com.kickoff.membership.domain.valueobject;
 import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.exception.VoException;
 import com.kickoff.common.domain.valuobject.BaseVo;
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
 import java.util.regex.Pattern;
 
-public class Email extends BaseVo<String> {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@EqualsAndHashCode(callSuper = true)
+@Embeddable
+public class Email extends BaseVo {
 
   private static final Pattern EMAIL_PATTERN = Pattern.compile(Constant.EMAIL_REGEX);
 
-  protected Email(String value) {
-    super(value);
-  }
+  private String email;
 
   @Override
   public void validate() {
-    if (value == null || !EMAIL_PATTERN.matcher(value).matches()) {
+    if (email == null || !EMAIL_PATTERN.matcher(email).matches()) {
       throw new VoException("이메일 형식이 올바르지 않습니다.");
     }
   }

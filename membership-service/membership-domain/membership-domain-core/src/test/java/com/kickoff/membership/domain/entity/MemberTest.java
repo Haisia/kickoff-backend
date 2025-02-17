@@ -44,7 +44,7 @@ class MemberTest {
       .build();
 
     //then
-    assertEquals(BigDecimal.ZERO, member.getPoint().getValue());
+    assertEquals(BigDecimal.ZERO, member.getPoint().getPoint());
   }
 
   @Test

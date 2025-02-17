@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = {"com.kickoff.membership.dataaccess.repository"})
-@EntityScan(basePackages = {"com.kickoff.membership.dataaccess.entity"})
+@EntityScan(basePackages = {"com.kickoff.membership"})
 @SpringBootApplication(scanBasePackages = "com.kickoff")
 public class MembershipServiceApplication {
   public static void main(String[] args) {

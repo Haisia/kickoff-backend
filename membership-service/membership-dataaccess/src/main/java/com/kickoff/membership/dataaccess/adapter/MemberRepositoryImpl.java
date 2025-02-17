@@ -1,10 +1,9 @@
 package com.kickoff.membership.dataaccess.adapter;
 
 import com.kickoff.common.domain.valuobject.MemberId;
-import com.kickoff.membership.dataaccess.entity.MemberEntity;
-import com.kickoff.membership.dataaccess.mapper.MembershipDataAccessMapper;
 import com.kickoff.membership.dataaccess.repository.MemberJpaRepository;
 import com.kickoff.membership.domain.entity.Member;
+import com.kickoff.membership.domain.valueobject.Email;
 import com.kickoff.membership.service.port.output.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,26 +16,21 @@ import java.util.Optional;
 public class MemberRepositoryImpl implements MemberRepository {
 
   private final MemberJpaRepository memberJpaRepository;
-  private final MembershipDataAccessMapper membershipDataAccessMapper;
 
   @Transactional
   @Override
   public Member save(Member member) {
-    MemberEntity entity = membershipDataAccessMapper.memberToMemberEntity(member);
-    MemberEntity savedMemberEntity = memberJpaRepository.save(entity);
-    return membershipDataAccessMapper.memberEntityToMember(savedMemberEntity);
+    return memberJpaRepository.save(member);
   }
 
   @Override
-  public Optional<Member> findByEmail(String email) {
-    return memberJpaRepository.findByEmail(email)
-      .map(membershipDataAccessMapper::memberEntityToMember);
+  public Optional<Member> findByEmail(Email email) {
+    return memberJpaRepository.findByEmail(email);
   }
 
   @Override
   public Optional<Member> findById(MemberId memberId) {
-    return memberJpaRepository.findById(memberId.getValue())
-      .map(membershipDataAccessMapper::memberEntityToMember);
+    return memberJpaRepository.findById(memberId);
   }
 
 }

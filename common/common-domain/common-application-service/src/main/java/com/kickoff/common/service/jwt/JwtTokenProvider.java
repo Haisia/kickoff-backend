@@ -20,7 +20,7 @@ public class JwtTokenProvider {
   private final long TOKEN_VALIDITY = 60 * 60 * 1000;
 
   public String generateToken(MemberId memberId) {
-    return JwtUtil.generateToken(memberId.getValue(), jwtSecret, applicationName, TOKEN_VALIDITY);
+    return JwtUtil.generateToken(memberId.getId(), jwtSecret, applicationName, TOKEN_VALIDITY);
   }
 
   public UUID parseToken(String token) {

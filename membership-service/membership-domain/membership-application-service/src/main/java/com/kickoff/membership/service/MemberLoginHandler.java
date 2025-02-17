@@ -1,5 +1,6 @@
 package com.kickoff.membership.service;
 
+import com.kickoff.membership.domain.valueobject.Email;
 import com.kickoff.membership.service.dto.login.LoginMemberRequest;
 import com.kickoff.membership.service.dto.login.LoginMemberResponse;
 import com.kickoff.membership.domain.entity.Member;
@@ -23,9 +24,9 @@ public class MemberLoginHandler {
 
   @Transactional
   public LoginMemberResponse loginMember(LoginMemberRequest request) {
-    Member findMember = memberRepository.findByEmail(request.getEmail())
+    Member findMember = memberRepository.findByEmail(Email.of(request.email))
       .orElseThrow(() -> new LoginFailureException(request.email));
-    if (!passwordEncoder.matches(request.getPassword(), findMember.getPassword().getValue())) {
+    if (!passwordEncoder.matches(request.getPassword(), findMember.getPassword().getHashedPassword())) {
       throw new LoginFailureException(request.email);
     }
 

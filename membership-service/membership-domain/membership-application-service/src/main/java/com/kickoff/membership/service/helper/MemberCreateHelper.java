@@ -29,7 +29,12 @@ public class MemberCreateHelper {
   @Transactional
   public MemberCreatedEvent persistMember(CreateMemberRequest request) {
     Member member = memberDataMapper.createMemberRequestToMember(request);
-    member.setPassword(Password.of(passwordEncoder.encode(request.password), true));
+    Password createdPassword = Password.builder()
+      .rawPassword(request.password)
+      .hashedPassword(passwordEncoder.encode(request.password))
+      .build();
+    member.setPassword(createdPassword);
+
     MemberCreatedEvent memberCreatedEvent = memberDomainService.validateAndInitiateMember(member);
     saveMember(member);
     log.info("[*] 회원가입에 성공하였습니다. : memberId={}", member.getId());
@@ -37,8 +42,8 @@ public class MemberCreateHelper {
   }
 
   private Member saveMember(Member member) {
-    memberRepository.findByEmail(member.getEmail().getValue()).ifPresent((m) -> {
-      throw new AlreadyExistEmailException(m.getEmail().getValue());
+    memberRepository.findByEmail(member.getEmail()).ifPresent((m) -> {
+      throw new AlreadyExistEmailException(m.getEmail().getEmail());
     });
     Member savedMember = memberRepository.save(member);
 

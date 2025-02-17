@@ -23,7 +23,7 @@ public class MemberAttendanceHandler {
   @Transactional
   public void attendMember(AttendMemberCommand command) {
     Member member = memberRepository.findById(command.getMemberId())
-      .orElseThrow(() -> new NotFoundMemberException("memberId", command.getMemberId().getValue().toString()));
+      .orElseThrow(() -> new NotFoundMemberException("memberId", command.getMemberId().getId().toString()));
 
     member.checkAttendance();
     member.addPoint(AttendanceRecord.attendancePoint);
@@ -32,7 +32,7 @@ public class MemberAttendanceHandler {
     String logMessage = String.format("[*] 출석체크하여 %s 포인트를 적립하였습니다. : memberId=%s, currentPoint=%s"
       , AttendanceRecord.attendancePoint.toString()
       , member.getId()
-      , member.getPoint().getValue());
+      , member.getPoint().getPoint());
     log.info(logMessage);
 
     logEntryPersistPublisher.publish(LogEntryLevel.INFO, logMessage);
