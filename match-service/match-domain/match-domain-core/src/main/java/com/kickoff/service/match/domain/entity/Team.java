@@ -29,6 +29,10 @@ public class Team extends BaseEntity {
   private Integer founded;
   private Boolean national;
 
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "league_id")
+  private League league;
+
   @ElementCollection
   @CollectionTable(name = "team_logos", joinColumns = @JoinColumn(name = "team_id"))
   private List<Logo> logos = new ArrayList<>();

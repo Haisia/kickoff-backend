@@ -2,7 +2,6 @@ package com.kickoff.service.match.domain;
 
 import com.kickoff.common.constant.Constant;
 import com.kickoff.service.match.domain.entity.League;
-import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiClient;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import com.kickoff.service.match.domain.port.output.repository.SeasonRepository;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,15 +22,11 @@ public class TeamApiPullHandler {
   private final SeasonRepository seasonRepository;
 
   @Transactional
-  public void teamApiPull() {
-    List<League> leagues = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_IDS);
-    List<Team> teams = new ArrayList<>();
+  public void teamApiPullAndMappingSeason() {
+    List<League> leagues = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS);
     for (League league : leagues) {
-      teams.addAll(leagueExternalApiClient.pullTeam(league));
+      leagueExternalApiClient.pullTeam(league);
     }
-
-    teamRepository.saveAllFromApiFootball(teams);
-    leagueExternalApiClient.mappingSeasonWithTeams(leagues);
   }
 }
 

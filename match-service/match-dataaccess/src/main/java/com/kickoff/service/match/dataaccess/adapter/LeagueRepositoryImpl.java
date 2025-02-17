@@ -28,4 +28,9 @@ public class LeagueRepositoryImpl implements LeagueRepository {
   public List<League> findByApiFootballLeagueIdIn(List<Long> apiFootballLeagueIds) {
     return leagueJpaRepository.findByApiFootballLeagueIdIn(apiFootballLeagueIds);
   }
+
+  @Override
+  public List<League> findAll() {
+    return leagueJpaRepository.findAll();
+  }
 }

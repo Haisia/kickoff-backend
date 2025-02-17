@@ -7,7 +7,8 @@ import lombok.*;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
+@Table(name = "season_map_team", uniqueConstraints = @UniqueConstraint(columnNames = {"season_id", "team_id"}))
 @Embeddable
 public class SeasonMapTeam extends BaseEntity {
 

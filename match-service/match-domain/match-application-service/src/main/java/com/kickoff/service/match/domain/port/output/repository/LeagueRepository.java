@@ -8,4 +8,5 @@ public interface LeagueRepository {
   League save(League league);
   List<League> saveAll(List<League> leagues);
   List<League> findByApiFootballLeagueIdIn(List<Long> apiFootballLeagueIds);
+  List<League> findAll();
 }

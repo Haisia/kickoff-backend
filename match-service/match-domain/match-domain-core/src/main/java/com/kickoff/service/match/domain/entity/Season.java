@@ -1,10 +1,8 @@
 package com.kickoff.service.match.domain.entity;
 
 import com.kickoff.common.domain.entity.BaseEntity;
-import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.service.match.domain.valueobject.SeasonId;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -13,20 +11,24 @@ import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
+@Table(name = "seasons")
 @Entity
 public class Season extends BaseEntity {
   @EmbeddedId
   private SeasonId id;
-  private LeagueId leagueId;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "league_id", nullable = false)
+  private League league;
   private Year year;
   private LocalDate startDate;
   private LocalDate endDate;
 
   @Builder
-  public Season(SeasonId id, LeagueId leagueId, Year year, LocalDate startDate, LocalDate endDate) {
+  public Season(SeasonId id, League league, Year year, LocalDate startDate, LocalDate endDate) {
     if (id == null) id = SeasonId.generate();
     this.id = id;
-    this.leagueId = leagueId;
+    this.league = league;
     this.year = year;
     this.startDate = startDate;
     this.endDate = endDate;

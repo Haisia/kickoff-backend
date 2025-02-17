@@ -21,7 +21,7 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
 
   @Transactional
   @Override
-  public void teamApiPull() {
-    teamApiPullHandler.teamApiPull();
+  public void teamApiPullAndMappingSeason() {
+    teamApiPullHandler.teamApiPullAndMappingSeason();
   }
 }

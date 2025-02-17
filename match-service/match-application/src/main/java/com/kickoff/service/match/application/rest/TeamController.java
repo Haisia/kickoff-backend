@@ -1,6 +1,7 @@
 package com.kickoff.service.match.application.rest;
 
 import com.kickoff.service.match.domain.port.input.TeamApiPullUseCase;
+import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamController {
 
   private final TeamApiPullUseCase teamApiPullUseCase;
+  private final LeagueRepository repository;
 
   @PostMapping("/pull-all")
   public ResponseEntity<?> pullAllTeams() {
-    teamApiPullUseCase.teamApiPull();
+    teamApiPullUseCase.teamApiPullAndMappingSeason();
     return ResponseEntity.ok().build();
   }
-
 }

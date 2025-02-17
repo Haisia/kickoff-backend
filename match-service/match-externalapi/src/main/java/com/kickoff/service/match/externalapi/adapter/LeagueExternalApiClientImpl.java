@@ -2,7 +2,6 @@ package com.kickoff.service.match.externalapi.adapter;
 
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
-import com.kickoff.service.match.domain.entity.SeasonMapTeam;
 import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiClient;
 import com.kickoff.service.match.externalapi.dto.rapidapi.RapidApiResponse;
@@ -43,12 +42,12 @@ public class LeagueExternalApiClientImpl implements LeagueExternalApiClient {
   }
 
   @Override
-  public List<Team> pullTeam(League league) {
+  public League pullTeam(League league) {
     ParameterizedTypeReference<RapidApiResponse<TeamsResponse>> responseType = new ParameterizedTypeReference<>() {};
 
-    List<Team> result = new ArrayList<>();
-    for (SeasonMapTeam seasonMapTeam : league.getSeasonMapTeams()) {
-      Season season = seasonMapTeam.getSeason();
+    for (Season season : new ArrayList<>(league.getAllSeasonsInLeague())) {
+      if (league.getSeasonMapTeams().stream()
+        .anyMatch(seasonMapTeam -> seasonMapTeam.getSeason().equals(season))) continue;
 
       List<TeamsResponse> response = Objects.requireNonNull(
         webClient.get()
@@ -63,21 +62,10 @@ public class LeagueExternalApiClientImpl implements LeagueExternalApiClient {
       ).getResponse();
 
       List<Team> teams = teamsExternalApiMapper.teamsResponsesToTeams(response);
-
-
-
-
-
-      result.addAll(teams);
+      teamsExternalApiMapper.teamsResponsesToTeams(response)
+        .forEach(team -> league.addTeamWithSeason(season, team));
     }
-    return result;
-  }
 
-  @Override
-  public List<League> mappingSeasonWithTeams(List<League> leagues) {
-
-
-
-    return List.of();
+    return league;
   }
 }

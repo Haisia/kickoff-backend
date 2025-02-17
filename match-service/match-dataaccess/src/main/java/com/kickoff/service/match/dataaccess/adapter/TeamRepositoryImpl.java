@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -29,5 +30,10 @@ public class TeamRepositoryImpl implements TeamRepository {
       .map(teamJpaRepository::save)
       .collect(Collectors.toList())
       ;
+  }
+
+  @Override
+  public Optional<Team> findByApiFootballTeamId(Long apiFootballTeamId) {
+    return teamJpaRepository.findByApiFootballTeamId(apiFootballTeamId);
   }
 }
