@@ -14,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Embeddable
 public class LogEntryId extends BaseId<UUID> {
-  @Column(name = "league_id")
+  @Column(name = "log_entry_id")
   private UUID id;
 
   protected LogEntryId(UUID id) {
