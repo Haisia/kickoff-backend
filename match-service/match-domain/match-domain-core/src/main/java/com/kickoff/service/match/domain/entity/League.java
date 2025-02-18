@@ -68,7 +68,10 @@ public class League extends AggregateRoot {
 
     season.setLeague(this);
     team.setLeague(this);
-    SeasonMapTeam seasonMapTeam = new SeasonMapTeam(season, team);
+    SeasonMapTeam seasonMapTeam = SeasonMapTeam.builder()
+      .season(season)
+      .team(team)
+      .build();
     if (!seasonMapTeams.contains(seasonMapTeam)) seasonMapTeams.add(seasonMapTeam);
   }
 
@@ -96,6 +99,12 @@ public class League extends AggregateRoot {
       .filter(season -> season.getYear().equals(year))
       .findFirst()
       ;
+  }
+
+  public Optional<SeasonMapTeam> getSeasonMapTeam(Year year, Long apiFootballTeamId) {
+    return seasonMapTeams.stream()
+      .filter(m -> m.getSeason().getYear().equals(year) && m.getTeam().getApiFootballTeamId().equals(apiFootballTeamId))
+      .findFirst();
   }
 
   public void addTeam(Team team) {

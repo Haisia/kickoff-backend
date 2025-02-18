@@ -20,4 +20,10 @@ public class LeagueController {
     return ResponseEntity.ok().build();
   }
 
+  @PostMapping("/rank/init")
+  public ResponseEntity<?> initRanking() {
+    leagueApiPullUseCase.initRanking();
+    return ResponseEntity.ok().build();
+  }
+
 }

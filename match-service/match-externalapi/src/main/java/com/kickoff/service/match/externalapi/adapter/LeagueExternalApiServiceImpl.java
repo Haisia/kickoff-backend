@@ -9,14 +9,17 @@ import com.kickoff.service.match.externalapi.client.LeagueExternalApiClient;
 import com.kickoff.service.match.externalapi.dto.rapidapi.leagues.LeaguesResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayerDto;
 import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayersResponse;
+import com.kickoff.service.match.externalapi.dto.rapidapi.standings.StandingResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamsResponse;
 import com.kickoff.service.match.externalapi.mapper.LeagueExternalApiMapper;
 import com.kickoff.service.match.externalapi.mapper.PlayerExternalApiMapper;
+import com.kickoff.service.match.externalapi.mapper.StandingsExternalApiMapper;
 import com.kickoff.service.match.externalapi.mapper.TeamsExternalApiMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
   private final TeamsExternalApiMapper teamsExternalApiMapper;
   private final PlayerExternalApiMapper playerExternalApiMapper;
   private final LeagueExternalApiClient leagueExternalApiClient;
+  private final StandingsExternalApiMapper standingsExternalApiMapper;
 
   @Override
   public List<League> initLeagues() {
@@ -68,6 +72,24 @@ public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
           .toList();
 
         team.addPlayers(players);
+      }
+    }
+    return leagues;
+  }
+
+  @Override
+  public List<League> initRanking(List<League> leagues) {
+    for (League league : leagues) {
+      for (Season season : league.getAllSeasonsInLeague()) {
+        Year year = season.getYear();
+        List<StandingResponse> standingResponses = leagueExternalApiClient.requestStandings(league.getApiFootballLeagueId(), year);
+        leagueExternalApiClient.requestStandings(league.getApiFootballLeagueId(), year).getFirst().getLeague()
+          .getStandings().getFirst()
+          .forEach(standingDto ->
+            standingsExternalApiMapper.StandingDtoToSeasonMapTeam(standingDto, league.getSeasonMapTeam(year, standingDto.getTeam().getId())
+              .orElse(null)
+            )
+          );
       }
     }
     return leagues;

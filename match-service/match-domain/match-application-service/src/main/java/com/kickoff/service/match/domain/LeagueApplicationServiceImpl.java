@@ -23,6 +23,12 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
 
   @Transactional
   @Override
+  public void initRanking() {
+    leagueApiPullHandler.initRanking();
+  }
+
+  @Transactional
+  @Override
   public void teamApiPullAndMappingSeason() {
     teamApiPullHandler.teamApiPullAndMappingSeason();
   }
