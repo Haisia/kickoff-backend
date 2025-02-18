@@ -38,7 +38,7 @@ public class Team extends BaseEntity {
   private List<Logo> logos = new ArrayList<>();
 
   @ElementCollection
-  @CollectionTable(name = "team_venue", joinColumns = @JoinColumn(name = "team_id"))
+  @CollectionTable(name = "team_venues", joinColumns = @JoinColumn(name = "team_id"))
   private List<Venue> venues = new ArrayList<>();
 
   @Builder
