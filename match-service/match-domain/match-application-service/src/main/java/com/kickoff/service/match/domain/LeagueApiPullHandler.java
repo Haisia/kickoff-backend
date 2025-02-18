@@ -13,6 +13,6 @@ public class LeagueApiPullHandler {
   private final LeagueRepository leagueRepository;
 
   public void leagueApiPull() {
-    leagueRepository.saveAll(leagueExternalApiService.pullLeagues());
+    leagueRepository.saveAll(leagueExternalApiService.initLeagues());
   }
 }

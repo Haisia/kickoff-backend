@@ -1,12 +1,17 @@
 package com.kickoff.service.match.externalapi.adapter;
 
 import com.kickoff.service.match.domain.entity.League;
+import com.kickoff.service.match.domain.entity.Player;
 import com.kickoff.service.match.domain.entity.Season;
+import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiService;
 import com.kickoff.service.match.externalapi.client.LeagueExternalApiClient;
 import com.kickoff.service.match.externalapi.dto.rapidapi.leagues.LeaguesResponse;
+import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayerDto;
+import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayersResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamsResponse;
 import com.kickoff.service.match.externalapi.mapper.LeagueExternalApiMapper;
+import com.kickoff.service.match.externalapi.mapper.PlayerExternalApiMapper;
 import com.kickoff.service.match.externalapi.mapper.TeamsExternalApiMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,6 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
@@ -22,16 +28,17 @@ public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
   private final WebClient webClient;
   private final LeagueExternalApiMapper leagueExternalApiMapper;
   private final TeamsExternalApiMapper teamsExternalApiMapper;
+  private final PlayerExternalApiMapper playerExternalApiMapper;
   private final LeagueExternalApiClient leagueExternalApiClient;
 
   @Override
-  public List<League> pullLeagues() {
+  public List<League> initLeagues() {
     List<LeaguesResponse> response = leagueExternalApiClient.requestLeagues();
     return leagueExternalApiMapper.leaguesResponsesToLeagues(response);
   }
 
   @Override
-  public League pullTeam(League league) {
+  public League initTeam(League league) {
     for (Season season : new ArrayList<>(league.getAllSeasonsInLeague())) {
       if (league.getSeasonMapTeams()
         .stream()
@@ -45,5 +52,30 @@ public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
     }
 
     return league;
+  }
+
+  // allPlayers<apiFootballPlayerId, player>
+  @Override
+  public List<League> initPlayers(List<League> leagues, Map<Long, Player> allPlayers) {
+    for (League league : leagues) {
+      for (Team team : league.getAllTeamsInLeague()) {
+        List<PlayersResponse> playersResponses = leagueExternalApiClient.requestPlayersSquads(team.getApiFootballTeamId());
+        if (playersResponses.isEmpty()) continue;
+        List<Player> players = playersResponses.getFirst()
+          .getPlayers()
+          .stream()
+          .map(playerDto -> allPlayers.getOrDefault(playerDto.getId(), notExistsPlayerHandler(allPlayers, playerDto)))
+          .toList();
+
+        team.addPlayers(players);
+      }
+    }
+    return leagues;
+  }
+
+  private Player notExistsPlayerHandler(Map<Long, Player> allPlayers, PlayerDto playerDto) {
+    Player player = playerExternalApiMapper.playerDtoToPlayer(playerDto);
+    allPlayers.putIfAbsent(playerDto.getId(), player);
+    return player;
   }
 }

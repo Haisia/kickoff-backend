@@ -2,6 +2,7 @@ package com.kickoff.service.match.externalapi.client;
 
 import com.kickoff.service.match.externalapi.dto.rapidapi.RapidApiResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.leagues.LeaguesResponse;
+import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayersResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -39,6 +40,21 @@ public class LeagueExternalApiClient {
           .path("/teams")
           .queryParam("league", leagueId)
           .queryParam("season", season)
+          .build())
+        .retrieve()
+        .bodyToMono(responseType)
+        .block()
+    ).getResponse();
+  }
+
+  public List<PlayersResponse> requestPlayersSquads(Long teamId) {
+    ParameterizedTypeReference<RapidApiResponse<PlayersResponse>> responseType = new ParameterizedTypeReference<>() {};
+
+    return Objects.requireNonNull(
+      webClient.get()
+        .uri(uriBuilder -> uriBuilder
+          .path("/players/squads")
+          .queryParam("team", teamId)
           .build())
         .retrieve()
         .bodyToMono(responseType)

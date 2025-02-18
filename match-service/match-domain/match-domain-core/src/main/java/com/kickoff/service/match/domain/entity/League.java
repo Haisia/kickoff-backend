@@ -40,10 +40,10 @@ public class League extends AggregateRoot {
   @CollectionTable(name = "season_map_team", joinColumns = @JoinColumn(name = "league_id"))
   private List<SeasonMapTeam> seasonMapTeams = new ArrayList<>();
 
-  @OneToMany(mappedBy = "league", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Team> allTeamsInLeague = new ArrayList<>();
 
-  @OneToMany(mappedBy = "league", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Season> allSeasonsInLeague = new ArrayList<>();
 
   @Builder

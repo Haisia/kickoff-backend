@@ -2,31 +2,31 @@ package com.kickoff.service.match.domain;
 
 import com.kickoff.common.constant.Constant;
 import com.kickoff.service.match.domain.entity.League;
+import com.kickoff.service.match.domain.entity.Player;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiService;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
-import com.kickoff.service.match.domain.port.output.repository.SeasonRepository;
-import com.kickoff.service.match.domain.port.output.repository.TeamRepository;
+import com.kickoff.service.match.domain.port.output.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
-public class TeamApiPullHandler {
+public class PlayerApiPullHandler {
 
-  private final LeagueRepository leagueRepository;
   private final LeagueExternalApiService leagueExternalApiService;
-  private final TeamRepository teamRepository;
-  private final SeasonRepository seasonRepository;
+  private final LeagueRepository leagueRepository;
+  private final PlayerRepository playerRepository;
 
-  public void teamApiPullAndMappingSeason() {
+  public void playerApiPull() {
     List<League> leagues = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS);
-    for (League league : leagues) {
-      leagueExternalApiService.initTeam(league);
-    }
+    Map<Long, Player> allPlayers = playerRepository.findAll()
+      .stream()
+      .collect(Collectors.toMap(Player::getApiFootballPlayerId, player -> player));
+
+    leagueExternalApiService.initPlayers(leagues, allPlayers);
   }
 }
-
-
-

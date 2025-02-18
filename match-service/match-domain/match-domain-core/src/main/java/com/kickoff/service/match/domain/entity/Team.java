@@ -13,6 +13,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @NoArgsConstructor
 @Getter @Setter
@@ -41,6 +42,9 @@ public class Team extends BaseEntity {
   @CollectionTable(name = "team_venues", joinColumns = @JoinColumn(name = "team_id"))
   private List<Venue> venues = new ArrayList<>();
 
+  @OneToMany(mappedBy = "currentTeam", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Player> players = new ArrayList<>();
+
   @Builder
   public Team(TeamId id, Long apiFootballTeamId, String name, String code, String country, Integer founded, Boolean national) {
     if (id == null) id = TeamId.generate();
@@ -59,6 +63,31 @@ public class Team extends BaseEntity {
 
   public void addVenue(Venue venue) {
     venues.add(venue);
+  }
+
+  public void addPlayer(Player player) {
+    if (player == null) return;
+    if (hasPlayer(player)) return;
+
+    player.setCurrentTeam(this);
+    players.add(player);
+  }
+
+  public void addPlayers(List<Player> players) {
+    players.forEach(this::addPlayer);
+  }
+
+  public boolean hasPlayer(Player player) {
+    if(players.contains(player)) return true;
+    if(getPlayerByApiFootballPlayerId(player.getApiFootballPlayerId()).isPresent()) return true;
+    return false;
+  }
+
+  public Optional<Player> getPlayerByApiFootballPlayerId(Long apiFootballTeamId) {
+    return players.stream()
+      .filter(player -> player.getApiFootballPlayerId().equals(apiFootballTeamId))
+      .findFirst()
+      ;
   }
 
   @Override
