@@ -1,0 +1,48 @@
+package com.kickoff.service.match.externalapi.client;
+
+import com.kickoff.service.match.externalapi.dto.rapidapi.RapidApiResponse;
+import com.kickoff.service.match.externalapi.dto.rapidapi.leagues.LeaguesResponse;
+import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamsResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.time.Year;
+import java.util.List;
+import java.util.Objects;
+
+@RequiredArgsConstructor
+@Component
+public class LeagueExternalApiClient {
+
+  private final WebClient webClient;
+
+  public List<LeaguesResponse> requestLeagues() {
+    ParameterizedTypeReference<RapidApiResponse<LeaguesResponse>> responseType = new ParameterizedTypeReference<>() {};
+
+    return Objects.requireNonNull(
+      webClient.get()
+        .uri("/leagues")
+        .retrieve()
+        .bodyToMono(responseType)
+        .block()
+    ).getResponse();
+  }
+
+  public List<TeamsResponse> requestTeams(Long leagueId, Year season) {
+    ParameterizedTypeReference<RapidApiResponse<TeamsResponse>> responseType = new ParameterizedTypeReference<>() {};
+
+    return Objects.requireNonNull(
+      webClient.get()
+        .uri(uriBuilder -> uriBuilder
+          .path("/teams")
+          .queryParam("league", leagueId)
+          .queryParam("season", season)
+          .build())
+        .retrieve()
+        .bodyToMono(responseType)
+        .block()
+    ).getResponse();
+  }
+}

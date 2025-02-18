@@ -2,7 +2,7 @@ package com.kickoff.service.match.domain;
 
 import com.kickoff.common.constant.Constant;
 import com.kickoff.service.match.domain.entity.League;
-import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiClient;
+import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiService;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import com.kickoff.service.match.domain.port.output.repository.SeasonRepository;
 import com.kickoff.service.match.domain.port.output.repository.TeamRepository;
@@ -17,7 +17,7 @@ import java.util.List;
 public class TeamApiPullHandler {
 
   private final LeagueRepository leagueRepository;
-  private final LeagueExternalApiClient leagueExternalApiClient;
+  private final LeagueExternalApiService leagueExternalApiService;
   private final TeamRepository teamRepository;
   private final SeasonRepository seasonRepository;
 
@@ -25,7 +25,7 @@ public class TeamApiPullHandler {
   public void teamApiPullAndMappingSeason() {
     List<League> leagues = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS);
     for (League league : leagues) {
-      leagueExternalApiClient.pullTeam(league);
+      leagueExternalApiService.pullTeam(league);
     }
   }
 }
