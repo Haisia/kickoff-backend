@@ -7,6 +7,8 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,6 +26,9 @@ public class Season extends BaseEntity {
   private LocalDate startDate;
   private LocalDate endDate;
 
+  @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Fixture> fixtures = new ArrayList<>();
+
   @Builder
   public Season(SeasonId id, League league, Year year, LocalDate startDate, LocalDate endDate) {
     if (id == null) id = SeasonId.generate();
@@ -32,6 +37,12 @@ public class Season extends BaseEntity {
     this.year = year;
     this.startDate = startDate;
     this.endDate = endDate;
+  }
+
+  public void addFixture(Fixture fixture) {
+    if (fixture == null) return;
+    fixture.setSeason(this);
+    fixtures.add(fixture);
   }
 
   @Override

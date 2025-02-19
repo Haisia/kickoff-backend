@@ -168,6 +168,13 @@ public class League extends AggregateRoot {
       .orElse(null);
   }
 
+  public Optional<Venue> getVenueByApiFootballVenueId(Long apiFootballVenueId) {
+    return allTeamsInLeague.stream()
+      .flatMap(team -> team.getVenues().stream())
+      .filter(venue -> venue.getApiFootballVenueId().equals(apiFootballVenueId))
+      .findFirst();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;

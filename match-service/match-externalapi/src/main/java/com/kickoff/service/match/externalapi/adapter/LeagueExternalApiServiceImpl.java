@@ -6,15 +6,13 @@ import com.kickoff.service.match.domain.entity.Season;
 import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiService;
 import com.kickoff.service.match.externalapi.client.LeagueExternalApiClient;
+import com.kickoff.service.match.externalapi.dto.rapidapi.fixtures.FixturesResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.leagues.LeaguesResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayerDto;
 import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayersResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.standings.StandingResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamsResponse;
-import com.kickoff.service.match.externalapi.mapper.LeagueExternalApiMapper;
-import com.kickoff.service.match.externalapi.mapper.PlayerExternalApiMapper;
-import com.kickoff.service.match.externalapi.mapper.StandingsExternalApiMapper;
-import com.kickoff.service.match.externalapi.mapper.TeamsExternalApiMapper;
+import com.kickoff.service.match.externalapi.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -34,6 +32,7 @@ public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
   private final PlayerExternalApiMapper playerExternalApiMapper;
   private final LeagueExternalApiClient leagueExternalApiClient;
   private final StandingsExternalApiMapper standingsExternalApiMapper;
+  private final FixtureExternalApiMapper fixtureExternalApiMapper;
 
   @Override
   public List<League> initLeagues() {
@@ -90,6 +89,19 @@ public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
               .orElse(null)
             )
           );
+      }
+    }
+    return leagues;
+  }
+
+  @Override
+  public List<League> initFixture(List<League> leagues) {
+    for (League league : leagues) {
+      for (Season season : league.getAllSeasonsInLeague()) {
+        leagueExternalApiClient.requestFixtures(league.getApiFootballLeagueId(), season.getYear())
+          .stream()
+          .map(fixturesResponse -> fixtureExternalApiMapper.fixturesResponseToFixture(fixturesResponse, league))
+          .forEach(season::addFixture);
       }
     }
     return leagues;

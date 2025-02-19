@@ -4,10 +4,7 @@ import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.service.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingQuery;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
-import com.kickoff.service.match.domain.port.input.GetLeagueUseCase;
-import com.kickoff.service.match.domain.port.input.LeagueApiPullUseCase;
-import com.kickoff.service.match.domain.port.input.PlayerApiPullUseCase;
-import com.kickoff.service.match.domain.port.input.TeamApiPullUseCase;
+import com.kickoff.service.match.domain.port.input.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +13,13 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamApiPullUseCase, PlayerApiPullUseCase, GetLeagueUseCase {
+public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamApiPullUseCase, PlayerApiPullUseCase, GetLeagueUseCase, FixtureApiPullUseCase {
 
   private final LeagueApiPullHandler leagueApiPullHandler;
   private final TeamApiPullHandler teamApiPullHandler;
   private final PlayerApiPullHandler playerApiPullHandler;
   private final LeagueRankingGetHandler leagueRankingGetHandler;
+  private final FixtureApiPullHandler fixtureApiPullHandler;
 
   @Transactional
   @Override
@@ -59,6 +57,11 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
   public ResponseContainer<GetLeagueSeasonRankingResponse> getLeagueSeasonRankingForMainPage() {
     List<GetLeagueSeasonRankingResponse> leagueSeasonRankingForMainPage = leagueRankingGetHandler.getLeagueSeasonRankingForMainPage();
     return new ResponseContainer<>("", leagueSeasonRankingForMainPage);
+  }
 
+  @Transactional
+  @Override
+  public void initFixtures() {
+    fixtureApiPullHandler.initFixtures();
   }
 }

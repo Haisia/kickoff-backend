@@ -14,5 +14,6 @@ public class LeagueDto {
   public String name;
   public String type;
   public String logo;
+  public Integer season;
   List<List<StandingDto>> standings;
 }

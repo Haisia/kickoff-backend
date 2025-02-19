@@ -13,4 +13,5 @@ public interface LeagueExternalApiService {
   // allPlayers<apiFootballPlayerId, player>
   List<League> initPlayers(List<League> league, Map<Long, Player> allPlayers);
   List<League> initRanking(List<League> league);
+  List<League> initFixture(List<League> league);
 }

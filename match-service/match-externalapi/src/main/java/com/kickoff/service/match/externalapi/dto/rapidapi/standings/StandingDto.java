@@ -18,6 +18,4 @@ public class StandingDto {
   public ScoreStatsDto all;
   public ScoreStatsDto home;
   public ScoreStatsDto away;
-
-
 }
