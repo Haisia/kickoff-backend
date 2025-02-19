@@ -1,5 +1,6 @@
 package com.kickoff.service.match.dataaccess.adapter;
 
+import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.service.match.dataaccess.repository.LeagueJpaRepository;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -22,6 +24,11 @@ public class LeagueRepositoryImpl implements LeagueRepository {
   @Override
   public List<League> saveAll(List<League> leagues) {
     return leagueJpaRepository.saveAll(leagues);
+  }
+
+  @Override
+  public Optional<League> findById(LeagueId id) {
+    return leagueJpaRepository.findById(id);
   }
 
   @Override

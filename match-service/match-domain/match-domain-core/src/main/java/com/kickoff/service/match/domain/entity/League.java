@@ -12,10 +12,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
@@ -107,6 +104,18 @@ public class League extends AggregateRoot {
       .findFirst();
   }
 
+  public List<SeasonMapTeam> getSeasonMapTeams(Year year) {
+    List<SeasonMapTeam> result = seasonMapTeams.stream()
+      .filter(m -> m.getSeason().getYear().equals(year))
+      .sorted(Comparator.comparingInt(SeasonMapTeam::getRank))
+      .toList();
+
+    if (result.isEmpty()) {
+      throw new LeagueDomainException(String.format("[*] seasonMapTeam 을 찾을 수 없습니다. : seasonYear=%s", year), CustomHttpStatus.BAD_REQUEST);
+    }
+    return result;
+  }
+
   public void addTeam(Team team) {
     if (team == null) return;
     if (allTeamsInLeague.contains(team)) return;
@@ -144,6 +153,11 @@ public class League extends AggregateRoot {
 
   public void addLogo(Logo logo) {
     logos.add(logo);
+  }
+
+  public String getLogoUrlAnything() {
+    if (logos.isEmpty()) return "";
+    return logos.getFirst().getUrl();
   }
 
   @Override

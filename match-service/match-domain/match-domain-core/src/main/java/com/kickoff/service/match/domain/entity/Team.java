@@ -61,6 +61,11 @@ public class Team extends BaseEntity {
     logos.add(logo);
   }
 
+  public String getLogoUrlAnything() {
+    if (logos.isEmpty()) return "";
+    return logos.getFirst().getUrl();
+  }
+
   public void addVenue(Venue venue) {
     venues.add(venue);
   }
