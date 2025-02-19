@@ -5,6 +5,8 @@ import com.kickoff.service.match.domain.valueobject.VenueId;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
 @Table(name = "venues")
@@ -36,5 +38,17 @@ public class Venue extends BaseEntity {
     this.surface = surface;
     this.image = image;
     this.team = team;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    Venue venue = (Venue) o;
+    return Objects.equals(id, venue.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
   }
 }
