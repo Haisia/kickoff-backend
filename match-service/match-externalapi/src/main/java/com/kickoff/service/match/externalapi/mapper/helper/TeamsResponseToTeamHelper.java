@@ -3,7 +3,7 @@ package com.kickoff.service.match.externalapi.mapper.helper;
 import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.valueobject.Logo;
 import com.kickoff.service.match.domain.valueobject.UrlType;
-import com.kickoff.service.match.domain.valueobject.Venue;
+import com.kickoff.service.match.domain.entity.Venue;
 import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamDto;
 import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamsResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.teams.VenueDto;

@@ -85,7 +85,7 @@ alter table public.team_logos
   owner to root;
 
 
-create table if not exists public.team_venues
+create table if not exists public.venues
 (
   team_id               uuid not null references public.teams,
   api_football_venue_id bigint,
@@ -97,7 +97,7 @@ create table if not exists public.team_venues
   image                 varchar(255)
 );
 
-alter table public.team_venues
+alter table public.venues
   owner to root;
 
 

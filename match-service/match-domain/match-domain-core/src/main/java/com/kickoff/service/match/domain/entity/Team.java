@@ -3,7 +3,6 @@ package com.kickoff.service.match.domain.entity;
 import com.kickoff.common.domain.entity.BaseEntity;
 import com.kickoff.service.match.domain.valueobject.Logo;
 import com.kickoff.service.match.domain.valueobject.TeamId;
-import com.kickoff.service.match.domain.valueobject.Venue;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,8 +37,7 @@ public class Team extends BaseEntity {
   @CollectionTable(name = "team_logos", joinColumns = @JoinColumn(name = "team_id"))
   private List<Logo> logos = new ArrayList<>();
 
-  @ElementCollection
-  @CollectionTable(name = "team_venues", joinColumns = @JoinColumn(name = "team_id"))
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
   private List<Venue> venues = new ArrayList<>();
 
   @OneToMany(mappedBy = "currentTeam", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -67,6 +65,8 @@ public class Team extends BaseEntity {
   }
 
   public void addVenue(Venue venue) {
+    if (venue == null) return;
+    venue.setTeam(this);
     venues.add(venue);
   }
 
