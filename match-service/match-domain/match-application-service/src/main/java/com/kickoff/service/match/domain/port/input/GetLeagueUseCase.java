@@ -6,4 +6,5 @@ import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
 
 public interface GetLeagueUseCase {
   ResponseContainer<GetLeagueSeasonRankingResponse> getLeagueSeasonRanking(GetLeagueSeasonRankingQuery query);
+  ResponseContainer<GetLeagueSeasonRankingResponse> getLeagueSeasonRankingForMainPage();
 }

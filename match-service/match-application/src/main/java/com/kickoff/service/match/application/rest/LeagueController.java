@@ -34,4 +34,9 @@ public class LeagueController {
   public ResponseEntity<ResponseContainer<GetLeagueSeasonRankingResponse>> getLeagueSeasonRanking(@Valid @RequestBody GetLeagueSeasonRankingQuery query) {
     return ResponseEntity.ok(getLeagueUseCase.getLeagueSeasonRanking(query));
   }
+
+  @PostMapping("/rank/main")
+  public ResponseEntity<ResponseContainer<GetLeagueSeasonRankingResponse>> getLeagueSeasonRanking() {
+    return ResponseEntity.ok(getLeagueUseCase.getLeagueSeasonRankingForMainPage());
+  }
 }

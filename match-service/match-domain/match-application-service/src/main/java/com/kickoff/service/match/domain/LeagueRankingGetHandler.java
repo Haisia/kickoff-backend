@@ -1,5 +1,6 @@
 package com.kickoff.service.match.domain;
 
+import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Year;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -24,5 +26,12 @@ public class LeagueRankingGetHandler {
       .orElseThrow(() -> new LeagueDomainException(String.format("[*] league를 찾을 수 없습니다. : leagueId=%s", leagueId.getId()), CustomHttpStatus.BAD_REQUEST));
 
     return leagueDataMapper.leagueToGetLeagueSeasonRankingResponse(league, year);
+  }
+
+  public List<GetLeagueSeasonRankingResponse> getLeagueSeasonRankingForMainPage() {
+    return leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS)
+      .stream()
+      .map(league -> leagueDataMapper.leagueToGetLeagueSeasonRankingResponse(league, league.getLatestSeasonYear()))
+      .toList();
   }
 }

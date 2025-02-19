@@ -53,4 +53,12 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
     GetLeagueSeasonRankingResponse leagueSeasonRanking = leagueRankingGetHandler.getLeagueSeasonRanking(LeagueId.of(query.getLeagueId()), query.getYear());
     return new ResponseContainer<>(query, List.of(leagueSeasonRanking));
   }
+
+  @Transactional
+  @Override
+  public ResponseContainer<GetLeagueSeasonRankingResponse> getLeagueSeasonRankingForMainPage() {
+    List<GetLeagueSeasonRankingResponse> leagueSeasonRankingForMainPage = leagueRankingGetHandler.getLeagueSeasonRankingForMainPage();
+    return new ResponseContainer<>("", leagueSeasonRankingForMainPage);
+
+  }
 }

@@ -160,6 +160,14 @@ public class League extends AggregateRoot {
     return logos.getFirst().getUrl();
   }
 
+  public Year getLatestSeasonYear() {
+    if (allSeasonsInLeague.isEmpty()) throw new LeagueDomainException("[*] season 을 찾을 수 없습니다", CustomHttpStatus.INTERNAL_SERVER_ERROR);
+    return allSeasonsInLeague.stream()
+      .map(Season::getYear)
+      .max(Comparator.naturalOrder())
+      .orElse(null);
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
