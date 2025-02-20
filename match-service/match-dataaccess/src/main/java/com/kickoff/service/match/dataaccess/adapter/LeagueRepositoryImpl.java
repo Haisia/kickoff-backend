@@ -1,11 +1,13 @@
 package com.kickoff.service.match.dataaccess.adapter;
 
 import com.kickoff.common.domain.valuobject.LeagueId;
+import com.kickoff.service.match.dataaccess.repository.FixtureJpaRepository;
 import com.kickoff.service.match.dataaccess.repository.LeagueJpaRepository;
 import com.kickoff.service.match.dataaccess.repository.TeamJpaRepository;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
+import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.TeamId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,7 @@ public class LeagueRepositoryImpl implements LeagueRepository {
 
   private final LeagueJpaRepository leagueJpaRepository;
   private final TeamJpaRepository teamJpaRepository;
+  private final FixtureJpaRepository fixtureJpaRepository;
 
   @Override
   public League save(League league) {
@@ -42,8 +45,13 @@ public class LeagueRepositoryImpl implements LeagueRepository {
 
   @Override
   public Optional<League> findByTeamId(TeamId teamId) {
-    Team team = teamJpaRepository.findById(teamId).orElseThrow();
-    return Optional.ofNullable(team.getLeague());
+    return teamJpaRepository.findById(teamId).map(Team::getLeague);
+  }
+
+  @Override
+  public Optional<League> findByFixtureId(FixtureId fixtureId) {
+    return fixtureJpaRepository.findById(fixtureId)
+      .map(fixture -> fixture.getSeason().getLeague());
   }
 
   @Override

@@ -5,10 +5,12 @@ import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.common.service.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
+import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
 import com.kickoff.service.match.domain.exception.LeagueDomainException;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
+import com.kickoff.service.match.domain.valueobject.TeamId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -33,5 +35,17 @@ public class LeagueFixtureGetHandler {
       .toList();
 
     return new ResponseContainer<>(query, responses);
+  }
+
+  public List<GetLeagueSeasonFixturesResponse> getHeadToHeadSimple(TeamId teamId1, TeamId teamId2) {
+    League league = leagueRepository.findByTeamId(teamId1).orElseThrow();
+    League league2 = leagueRepository.findByTeamId(teamId2).orElseThrow();
+    if (!league.equals(league2)) throw new LeagueDomainException("[*] HeadToHead 는 동일한 리그 내에서만 가능합니다.", CustomHttpStatus.BAD_REQUEST);
+
+    List<Fixture> headToHeadFixtures = league.getRecently5GamesFixtures(teamId1, teamId2);
+    return league.getRecently5GamesFixtures(teamId1, teamId2)
+      .stream()
+      .map(GetLeagueSeasonFixturesResponse::from)
+      .toList();
   }
 }

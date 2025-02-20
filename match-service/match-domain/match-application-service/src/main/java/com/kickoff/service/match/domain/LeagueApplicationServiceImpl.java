@@ -2,7 +2,6 @@ package com.kickoff.service.match.domain;
 
 import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.valuobject.LeagueId;
-import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.common.service.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesForMainPageResponse;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesInPlayResponse;
@@ -14,9 +13,11 @@ import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
 import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
-import com.kickoff.service.match.domain.exception.LeagueDomainException;
+import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.port.input.*;
+import com.kickoff.service.match.domain.port.output.repository.FixtureRepository;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
+import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.TeamId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,7 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
   private final FixtureApiPullHandler fixtureApiPullHandler;
   private final LeagueFixtureGetHandler leagueFixtureGetHandler;
   private final LeagueRepository leagueRepository;
+  private final FixtureRepository fixtureRepository;
 
   @Transactional
   @Override
@@ -130,19 +132,20 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
   @Transactional
   @Override
   public ResponseContainer<GetLeagueSeasonFixturesResponse> getHeadToHeadSimple(GetHeadToHeadSimpleQuery query) {
-    TeamId teamId = TeamId.of(query.getTeamIds().getFirst());
+    TeamId teamId1 = TeamId.of(query.getTeamIds().getFirst());
     TeamId teamId2 = TeamId.of(query.getTeamIds().getLast());
 
-    League league = leagueRepository.findByTeamId(teamId).orElseThrow();
-    League league2 = leagueRepository.findByTeamId(teamId2).orElseThrow();
-    if (!league.equals(league2)) throw new LeagueDomainException("[*] HeadToHead 는 동일한 리그 내에서만 가능합니다.", CustomHttpStatus.BAD_REQUEST);
-
-    List<Fixture> headToHeadFixtures = league.getRecently5GamesFixtures(teamId, teamId2);
-    List<GetLeagueSeasonFixturesResponse> responses = league.getRecently5GamesFixtures(teamId, teamId2)
-      .stream()
-      .map(GetLeagueSeasonFixturesResponse::from)
-      .toList();
-
+    List<GetLeagueSeasonFixturesResponse> responses = leagueFixtureGetHandler.getHeadToHeadSimple(teamId1, teamId2);
     return new ResponseContainer<>(query, responses);
+  }
+
+  @Transactional
+  @Override
+  public ResponseContainer<GetLeagueSeasonFixturesResponse> getHeadToHeadSimple(FixtureId fixtureId) {
+    Fixture fixture = fixtureRepository.findById(fixtureId).orElseThrow();
+    Team homeTeam = fixture.getHomeTeam();
+    Team awayTeam = fixture.getAwayTeam();
+    List<GetLeagueSeasonFixturesResponse> responses = leagueFixtureGetHandler.getHeadToHeadSimple(homeTeam.getId(), awayTeam.getId());
+    return new ResponseContainer<>(fixtureId, responses);
   }
 }

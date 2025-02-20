@@ -7,12 +7,13 @@ import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
 import com.kickoff.service.match.domain.port.input.FixtureApiPullUseCase;
 import com.kickoff.service.match.domain.port.input.GetFixtureUseCase;
+import com.kickoff.service.match.domain.port.input.GetHeadToHeadUseCase;
+import com.kickoff.service.match.domain.valueobject.FixtureId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,6 +22,7 @@ public class FixtureController {
 
   private final FixtureApiPullUseCase fixtureApiPullUseCase;
   private final GetFixtureUseCase getFixtureUseCase;
+  private final GetHeadToHeadUseCase getHeadToHeadUseCase;
 
   @PostMapping("/pull-all")
   public ResponseEntity<?> pullAllFixtures() {
@@ -41,5 +43,10 @@ public class FixtureController {
   @PostMapping("/in-play")
   public ResponseEntity<ResponseContainer<GetLeagueSeasonFixturesInPlayResponse>> getLeagueSeasonInPlayFixtures() {
     return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonInPlayFixtures());
+  }
+
+  @PostMapping("/head-to-head/simple/{fixtureId}")
+  public ResponseEntity<?> getHeadToHeadSimple(@PathVariable("fixtureId") UUID fixtureId) {
+    return ResponseEntity.ok(getHeadToHeadUseCase.getHeadToHeadSimple(FixtureId.of(fixtureId)));
   }
 }

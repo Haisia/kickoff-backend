@@ -2,6 +2,7 @@ package com.kickoff.service.match.domain.port.output.repository;
 
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.service.match.domain.entity.League;
+import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.TeamId;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface LeagueRepository {
   List<League> findAll();
   List<League> findByApiFootballLeagueIdIn(List<Long> apiFootballLeagueIds);
   Optional<League> findByTeamId(TeamId teamId);
+  Optional<League> findByFixtureId(FixtureId fixtureId);
 }
