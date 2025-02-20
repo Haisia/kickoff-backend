@@ -1,16 +1,23 @@
 package com.kickoff.service.match.domain;
 
+import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.service.dto.ResponseContainer;
+import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesForMainPageResponse;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingQuery;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
+import com.kickoff.service.match.domain.entity.League;
+import com.kickoff.service.match.domain.entity.Season;
 import com.kickoff.service.match.domain.port.input.*;
+import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,6 +30,7 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
   private final LeagueRankingGetHandler leagueRankingGetHandler;
   private final FixtureApiPullHandler fixtureApiPullHandler;
   private final LeagueFixtureGetHandler leagueFixtureGetHandler;
+  private final LeagueRepository leagueRepository;
 
   @Transactional
   @Override
@@ -72,5 +80,24 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
   @Override
   public ResponseContainer<GetLeagueSeasonFixturesResponse> getLeagueSeasonFixtures(GetLeagueSeasonFixturesQuery query) {
     return leagueFixtureGetHandler.getLeagueSeasonFixtures(query);
+  }
+
+  @Transactional
+  @Override
+  public ResponseContainer<GetLeagueSeasonFixturesForMainPageResponse> getLeagueSeasonFixturesForMainPage() {
+    List<League> leagues = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS);
+    List<GetLeagueSeasonFixturesForMainPageResponse> result = new ArrayList<>();
+
+    for (League league : leagues) {
+      Year year = league.getLatestSeasonYear();
+      Season season = league.getSeasonByYear(year).orElseThrow();
+      List<GetLeagueSeasonFixturesResponse> responses = season.findFixturesWithinTwoWeeks()
+        .stream()
+        .map(GetLeagueSeasonFixturesResponse::from)
+        .toList();
+
+      result.add(GetLeagueSeasonFixturesForMainPageResponse.from(league, year.getValue(), responses));
+    }
+    return new ResponseContainer<>("", result);
   }
 }

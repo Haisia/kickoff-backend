@@ -6,13 +6,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "seasons")
 @Entity
 public class Season extends BaseEntity {
@@ -43,6 +46,18 @@ public class Season extends BaseEntity {
     if (fixture == null) return;
     fixture.setSeason(this);
     fixtures.add(fixture);
+  }
+
+  public List<Fixture> findFixturesWithinTwoWeeks() {
+    LocalDateTime startRange = LocalDate.now().minusWeeks(2).atStartOfDay();
+    LocalDateTime endRange = LocalDate.now().plusWeeks(2).plusDays(1).atStartOfDay();
+
+    return fixtures.stream()
+      .filter(fixture -> {
+        LocalDateTime fixtureDate = fixture.getFixtureDateTime().getDate();
+        return fixtureDate.isAfter(startRange) && fixtureDate.isBefore(endRange);
+      })
+      .collect(Collectors.toList());
   }
 
   @Override
