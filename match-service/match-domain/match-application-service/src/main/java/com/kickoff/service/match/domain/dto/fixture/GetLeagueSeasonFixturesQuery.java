@@ -1,4 +1,4 @@
-package com.kickoff.service.match.domain.dto.rank;
+package com.kickoff.service.match.domain.dto.fixture;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 import java.time.Year;
 import java.util.UUID;
 
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-public class GetLeagueSeasonRankingQuery {
+public class GetLeagueSeasonFixturesQuery {
   @NotNull(message = "League ID는 반드시 입력해야 합니다.")
   public UUID leagueId;
   @NotNull(message = "Year는 반드시 입력해야 합니다.")

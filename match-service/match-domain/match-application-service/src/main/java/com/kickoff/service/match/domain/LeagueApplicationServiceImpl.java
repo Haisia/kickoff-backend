@@ -2,6 +2,8 @@ package com.kickoff.service.match.domain;
 
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.service.dto.ResponseContainer;
+import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
+import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingQuery;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
 import com.kickoff.service.match.domain.port.input.*;
@@ -13,13 +15,14 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamApiPullUseCase, PlayerApiPullUseCase, GetLeagueUseCase, FixtureApiPullUseCase {
+public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamApiPullUseCase, PlayerApiPullUseCase, GetLeagueUseCase, FixtureApiPullUseCase, GetFixtureUseCase {
 
   private final LeagueApiPullHandler leagueApiPullHandler;
   private final TeamApiPullHandler teamApiPullHandler;
   private final PlayerApiPullHandler playerApiPullHandler;
   private final LeagueRankingGetHandler leagueRankingGetHandler;
   private final FixtureApiPullHandler fixtureApiPullHandler;
+  private final LeagueFixtureGetHandler leagueFixtureGetHandler;
 
   @Transactional
   @Override
@@ -63,5 +66,11 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
   @Override
   public void initFixtures() {
     fixtureApiPullHandler.initFixtures();
+  }
+
+  @Transactional
+  @Override
+  public ResponseContainer<GetLeagueSeasonFixturesResponse> getLeagueSeasonFixtures(GetLeagueSeasonFixturesQuery query) {
+    return leagueFixtureGetHandler.getLeagueSeasonFixtures(query);
   }
 }

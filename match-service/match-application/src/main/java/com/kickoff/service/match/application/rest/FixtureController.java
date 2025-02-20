@@ -1,9 +1,12 @@
 package com.kickoff.service.match.application.rest;
 
+import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
 import com.kickoff.service.match.domain.port.input.FixtureApiPullUseCase;
+import com.kickoff.service.match.domain.port.input.GetFixtureUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,10 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class FixtureController {
 
   private final FixtureApiPullUseCase fixtureApiPullUseCase;
+  private final GetFixtureUseCase getFixtureUseCase;
 
   @PostMapping("/pull-all")
   public ResponseEntity<?> pullAllFixtures() {
     fixtureApiPullUseCase.initFixtures();
     return ResponseEntity.ok().build();
+  }
+
+  @PostMapping
+  public ResponseEntity<?> getFixtures(@RequestBody GetLeagueSeasonFixturesQuery query) {
+    return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixtures(query));
   }
 }
