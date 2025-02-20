@@ -43,6 +43,10 @@ public enum FixtureStatusType {
     return this.progressStatus == FixtureProgressStatus.IN_PLAY;
   }
 
+  public boolean isFinished() {
+    return this.progressStatus == FixtureProgressStatus.FINISHED;
+  }
+
   public static FixtureStatusType parseCodeIgnoreCase(String code) {
     if (code == null) {
       return FixtureStatusType.UNKNOWN;
