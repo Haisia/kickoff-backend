@@ -204,8 +204,9 @@ public class League extends AggregateRoot {
         TeamId homeTeamId = fixture.getHomeTeam().getId();
         TeamId awayTeamId = fixture.getAwayTeam().getId();
         if (
-          (homeTeamId.equals(teamId1) && awayTeamId.equals(teamId2)) ||
-          (homeTeamId.equals(teamId2) && awayTeamId.equals(teamId1))
+          ((homeTeamId.equals(teamId1) && awayTeamId.equals(teamId2)) || (homeTeamId.equals(teamId2) && awayTeamId.equals(teamId1))
+            && fixture.getFixtureStatus().getFixtureStatusType().isFinished()
+          )
         ) {
           result.add(fixture);
           if (result.size() == TARGET_COUNT_OF_GAME) return result;
