@@ -81,6 +81,7 @@ public class GetLeagueSeasonFixturesResponse {
       .id(team.getId().getId())
       .name(team.getName())
       .code(team.getCode())
+      .logo(team.getLogoUrlAnything())
       .build();
   }
 
@@ -128,6 +129,7 @@ public class GetLeagueSeasonFixturesResponse {
     public UUID id;
     public String name;
     public String code;
+    public String logo;
   }
 
   @Builder
