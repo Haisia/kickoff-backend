@@ -16,7 +16,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "leagues")
 @Entity
 public class League extends AggregateRoot {
@@ -162,7 +163,8 @@ public class League extends AggregateRoot {
   }
 
   public Year getLatestSeasonYear() {
-    if (allSeasonsInLeague.isEmpty()) throw new LeagueDomainException("[*] season 을 찾을 수 없습니다", CustomHttpStatus.INTERNAL_SERVER_ERROR);
+    if (allSeasonsInLeague.isEmpty())
+      throw new LeagueDomainException("[*] season 을 찾을 수 없습니다", CustomHttpStatus.INTERNAL_SERVER_ERROR);
     return allSeasonsInLeague.stream()
       .map(Season::getYear)
       .max(Comparator.naturalOrder())
@@ -184,8 +186,33 @@ public class League extends AggregateRoot {
       .collect(Collectors.toList());
   }
 
-  private Season getLatestSeason() {
+  public Season getLatestSeason() {
     return getSeasonByYear(getLatestSeasonYear()).orElseThrow();
+  }
+
+  public List<Fixture> getRecently5GamesFixtures(TeamId teamId1, TeamId teamId2) {
+    if (teamId1 == null || teamId2 == null || (teamId1.equals(teamId2)))
+      throw new LeagueDomainException("[*] HeadToHead는 서로 다른 teamId 가 필요합니다.", CustomHttpStatus.BAD_REQUEST);
+
+    List<Fixture> result = new ArrayList<>();
+    final int TARGET_COUNT_OF_GAME = 5;
+
+    for (int i = allSeasonsInLeague.size() - 1; i >= 0; i--) {
+      List<Fixture> fixtures = allSeasonsInLeague.get(i).getFixtures();
+      for (int j = fixtures.size() - 1; j >= 0; j--) {
+        Fixture fixture = fixtures.get(j);
+        TeamId homeTeamId = fixture.getHomeTeam().getId();
+        TeamId awayTeamId = fixture.getAwayTeam().getId();
+        if (
+          (homeTeamId.equals(teamId1) && awayTeamId.equals(teamId2)) ||
+          (homeTeamId.equals(teamId2) && awayTeamId.equals(teamId1))
+        ) {
+          result.add(fixture);
+          if (result.size() == TARGET_COUNT_OF_GAME) return result;
+        }
+      }
+    }
+    return result;
   }
 
   @Override

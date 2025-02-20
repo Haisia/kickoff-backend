@@ -2,17 +2,22 @@ package com.kickoff.service.match.domain;
 
 import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.valuobject.LeagueId;
+import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.common.service.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesForMainPageResponse;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesInPlayResponse;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
+import com.kickoff.service.match.domain.dto.headtohead.GetHeadToHeadSimpleQuery;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingQuery;
 import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
+import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
+import com.kickoff.service.match.domain.exception.LeagueDomainException;
 import com.kickoff.service.match.domain.port.input.*;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
+import com.kickoff.service.match.domain.valueobject.TeamId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +28,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamApiPullUseCase, PlayerApiPullUseCase, GetLeagueUseCase, FixtureApiPullUseCase, GetFixtureUseCase {
+public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamApiPullUseCase, PlayerApiPullUseCase, GetLeagueUseCase, FixtureApiPullUseCase, GetFixtureUseCase, GetHeadToHeadUseCase {
 
   private final LeagueApiPullHandler leagueApiPullHandler;
   private final TeamApiPullHandler teamApiPullHandler;
@@ -120,5 +125,24 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
     }
 
     return new ResponseContainer<>("", result);
+  }
+
+  @Transactional
+  @Override
+  public ResponseContainer<GetLeagueSeasonFixturesResponse> getHeadToHeadSimple(GetHeadToHeadSimpleQuery query) {
+    TeamId teamId = TeamId.of(query.getTeamIds().getFirst());
+    TeamId teamId2 = TeamId.of(query.getTeamIds().getLast());
+
+    League league = leagueRepository.findByTeamId(teamId).orElseThrow();
+    League league2 = leagueRepository.findByTeamId(teamId2).orElseThrow();
+    if (!league.equals(league2)) throw new LeagueDomainException("[*] HeadToHead 는 동일한 리그 내에서만 가능합니다.", CustomHttpStatus.BAD_REQUEST);
+
+    List<Fixture> headToHeadFixtures = league.getRecently5GamesFixtures(teamId, teamId2);
+    List<GetLeagueSeasonFixturesResponse> responses = league.getRecently5GamesFixtures(teamId, teamId2)
+      .stream()
+      .map(GetLeagueSeasonFixturesResponse::from)
+      .toList();
+
+    return new ResponseContainer<>(query, responses);
   }
 }
