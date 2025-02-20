@@ -68,7 +68,7 @@ public class GetLeagueSeasonFixturesResponse {
     return FixtureStatus.builder()
       .code(fixtureStatusType.getCode())
       .name(fixtureStatusType.getName())
-      .type(fixtureStatusType.getType())
+      .progressStatus(fixtureStatusType.getProgressStatus().name())
       .description(fixtureStatusType.getDescription())
       .elapsed(fixtureStatus.getElapsed())
       .extra(fixtureStatus.getExtra())
@@ -117,7 +117,7 @@ public class GetLeagueSeasonFixturesResponse {
   public static class FixtureStatus {
     public String code;
     public String name;
-    public String type;
+    public String progressStatus;
     public String description;
     public Integer elapsed;
     public String extra;

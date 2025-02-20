@@ -13,6 +13,7 @@ import lombok.*;
 
 import java.time.Year;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
@@ -173,6 +174,18 @@ public class League extends AggregateRoot {
       .flatMap(team -> team.getVenues().stream())
       .filter(venue -> venue.getApiFootballVenueId().equals(apiFootballVenueId))
       .findFirst();
+  }
+
+  public List<Fixture> getInPlayFixture() {
+    return getLatestSeason()
+      .getFixtures()
+      .stream()
+      .filter(fixture -> fixture.getFixtureStatus().getFixtureStatusType().isInPlay())
+      .collect(Collectors.toList());
+  }
+
+  private Season getLatestSeason() {
+    return getSeasonByYear(getLatestSeasonYear()).orElseThrow();
   }
 
   @Override

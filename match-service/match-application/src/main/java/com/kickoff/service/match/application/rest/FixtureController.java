@@ -1,6 +1,8 @@
 package com.kickoff.service.match.application.rest;
 
 import com.kickoff.common.service.dto.ResponseContainer;
+import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesForMainPageResponse;
+import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesInPlayResponse;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
 import com.kickoff.service.match.domain.port.input.FixtureApiPullUseCase;
@@ -32,7 +34,12 @@ public class FixtureController {
   }
 
   @PostMapping("/main")
-  public ResponseEntity<?> getLeagueSeasonFixtures() {
+  public ResponseEntity<ResponseContainer<GetLeagueSeasonFixturesForMainPageResponse>> getLeagueSeasonFixturesForMainPage() {
     return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixturesForMainPage());
+  }
+
+  @PostMapping("/in-play")
+  public ResponseEntity<ResponseContainer<GetLeagueSeasonFixturesInPlayResponse>> getLeagueSeasonInPlayFixtures() {
+    return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonInPlayFixtures());
   }
 }

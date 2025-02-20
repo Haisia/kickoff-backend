@@ -6,37 +6,41 @@ import java.util.Arrays;
 
 @Getter
 public enum FixtureStatusType {
-  UNKNOWN("unknown", "Unknown", "Unknown", "Unknown"),
-  TBD("tbd", "Time To Be Defined", "Scheduled", "Scheduled but date and time are not known"),
-  NS("ns", "Not Started", "Scheduled", "Scheduled but not started yet"),
-  H1("1h", "First Half, Kick Off", "In Play", "First half in play"),
-  HT("ht", "Halftime", "In Play", "Halftime break, waiting for the second half"),
-  H2("2h", "Second Half, 2nd Half Started", "In Play", "Second half in play"),
-  ET("et", "Extra Time", "In Play", "Extra time period in play"),
-  BT("bt", "Break Time", "In Play", "Break during extra time"),
-  P("p", "Penalty In Progress", "In Play", "Penalty shootout is in progress"),
-  SUSP("susp", "Match Suspended", "In Play", "Match suspended by referee's decision, may be rescheduled another day"),
-  INT("int", "Match Interrupted", "In Play", "Match temporarily interrupted by referee's decision, should resume in a few minutes"),
-  FT("ft", "Match Finished", "Finished", "Match finished in the regular time"),
-  AET("aet", "Match Finished After Extra Time", "Finished", "Match finished after extra time without a penalty shootout"),
-  PEN("pen", "Match Finished After Penalty Shootout", "Finished", "Match finished after a penalty shootout"),
-  PST("pst", "Match Postponed", "Postponed", "Match postponed to another day, once date and time are known the status will change"),
-  CANC("canc", "Match Cancelled", "Cancelled", "Match cancelled and will not be played"),
-  ABD("abd", "Match Abandoned", "Abandoned", "Match abandoned for reasons such as weather or safety, may or may not be rescheduled"),
-  AWD("awd", "Technical Loss", "Not Played", "Match was forfeited and not played"),
-  WO("wo", "Walk Over", "Not Played", "Victory by forfeit or absence of competitor"),
-  LIVE("live", "Live Match, In Progress", "In Play", "A live match in progress, but details like times or phases are unavailable");
+  UNKNOWN("unknown", "Unknown", FixtureProgressStatus.UNKNOWN, "알 수 없는 상태"),
+  TBD("tbd", "Time To Be Defined", FixtureProgressStatus.SCHEDULED, "일정이 정해졌지만 날짜와 시간이 아직 확정되지 않음"),
+  NS("ns", "Not Started", FixtureProgressStatus.SCHEDULED, "예정된 경기이지만 아직 시작되지 않음"),
+  H1("1h", "First Half, Kick Off", FixtureProgressStatus.IN_PLAY, "전반전 진행 중"),
+  HT("ht", "Halftime", FixtureProgressStatus.IN_PLAY, "전반전 종료, 후반전을 대기 중"),
+  H2("2h", "Second Half, 2nd Half Started", FixtureProgressStatus.IN_PLAY, "후반전 진행 중"),
+  ET("et", "Extra Time", FixtureProgressStatus.IN_PLAY, "연장전 진행 중"),
+  BT("bt", "Break Time", FixtureProgressStatus.IN_PLAY, "연장전 휴식 시간"),
+  P("p", "Penalty In Progress", FixtureProgressStatus.IN_PLAY, "승부차기 진행 중"),
+  SUSP("susp", "Match Suspended", FixtureProgressStatus.IN_PLAY, "심판의 결정으로 경기 중단, 다른 날로 재조정될 수 있음"),
+  INT("int", "Match Interrupted", FixtureProgressStatus.IN_PLAY, "심판의 결정으로 경기 일시 중단, 몇 분 내에 재개될 예정"),
+  FT("ft", "Match Finished", FixtureProgressStatus.FINISHED, "정규 시간 내 경기가 종료됨"),
+  AET("aet", "Match Finished After Extra Time", FixtureProgressStatus.FINISHED, "연장전 후 경기가 종료됨 (승부차기 없이)"),
+  PEN("pen", "Match Finished After Penalty Shootout", FixtureProgressStatus.FINISHED, "승부차기 후 경기가 종료됨"),
+  PST("pst", "Match Postponed", FixtureProgressStatus.POSTPONED, "경기가 다른 날로 연기됨, 날짜와 시간이 확정되면 상태가 변경됨"),
+  CANC("canc", "Match Cancelled", FixtureProgressStatus.CANCELLED, "경기가 취소되었으며 진행되지 않음"),
+  ABD("abd", "Match Abandoned", FixtureProgressStatus.ABANDONED, "날씨나 안전 등의 이유로 경기 중단, 다시 일정이 잡힐 수도 있고 아닐 수도 있음"),
+  AWD("awd", "Technical Loss", FixtureProgressStatus.NOT_PLAYED, "경기가 몰수패로 간주되며 진행되지 않음"),
+  WO("wo", "Walk Over", FixtureProgressStatus.NOT_PLAYED, "부전승 또는 상대의 부재로 인한 승리"),
+  LIVE("live", "Live Match, In Progress", FixtureProgressStatus.IN_PLAY, "현재 진행 중인 경기이지만 시간이나 단계와 같은 세부사항은 알 수 없음");
 
   public final String code;
   public final String name;
-  public final String type;
+  public final FixtureProgressStatus progressStatus;
   public final String description;
 
-  FixtureStatusType(String code, String name, String type, String description) {
+  FixtureStatusType(String code, String name, FixtureProgressStatus progressStatus, String description) {
     this.code = code;
     this.name = name;
-    this.type = type;
+    this.progressStatus = progressStatus;
     this.description = description;
+  }
+
+  public boolean isInPlay() {
+    return this.progressStatus == FixtureProgressStatus.IN_PLAY;
   }
 
   public static FixtureStatusType parseCodeIgnoreCase(String code) {
