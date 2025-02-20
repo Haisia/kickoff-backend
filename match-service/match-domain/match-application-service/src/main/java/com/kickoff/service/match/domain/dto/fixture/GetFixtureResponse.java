@@ -11,22 +11,22 @@ import java.util.UUID;
 
 @Builder
 @Data
-public class GetLeagueSeasonFixturesResponse {
-  public UUID id;
-  public String referee;
-  public FixtureDateTime fixtureDateTime;
-  public Venue venue;
-  public FixtureStatus fixtureStatus;
-  public Team homeTeam;
-  public Team awayTeam;
-  public Score halfTimeScore;
-  public Score fullTimeScore;
-  public Score extraTimeScore;
-  public Score penaltyTimeScore;
+public class GetFixtureResponse {
+  UUID id;
+  String referee;
+  FixtureDateTime fixtureDateTime;
+  Venue venue;
+  FixtureStatus fixtureStatus;
+  Team homeTeam;
+  Team awayTeam;
+  Score halfTimeScore;
+  Score fullTimeScore;
+  Score extraTimeScore;
+  Score penaltyTimeScore;
 
-  public static GetLeagueSeasonFixturesResponse from(Fixture fixture) {
+  public static GetFixtureResponse from(Fixture fixture) {
     if (fixture == null) return null;
-    return GetLeagueSeasonFixturesResponse.builder()
+    return GetFixtureResponse.builder()
       .id(fixture.getId().getId())
       .referee(fixture.getReferee())
       .fixtureDateTime(mapFixtureDateTimeFrom(fixture.getFixtureDateTime()))
@@ -95,7 +95,7 @@ public class GetLeagueSeasonFixturesResponse {
 
   @Builder
   @Data
-  public static class FixtureDateTime {
+  private static class FixtureDateTime {
     public ZoneId dateTimeZone;
     public LocalDateTime date;
     public Long timestamp;
@@ -105,7 +105,7 @@ public class GetLeagueSeasonFixturesResponse {
 
   @Builder
   @Data
-  public static class Venue {
+  private static class Venue {
     public UUID id;
     public String name;
     public String city;
@@ -114,7 +114,7 @@ public class GetLeagueSeasonFixturesResponse {
 
   @Builder
   @Data
-  public static class FixtureStatus {
+  private static class FixtureStatus {
     public String code;
     public String name;
     public String progressStatus;
@@ -125,7 +125,7 @@ public class GetLeagueSeasonFixturesResponse {
 
   @Builder
   @Data
-  public static class Team {
+  private static class Team {
     public UUID id;
     public String name;
     public String code;
@@ -134,7 +134,7 @@ public class GetLeagueSeasonFixturesResponse {
 
   @Builder
   @Data
-  public static class Score {
+  private static class Score {
     public Integer home;
     public Integer away;
   }

@@ -1,13 +1,14 @@
 package com.kickoff.service.match.domain.port.input;
 
 import com.kickoff.common.service.dto.ResponseContainer;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesForMainPageResponse;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesInPlayResponse;
+import com.kickoff.service.match.domain.dto.fixture.FixturesWithLeagueResponse;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
+import com.kickoff.service.match.domain.dto.fixture.GetFixtureResponse;
+import com.kickoff.service.match.domain.valueobject.FixtureId;
 
 public interface GetFixtureUseCase {
-  ResponseContainer<GetLeagueSeasonFixturesResponse> getLeagueSeasonFixtures(GetLeagueSeasonFixturesQuery query);
-  ResponseContainer<GetLeagueSeasonFixturesForMainPageResponse> getLeagueSeasonFixturesForMainPage();
-  ResponseContainer<GetLeagueSeasonFixturesInPlayResponse> getLeagueSeasonInPlayFixtures();
+  ResponseContainer<GetFixtureResponse> getLeagueSeasonFixtures(GetLeagueSeasonFixturesQuery query);
+  ResponseContainer<FixturesWithLeagueResponse> getLeagueSeasonFixturesForMainPage();
+  ResponseContainer<FixturesWithLeagueResponse> getLeagueSeasonInPlayFixtures();
+  ResponseContainer<GetFixtureResponse> getFixtureById(FixtureId fixtureId);
 }

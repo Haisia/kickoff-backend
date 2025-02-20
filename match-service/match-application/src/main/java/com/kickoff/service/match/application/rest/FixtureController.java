@@ -1,10 +1,9 @@
 package com.kickoff.service.match.application.rest;
 
 import com.kickoff.common.service.dto.ResponseContainer;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesForMainPageResponse;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesInPlayResponse;
+import com.kickoff.service.match.domain.dto.fixture.FixturesWithLeagueResponse;
+import com.kickoff.service.match.domain.dto.fixture.GetFixtureResponse;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
 import com.kickoff.service.match.domain.port.input.FixtureApiPullUseCase;
 import com.kickoff.service.match.domain.port.input.GetFixtureUseCase;
 import com.kickoff.service.match.domain.port.input.GetHeadToHeadUseCase;
@@ -31,22 +30,27 @@ public class FixtureController {
   }
 
   @PostMapping
-  public ResponseEntity<ResponseContainer<GetLeagueSeasonFixturesResponse>> getLeagueSeasonFixtures(@RequestBody GetLeagueSeasonFixturesQuery query) {
+  public ResponseEntity<ResponseContainer<GetFixtureResponse>> getLeagueSeasonFixtures(@RequestBody GetLeagueSeasonFixturesQuery query) {
     return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixtures(query));
   }
 
   @PostMapping("/main")
-  public ResponseEntity<ResponseContainer<GetLeagueSeasonFixturesForMainPageResponse>> getLeagueSeasonFixturesForMainPage() {
+  public ResponseEntity<ResponseContainer<FixturesWithLeagueResponse>> getLeagueSeasonFixturesForMainPage() {
     return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixturesForMainPage());
   }
 
   @PostMapping("/in-play")
-  public ResponseEntity<ResponseContainer<GetLeagueSeasonFixturesInPlayResponse>> getLeagueSeasonInPlayFixtures() {
+  public ResponseEntity<ResponseContainer<FixturesWithLeagueResponse>> getLeagueSeasonInPlayFixtures() {
     return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonInPlayFixtures());
   }
 
   @PostMapping("/head-to-head/simple/{fixtureId}")
   public ResponseEntity<?> getHeadToHeadSimple(@PathVariable("fixtureId") UUID fixtureId) {
     return ResponseEntity.ok(getHeadToHeadUseCase.getHeadToHeadSimple(FixtureId.of(fixtureId)));
+  }
+
+  @PostMapping("/{fixtureId}")
+  public ResponseEntity<?> getFixture(@PathVariable("fixtureId") UUID fixtureId) {
+    return ResponseEntity.ok(getFixtureUseCase.getFixtureById(FixtureId.of(fixtureId)));
   }
 }

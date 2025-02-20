@@ -10,12 +10,12 @@ import java.util.UUID;
 
 @NoArgsConstructor @AllArgsConstructor
 @Data
-public class GetLeagueSeasonFixturesForMainPageResponse {
-  public League league;
-  public List<GetLeagueSeasonFixturesResponse> fixtures;
+public class FixturesWithLeagueResponse {
+  League league;
+  List<GetFixtureResponse> fixtures;
 
-  public static GetLeagueSeasonFixturesForMainPageResponse from(com.kickoff.service.match.domain.entity.League league, Integer year, List<GetLeagueSeasonFixturesResponse> fixtures) {
-    return new GetLeagueSeasonFixturesForMainPageResponse(from(league, year), fixtures);
+  public static FixturesWithLeagueResponse from(com.kickoff.service.match.domain.entity.League league, Integer year, List<GetFixtureResponse> fixtures) {
+    return new FixturesWithLeagueResponse(from(league, year), fixtures);
   }
 
   private static League from(com.kickoff.service.match.domain.entity.League league, Integer year) {
@@ -29,7 +29,7 @@ public class GetLeagueSeasonFixturesForMainPageResponse {
 
   @Builder
   @Data
-  public static class League {
+  private static class League {
     public UUID id;
     public String name;
     public String logo;

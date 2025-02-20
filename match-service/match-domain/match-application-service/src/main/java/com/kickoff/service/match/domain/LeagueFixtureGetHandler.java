@@ -4,7 +4,7 @@ import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.common.service.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesResponse;
+import com.kickoff.service.match.domain.dto.fixture.GetFixtureResponse;
 import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
@@ -22,22 +22,22 @@ public class LeagueFixtureGetHandler {
 
   private final LeagueRepository leagueRepository;
 
-  public ResponseContainer<GetLeagueSeasonFixturesResponse> getLeagueSeasonFixtures(GetLeagueSeasonFixturesQuery query) {
+  public ResponseContainer<GetFixtureResponse> getLeagueSeasonFixtures(GetLeagueSeasonFixturesQuery query) {
     League league = leagueRepository.findById(LeagueId.of(query.getLeagueId()))
       .orElseThrow(() -> new LeagueDomainException(String.format("[*] league를 찾을 수 없습니다. : leagueId=%s", query.getLeagueId()), CustomHttpStatus.BAD_REQUEST));
 
     Season season = league.getSeasonByYear(query.getYear())
       .orElseThrow(() -> new LeagueDomainException(String.format("[*] season을 찾을 수 없습니다. : leagueId=%s, seasonId=%s", query.getLeagueId(), query.getYear()), CustomHttpStatus.BAD_REQUEST));
 
-    List<GetLeagueSeasonFixturesResponse> responses = season.getFixtures()
+    List<GetFixtureResponse> responses = season.getFixtures()
       .stream()
-      .map(GetLeagueSeasonFixturesResponse::from)
+      .map(GetFixtureResponse::from)
       .toList();
 
     return new ResponseContainer<>(query, responses);
   }
 
-  public List<GetLeagueSeasonFixturesResponse> getHeadToHeadSimple(TeamId teamId1, TeamId teamId2) {
+  public List<GetFixtureResponse> getHeadToHeadSimple(TeamId teamId1, TeamId teamId2) {
     League league = leagueRepository.findByTeamId(teamId1).orElseThrow();
     League league2 = leagueRepository.findByTeamId(teamId2).orElseThrow();
     if (!league.equals(league2)) throw new LeagueDomainException("[*] HeadToHead 는 동일한 리그 내에서만 가능합니다.", CustomHttpStatus.BAD_REQUEST);
@@ -45,7 +45,7 @@ public class LeagueFixtureGetHandler {
     List<Fixture> headToHeadFixtures = league.getRecently5GamesFixtures(teamId1, teamId2);
     return league.getRecently5GamesFixtures(teamId1, teamId2)
       .stream()
-      .map(GetLeagueSeasonFixturesResponse::from)
+      .map(GetFixtureResponse::from)
       .toList();
   }
 }
