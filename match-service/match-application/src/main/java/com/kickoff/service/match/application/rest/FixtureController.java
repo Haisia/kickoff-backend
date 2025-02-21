@@ -6,8 +6,7 @@ import com.kickoff.service.match.domain.dto.fixture.FixtureResponse;
 import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
 import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureQuery;
 import com.kickoff.service.match.domain.port.input.FixtureApiPullUseCase;
-import com.kickoff.service.match.domain.port.input.GetFixtureUseCase;
-import com.kickoff.service.match.domain.port.input.GetHeadToHeadUseCase;
+import com.kickoff.service.match.domain.service.query.FixtureQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 public class FixtureController {
 
   private final FixtureApiPullUseCase fixtureApiPullUseCase;
-  private final GetFixtureUseCase getFixtureUseCase;
-  private final GetHeadToHeadUseCase getHeadToHeadUseCase;
+
+  private final FixtureQueryService fixtureQueryService;
 
   @PostMapping("/pull-all")
   public ResponseEntity<?> pullAllFixtures() {
@@ -28,28 +27,28 @@ public class FixtureController {
     return ResponseEntity.ok().build();
   }
 
+  @PostMapping("/get")
+  public ResponseEntity<ResponseContainer<FixtureResponse>> fixtureGet(@RequestBody @Valid LeagueFixtureQuery query) {
+    return ResponseEntity.ok(fixtureQueryService.fixtureGet(query));
+  }
+
   @PostMapping("/list")
   public ResponseEntity<ResponseContainer<FixtureResponse>> fixtureList(@RequestBody LeagueSeasonQuery query) {
-    return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixtures(query));
+    return ResponseEntity.ok(fixtureQueryService.fixtureList(query));
   }
 
   @PostMapping("/main/list")
   public ResponseEntity<ResponseContainer<LeagueFixtureResponse>> fixtureMainList() {
-    return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixturesForMainPage());
+    return ResponseEntity.ok(fixtureQueryService.fixtureMainList());
   }
 
   @PostMapping("/in-play/list")
   public ResponseEntity<ResponseContainer<LeagueFixtureResponse>> fixtureInPlayList() {
-    return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonInPlayFixtures());
+    return ResponseEntity.ok(fixtureQueryService.fixtureInPlayList());
   }
 
   @PostMapping("/head-to-head/simple/list")
-  public ResponseEntity<?> fixtureH2HSimpleList(@RequestBody @Valid LeagueFixtureQuery query) {
-    return ResponseEntity.ok(getHeadToHeadUseCase.getHeadToHeadSimple(query));
-  }
-
-  @PostMapping("/get")
-  public ResponseEntity<?> fixtureGet(@RequestBody @Valid LeagueFixtureQuery query) {
-    return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixture(query));
+  public ResponseEntity<ResponseContainer<FixtureResponse>> fixtureH2HSimpleList(@RequestBody @Valid LeagueFixtureQuery query) {
+    return ResponseEntity.ok(fixtureQueryService.fixtureH2HSimpleList(query));
   }
 }

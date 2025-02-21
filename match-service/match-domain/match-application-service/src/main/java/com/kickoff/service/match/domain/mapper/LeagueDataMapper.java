@@ -2,7 +2,7 @@ package com.kickoff.service.match.domain.mapper;
 
 import com.kickoff.service.match.domain.dto.rank.LeagueTeamsResponse;
 import com.kickoff.service.match.domain.entity.League;
-import com.kickoff.service.match.domain.mapper.helper.LeagueToGetLeagueSeasonRankingResponseHelper;
+import com.kickoff.service.match.domain.mapper.helper.LeagueToLeagueTeamsResponseHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +12,9 @@ import java.time.Year;
 @Component
 public class LeagueDataMapper {
 
-  private final LeagueToGetLeagueSeasonRankingResponseHelper leagueToGetLeagueSeasonRankingResponseHelper;
+  private final LeagueToLeagueTeamsResponseHelper leagueToLeagueTeamsResponseHelper;
 
-  public LeagueTeamsResponse leagueToGetLeagueSeasonRankingResponse(League league, Year year) {
-    return leagueToGetLeagueSeasonRankingResponseHelper.leagueToGetLeagueSeasonRankingResponse(league, year);
+  public LeagueTeamsResponse leagueToLeagueTeamsResponse(League league, Year year) {
+    return leagueToLeagueTeamsResponseHelper.leagueToLeagueTeamsResponse(league, year);
   }
-
-
 }

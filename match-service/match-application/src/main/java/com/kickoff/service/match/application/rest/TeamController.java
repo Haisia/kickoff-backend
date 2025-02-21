@@ -1,6 +1,5 @@
 package com.kickoff.service.match.application.rest;
 
-import com.kickoff.service.match.domain.port.input.GetHeadToHeadUseCase;
 import com.kickoff.service.match.domain.port.input.TeamApiPullUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamController {
 
   private final TeamApiPullUseCase teamApiPullUseCase;
-  private final GetHeadToHeadUseCase getHeadToHeadUseCase;
 
   @PostMapping("/pull-all")
   public ResponseEntity<?> pullAllTeams() {

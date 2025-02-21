@@ -1,7 +1,8 @@
-package com.kickoff.service.match.domain;
+package com.kickoff.service.match.domain.service.command;
 
 import com.kickoff.common.constant.Constant;
 import com.kickoff.service.match.domain.entity.League;
+import com.kickoff.service.match.domain.port.input.TeamApiPullUseCase;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiService;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import com.kickoff.service.match.domain.port.output.repository.SeasonRepository;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class TeamApiPullHandler {
+public class TeamApiPullHandler implements TeamApiPullUseCase {
 
   private final LeagueRepository leagueRepository;
   private final LeagueExternalApiService leagueExternalApiService;

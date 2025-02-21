@@ -11,9 +11,9 @@ import java.time.Year;
 import java.util.List;
 
 @Component
-public class LeagueToGetLeagueSeasonRankingResponseHelper {
+public class LeagueToLeagueTeamsResponseHelper {
 
-  public LeagueTeamsResponse leagueToGetLeagueSeasonRankingResponse(League league, Year year) {
+  public LeagueTeamsResponse leagueToLeagueTeamsResponse(League league, Year year) {
     if (league == null || year == null) return null;
 
     return LeagueTeamsResponse.builder()
