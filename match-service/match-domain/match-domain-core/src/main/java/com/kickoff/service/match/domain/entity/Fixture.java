@@ -8,6 +8,8 @@ import com.kickoff.service.match.domain.valueobject.Score;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
 @Table(name = "fixtures")
@@ -65,6 +67,9 @@ public class Fixture extends BaseEntity {
   })
   @Embedded
   private Score penaltyTimeScore;
+
+  @OneToMany(mappedBy = "fixture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<FixtureComment> comments;
 
   @Builder
   public Fixture(FixtureId id, Long apiFootballFixtureId, Season season, String referee, FixtureDateTime fixtureDateTime, Venue venue, FixtureStatus fixtureStatus, Team homeTeam, Team awayTeam, Score halfTimeScore, Score fullTimeScore, Score extraTimeScore, Score penaltyTimeScore) {
