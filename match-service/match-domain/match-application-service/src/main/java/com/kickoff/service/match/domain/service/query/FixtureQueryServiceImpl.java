@@ -2,7 +2,6 @@ package com.kickoff.service.match.domain.service.query;
 
 import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.valuobject.LeagueId;
-import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.common.service.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.FixtureResponse;
 import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureQuery;
@@ -11,7 +10,9 @@ import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
 import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
-import com.kickoff.service.match.domain.exception.LeagueDomainException;
+import com.kickoff.service.match.domain.exception.FixtureNotFoundException;
+import com.kickoff.service.match.domain.exception.LeagueNotFoundException;
+import com.kickoff.service.match.domain.exception.SeasonNotFoundException;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.TeamId;
@@ -44,10 +45,10 @@ public class FixtureQueryServiceImpl implements FixtureQueryService {
   @Override
   public ResponseContainer<FixtureResponse> fixtureList(LeagueSeasonQuery query) {
     League league = leagueRepository.findById(LeagueId.of(query.getLeagueId()))
-      .orElseThrow(() -> new LeagueDomainException(String.format("[*] league를 찾을 수 없습니다. : leagueId=%s", query.getLeagueId()), CustomHttpStatus.BAD_REQUEST));
+      .orElseThrow(() -> new LeagueNotFoundException(query.getLeagueId()));
 
     Season season = league.getSeasonByYear(query.getYear())
-      .orElseThrow(() -> new LeagueDomainException(String.format("[*] season을 찾을 수 없습니다. : leagueId=%s, seasonId=%s", query.getLeagueId(), query.getYear()), CustomHttpStatus.BAD_REQUEST));
+      .orElseThrow(() -> new SeasonNotFoundException(query.getYear(), league.getId()));
 
     List<FixtureResponse> responses = season.getFixtures()
       .stream()
@@ -64,7 +65,7 @@ public class FixtureQueryServiceImpl implements FixtureQueryService {
 
     for (League league : leagues) {
       Year year = league.getLatestSeasonYear();
-      Season season = league.getSeasonByYear(year).orElseThrow();
+      Season season = league.getSeasonByYear(year).orElseThrow(() -> new SeasonNotFoundException(year, league.getId()));
       List<FixtureResponse> responses = season.findFixturesWithinTwoWeeks()
         .stream()
         .map(FixtureResponse::from)
@@ -82,7 +83,6 @@ public class FixtureQueryServiceImpl implements FixtureQueryService {
 
     for (League league : leagues) {
       Year year = league.getLatestSeasonYear();
-      Season season = league.getSeasonByYear(year).orElseThrow();
       List<FixtureResponse> responses = league.getInPlayFixture()
         .stream()
         .map(FixtureResponse::from)
@@ -99,8 +99,8 @@ public class FixtureQueryServiceImpl implements FixtureQueryService {
     LeagueId leagueId = LeagueId.of(query.getLeagueId());
     FixtureId fixtureId = FixtureId.of(query.getFixtureId());
 
-    League league = leagueRepository.findById(leagueId).orElseThrow();
-    Fixture fixture = league.getFixture(query.getYear(), fixtureId).orElseThrow();
+    League league = leagueRepository.findById(leagueId).orElseThrow(() -> new LeagueNotFoundException(leagueId));
+    Fixture fixture = league.getFixture(query.getYear(), fixtureId).orElseThrow(() -> new FixtureNotFoundException(query.getYear(), fixtureId));
 
     TeamId homeTeamId = fixture.getHomeTeam().getId();
     TeamId awayTeamId = fixture.getAwayTeam().getId();

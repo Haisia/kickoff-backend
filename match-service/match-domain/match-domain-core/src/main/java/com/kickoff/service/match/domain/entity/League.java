@@ -5,6 +5,9 @@ import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.domain.valuobject.LeagueType;
 import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.service.match.domain.exception.LeagueDomainException;
+import com.kickoff.service.match.domain.exception.SeasonMapTeamNotFoundException;
+import com.kickoff.service.match.domain.exception.SeasonNotFoundException;
+import com.kickoff.service.match.domain.exception.TeamNotFoundException;
 import com.kickoff.service.match.domain.valueobject.Country;
 import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.Logo;
@@ -58,13 +61,14 @@ public class League extends AggregateRoot {
 
   public void addTeamWithSeason(Season season, Team team) {
     if (season == null || team == null) return;
-    if (!hasSeason(season.getYear())) addSeason(season);
-    if (!hasTeam(team.getApiFootballTeamId())) addTeam(team);
+    Year year = season.getYear();
+    Long apiFootballTeamId = team.getApiFootballTeamId();
 
-    season = getSeasonByYear(season.getYear())
-      .orElseThrow(() -> new LeagueDomainException("[*] season 을 찾을 수 없습니다", CustomHttpStatus.INTERNAL_SERVER_ERROR));
-    team = getTeamByApIFootballTeamId(team.getApiFootballTeamId())
-      .orElseThrow(() -> new LeagueDomainException("[*] team 을 찾을 수 없습니다", CustomHttpStatus.INTERNAL_SERVER_ERROR));
+    if (!hasSeason(year)) addSeason(season);
+    if (!hasTeam(apiFootballTeamId)) addTeam(team);
+
+    season = getSeasonByYear(year).orElseThrow(() -> new SeasonNotFoundException(year));
+    team = getTeamByApIFootballTeamId(apiFootballTeamId).orElseThrow(() -> new TeamNotFoundException(apiFootballTeamId));
 
     season.setLeague(this);
     team.setLeague(this);
@@ -76,8 +80,7 @@ public class League extends AggregateRoot {
   }
 
   public void addTeamWithSeason(Season season, TeamId teamId) {
-    Team team = getTeamByTeamId(teamId)
-      .orElseThrow(() -> new LeagueDomainException("[*] team 을 찾을 수 없습니다", CustomHttpStatus.BAD_REQUEST));
+    Team team = getTeamByTeamId(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
 
     addTeamWithSeason(season, team);
   }
@@ -114,7 +117,7 @@ public class League extends AggregateRoot {
       .toList();
 
     if (result.isEmpty()) {
-      throw new LeagueDomainException(String.format("[*] seasonMapTeam 을 찾을 수 없습니다. : seasonYear=%s", year), CustomHttpStatus.BAD_REQUEST);
+      throw new SeasonMapTeamNotFoundException(year);
     }
     return result;
   }
@@ -164,8 +167,7 @@ public class League extends AggregateRoot {
   }
 
   public Year getLatestSeasonYear() {
-    if (allSeasonsInLeague.isEmpty())
-      throw new LeagueDomainException("[*] season 을 찾을 수 없습니다", CustomHttpStatus.INTERNAL_SERVER_ERROR);
+    if (allSeasonsInLeague.isEmpty()) throw new SeasonNotFoundException();
     return allSeasonsInLeague.stream()
       .map(Season::getYear)
       .max(Comparator.naturalOrder())
@@ -188,7 +190,8 @@ public class League extends AggregateRoot {
   }
 
   public Season getLatestSeason() {
-    return getSeasonByYear(getLatestSeasonYear()).orElseThrow();
+    return getSeasonByYear(getLatestSeasonYear())
+      .orElseThrow(() -> new SeasonNotFoundException(getLatestSeasonYear()));
   }
 
   public List<Fixture> getH2HRecent5Games(TeamId teamId1, TeamId teamId2) {
@@ -219,7 +222,7 @@ public class League extends AggregateRoot {
 
   public Optional<Fixture> getFixture(Year seasonYear, FixtureId fixtureId) {
     return getSeasonByYear(seasonYear)
-      .orElseThrow()
+      .orElseThrow(() -> new SeasonNotFoundException(seasonYear))
       .getFixture(fixtureId);
   }
 
