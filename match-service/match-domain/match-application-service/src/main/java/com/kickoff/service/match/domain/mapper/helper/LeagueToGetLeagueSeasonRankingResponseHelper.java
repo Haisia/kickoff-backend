@@ -1,6 +1,6 @@
 package com.kickoff.service.match.domain.mapper.helper;
 
-import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
+import com.kickoff.service.match.domain.dto.rank.LeagueTeamsResponse;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.SeasonMapTeam;
 import com.kickoff.service.match.domain.entity.Team;
@@ -13,29 +13,29 @@ import java.util.List;
 @Component
 public class LeagueToGetLeagueSeasonRankingResponseHelper {
 
-  public GetLeagueSeasonRankingResponse leagueToGetLeagueSeasonRankingResponse(League league, Year year) {
+  public LeagueTeamsResponse leagueToGetLeagueSeasonRankingResponse(League league, Year year) {
     if (league == null || year == null) return null;
 
-    return GetLeagueSeasonRankingResponse.builder()
+    return LeagueTeamsResponse.builder()
       .league(toLeague(league))
       .season(year.getValue())
       .teams(toTeams(league.getSeasonMapTeams(year)))
       .build();
   }
 
-  private GetLeagueSeasonRankingResponse.League toLeague(League league) {
-    return GetLeagueSeasonRankingResponse.League.builder()
+  private LeagueTeamsResponse.League toLeague(League league) {
+    return LeagueTeamsResponse.League.builder()
       .id(league.getId().getId())
       .name(league.getName())
       .logo(league.getLogoUrlAnything())
       .build();
   }
 
-  private GetLeagueSeasonRankingResponse.Team toTeam(SeasonMapTeam seasonMapTeam) {
+  private LeagueTeamsResponse.Team toTeam(SeasonMapTeam seasonMapTeam) {
     Team team = seasonMapTeam.getTeam();
     ScoreStats allScoreStats = seasonMapTeam.getAllScoreStats();
 
-    return GetLeagueSeasonRankingResponse.Team.builder()
+    return LeagueTeamsResponse.Team.builder()
       .id(team.getId().getId())
       .name(team.getName())
       .code(team.getCode())
@@ -54,7 +54,7 @@ public class LeagueToGetLeagueSeasonRankingResponseHelper {
       .build();
   }
 
-  private List<GetLeagueSeasonRankingResponse.Team> toTeams(List<SeasonMapTeam> seasonMapTeams) {
+  private List<LeagueTeamsResponse.Team> toTeams(List<SeasonMapTeam> seasonMapTeams) {
     return seasonMapTeams.stream()
       .map(this::toTeam)
       .toList();

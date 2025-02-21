@@ -1,8 +1,8 @@
 package com.kickoff.service.match.application.rest;
 
 import com.kickoff.common.service.dto.ResponseContainer;
-import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingQuery;
-import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
+import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
+import com.kickoff.service.match.domain.dto.rank.LeagueTeamsResponse;
 import com.kickoff.service.match.domain.port.input.GetLeagueUseCase;
 import com.kickoff.service.match.domain.port.input.LeagueApiPullUseCase;
 import jakarta.validation.Valid;
@@ -30,13 +30,13 @@ public class LeagueController {
     return ResponseEntity.ok().build();
   }
 
-  @PostMapping("/rank")
-  public ResponseEntity<ResponseContainer<GetLeagueSeasonRankingResponse>> getLeagueSeasonRanking(@Valid @RequestBody GetLeagueSeasonRankingQuery query) {
+  @PostMapping("/rank/list")
+  public ResponseEntity<ResponseContainer<LeagueTeamsResponse>> leagueRankList(@Valid @RequestBody LeagueSeasonQuery query) {
     return ResponseEntity.ok(getLeagueUseCase.getLeagueSeasonRanking(query));
   }
 
-  @PostMapping("/rank/main")
-  public ResponseEntity<ResponseContainer<GetLeagueSeasonRankingResponse>> getLeagueSeasonRanking() {
+  @PostMapping("/rank/main/list")
+  public ResponseEntity<ResponseContainer<LeagueTeamsResponse>> leagueRankMainList() {
     return ResponseEntity.ok(getLeagueUseCase.getLeagueSeasonRankingForMainPage());
   }
 }

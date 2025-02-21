@@ -4,15 +4,14 @@ import com.kickoff.common.domain.valuobject.BaseId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = true)
 @Embeddable
 public class FixtureId extends BaseId<UUID> {
   @Column(name = "fixture_id")
@@ -32,5 +31,17 @@ public class FixtureId extends BaseId<UUID> {
 
   public static FixtureId generate() {
     return new FixtureId(UUID.randomUUID());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    FixtureId fixtureId = (FixtureId) o;
+    return Objects.equals(id, fixtureId.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
   }
 }

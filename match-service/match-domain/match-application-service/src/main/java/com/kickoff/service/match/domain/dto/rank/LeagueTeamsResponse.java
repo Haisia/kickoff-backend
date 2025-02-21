@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Builder
 @Data
-public class GetLeagueSeasonRankingResponse {
+public class LeagueTeamsResponse {
   public League league;
   public Integer season;
   public List<Team> teams;

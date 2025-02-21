@@ -1,18 +1,17 @@
 package com.kickoff.service.match.application.rest;
 
 import com.kickoff.common.service.dto.ResponseContainer;
-import com.kickoff.service.match.domain.dto.fixture.FixturesWithLeagueResponse;
-import com.kickoff.service.match.domain.dto.fixture.GetFixtureResponse;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
+import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureResponse;
+import com.kickoff.service.match.domain.dto.fixture.FixtureResponse;
+import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
+import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureQuery;
 import com.kickoff.service.match.domain.port.input.FixtureApiPullUseCase;
 import com.kickoff.service.match.domain.port.input.GetFixtureUseCase;
 import com.kickoff.service.match.domain.port.input.GetHeadToHeadUseCase;
-import com.kickoff.service.match.domain.valueobject.FixtureId;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,28 +28,28 @@ public class FixtureController {
     return ResponseEntity.ok().build();
   }
 
-  @PostMapping
-  public ResponseEntity<ResponseContainer<GetFixtureResponse>> getLeagueSeasonFixtures(@RequestBody GetLeagueSeasonFixturesQuery query) {
+  @PostMapping("/list")
+  public ResponseEntity<ResponseContainer<FixtureResponse>> fixtureList(@RequestBody LeagueSeasonQuery query) {
     return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixtures(query));
   }
 
-  @PostMapping("/main")
-  public ResponseEntity<ResponseContainer<FixturesWithLeagueResponse>> getLeagueSeasonFixturesForMainPage() {
+  @PostMapping("/main/list")
+  public ResponseEntity<ResponseContainer<LeagueFixtureResponse>> fixtureMainList() {
     return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixturesForMainPage());
   }
 
-  @PostMapping("/in-play")
-  public ResponseEntity<ResponseContainer<FixturesWithLeagueResponse>> getLeagueSeasonInPlayFixtures() {
+  @PostMapping("/in-play/list")
+  public ResponseEntity<ResponseContainer<LeagueFixtureResponse>> fixtureInPlayList() {
     return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonInPlayFixtures());
   }
 
-  @PostMapping("/head-to-head/simple/{fixtureId}")
-  public ResponseEntity<?> getHeadToHeadSimple(@PathVariable("fixtureId") UUID fixtureId) {
-    return ResponseEntity.ok(getHeadToHeadUseCase.getHeadToHeadSimple(FixtureId.of(fixtureId)));
+  @PostMapping("/head-to-head/simple/list")
+  public ResponseEntity<?> fixtureH2HSimpleList(@RequestBody @Valid LeagueFixtureQuery query) {
+    return ResponseEntity.ok(getHeadToHeadUseCase.getHeadToHeadSimple(query));
   }
 
-  @PostMapping("/{fixtureId}")
-  public ResponseEntity<?> getFixture(@PathVariable("fixtureId") UUID fixtureId) {
-    return ResponseEntity.ok(getFixtureUseCase.getFixtureById(FixtureId.of(fixtureId)));
+  @PostMapping("/get")
+  public ResponseEntity<?> fixtureGet(@RequestBody @Valid LeagueFixtureQuery query) {
+    return ResponseEntity.ok(getFixtureUseCase.getLeagueSeasonFixture(query));
   }
 }

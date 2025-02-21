@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Builder
 @Data
-public class GetFixtureResponse {
+public class FixtureResponse {
   UUID id;
   String referee;
   FixtureDateTime fixtureDateTime;
@@ -24,9 +24,9 @@ public class GetFixtureResponse {
   Score extraTimeScore;
   Score penaltyTimeScore;
 
-  public static GetFixtureResponse from(Fixture fixture) {
+  public static FixtureResponse from(Fixture fixture) {
     if (fixture == null) return null;
-    return GetFixtureResponse.builder()
+    return FixtureResponse.builder()
       .id(fixture.getId().getId())
       .referee(fixture.getReferee())
       .fixtureDateTime(mapFixtureDateTimeFrom(fixture.getFixtureDateTime()))

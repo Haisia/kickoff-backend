@@ -4,15 +4,14 @@ import com.kickoff.common.domain.valuobject.BaseId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = true)
 @Embeddable
 public class SeasonId extends BaseId<UUID> {
   @Column(name = "season_id")
@@ -34,4 +33,15 @@ public class SeasonId extends BaseId<UUID> {
     return new SeasonId(UUID.randomUUID());
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    SeasonId seasonId = (SeasonId) o;
+    return Objects.equals(id, seasonId.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
+  }
 }

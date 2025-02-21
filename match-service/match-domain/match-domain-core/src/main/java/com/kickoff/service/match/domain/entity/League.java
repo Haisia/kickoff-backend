@@ -6,6 +6,7 @@ import com.kickoff.common.domain.valuobject.LeagueType;
 import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.service.match.domain.exception.LeagueDomainException;
 import com.kickoff.service.match.domain.valueobject.Country;
+import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.Logo;
 import com.kickoff.service.match.domain.valueobject.TeamId;
 import jakarta.persistence.*;
@@ -190,7 +191,7 @@ public class League extends AggregateRoot {
     return getSeasonByYear(getLatestSeasonYear()).orElseThrow();
   }
 
-  public List<Fixture> getRecently5GamesFixtures(TeamId teamId1, TeamId teamId2) {
+  public List<Fixture> getH2HRecent5Games(TeamId teamId1, TeamId teamId2) {
     if (teamId1 == null || teamId2 == null || (teamId1.equals(teamId2)))
       throw new LeagueDomainException("[*] HeadToHead는 서로 다른 teamId 가 필요합니다.", CustomHttpStatus.BAD_REQUEST);
 
@@ -214,6 +215,12 @@ public class League extends AggregateRoot {
       }
     }
     return result;
+  }
+
+  public Optional<Fixture> getFixture(Year seasonYear, FixtureId fixtureId) {
+    return getSeasonByYear(seasonYear)
+      .orElseThrow()
+      .getFixture(fixtureId);
   }
 
   @Override

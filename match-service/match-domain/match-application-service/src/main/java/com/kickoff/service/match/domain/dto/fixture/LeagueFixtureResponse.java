@@ -10,12 +10,12 @@ import java.util.UUID;
 
 @NoArgsConstructor @AllArgsConstructor
 @Data
-public class FixturesWithLeagueResponse {
+public class LeagueFixtureResponse {
   League league;
-  List<GetFixtureResponse> fixtures;
+  List<FixtureResponse> fixtures;
 
-  public static FixturesWithLeagueResponse from(com.kickoff.service.match.domain.entity.League league, Integer year, List<GetFixtureResponse> fixtures) {
-    return new FixturesWithLeagueResponse(from(league, year), fixtures);
+  public static LeagueFixtureResponse from(com.kickoff.service.match.domain.entity.League league, Integer year, List<FixtureResponse> fixtures) {
+    return new LeagueFixtureResponse(from(league, year), fixtures);
   }
 
   private static League from(com.kickoff.service.match.domain.entity.League league, Integer year) {

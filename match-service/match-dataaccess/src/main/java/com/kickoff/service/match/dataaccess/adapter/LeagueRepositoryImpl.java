@@ -5,10 +5,7 @@ import com.kickoff.service.match.dataaccess.repository.FixtureJpaRepository;
 import com.kickoff.service.match.dataaccess.repository.LeagueJpaRepository;
 import com.kickoff.service.match.dataaccess.repository.TeamJpaRepository;
 import com.kickoff.service.match.domain.entity.League;
-import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
-import com.kickoff.service.match.domain.valueobject.FixtureId;
-import com.kickoff.service.match.domain.valueobject.TeamId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,17 +38,6 @@ public class LeagueRepositoryImpl implements LeagueRepository {
   @Override
   public List<League> findByApiFootballLeagueIdIn(List<Long> apiFootballLeagueIds) {
     return leagueJpaRepository.findByApiFootballLeagueIdIn(apiFootballLeagueIds);
-  }
-
-  @Override
-  public Optional<League> findByTeamId(TeamId teamId) {
-    return teamJpaRepository.findById(teamId).map(Team::getLeague);
-  }
-
-  @Override
-  public Optional<League> findByFixtureId(FixtureId fixtureId) {
-    return fixtureJpaRepository.findById(fixtureId)
-      .map(fixture -> fixture.getSeason().getLeague());
   }
 
   @Override

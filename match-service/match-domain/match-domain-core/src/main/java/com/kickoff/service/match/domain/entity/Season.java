@@ -1,6 +1,7 @@
 package com.kickoff.service.match.domain.entity;
 
 import com.kickoff.common.domain.entity.BaseEntity;
+import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.SeasonId;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +12,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -46,6 +48,12 @@ public class Season extends BaseEntity {
     if (fixture == null) return;
     fixture.setSeason(this);
     fixtures.add(fixture);
+  }
+
+  public Optional<Fixture> getFixture(FixtureId fixtureId) {
+    return fixtures.stream()
+      .filter(fixture -> fixture.getId().equals(fixtureId))
+      .findFirst();
   }
 
   public List<Fixture> findFixturesWithinTwoWeeks() {

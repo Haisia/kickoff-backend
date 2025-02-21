@@ -3,18 +3,15 @@ package com.kickoff.service.match.domain;
 import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.service.dto.ResponseContainer;
-import com.kickoff.service.match.domain.dto.fixture.FixturesWithLeagueResponse;
-import com.kickoff.service.match.domain.dto.fixture.GetLeagueSeasonFixturesQuery;
-import com.kickoff.service.match.domain.dto.fixture.GetFixtureResponse;
-import com.kickoff.service.match.domain.dto.headtohead.GetHeadToHeadSimpleQuery;
-import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingQuery;
-import com.kickoff.service.match.domain.dto.rank.GetLeagueSeasonRankingResponse;
+import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureResponse;
+import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
+import com.kickoff.service.match.domain.dto.fixture.FixtureResponse;
+import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureQuery;
+import com.kickoff.service.match.domain.dto.rank.LeagueTeamsResponse;
 import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
-import com.kickoff.service.match.domain.entity.Team;
 import com.kickoff.service.match.domain.port.input.*;
-import com.kickoff.service.match.domain.port.output.repository.FixtureRepository;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.TeamId;
@@ -36,8 +33,8 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
   private final LeagueRankingGetHandler leagueRankingGetHandler;
   private final FixtureApiPullHandler fixtureApiPullHandler;
   private final LeagueFixtureGetHandler leagueFixtureGetHandler;
+
   private final LeagueRepository leagueRepository;
-  private final FixtureRepository fixtureRepository;
 
   @Transactional
   @Override
@@ -65,15 +62,15 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
 
   @Transactional
   @Override
-  public ResponseContainer<GetLeagueSeasonRankingResponse> getLeagueSeasonRanking(GetLeagueSeasonRankingQuery query) {
-    GetLeagueSeasonRankingResponse leagueSeasonRanking = leagueRankingGetHandler.getLeagueSeasonRanking(LeagueId.of(query.getLeagueId()), query.getYear());
+  public ResponseContainer<LeagueTeamsResponse> getLeagueSeasonRanking(LeagueSeasonQuery query) {
+    LeagueTeamsResponse leagueSeasonRanking = leagueRankingGetHandler.getLeagueSeasonRanking(LeagueId.of(query.getLeagueId()), query.getYear());
     return new ResponseContainer<>(query, List.of(leagueSeasonRanking));
   }
 
   @Transactional
   @Override
-  public ResponseContainer<GetLeagueSeasonRankingResponse> getLeagueSeasonRankingForMainPage() {
-    List<GetLeagueSeasonRankingResponse> leagueSeasonRankingForMainPage = leagueRankingGetHandler.getLeagueSeasonRankingForMainPage();
+  public ResponseContainer<LeagueTeamsResponse> getLeagueSeasonRankingForMainPage() {
+    List<LeagueTeamsResponse> leagueSeasonRankingForMainPage = leagueRankingGetHandler.getLeagueSeasonRankingForMainPage();
     return new ResponseContainer<>("", leagueSeasonRankingForMainPage);
   }
 
@@ -85,44 +82,56 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
 
   @Transactional
   @Override
-  public ResponseContainer<GetFixtureResponse> getLeagueSeasonFixtures(GetLeagueSeasonFixturesQuery query) {
+  public ResponseContainer<FixtureResponse> getLeagueSeasonFixture(LeagueFixtureQuery query) {
+    LeagueId leagueId = LeagueId.of(query.getLeagueId());
+    FixtureId fixtureId = FixtureId.of(query.getFixtureId());
+
+    League league = leagueRepository.findById(leagueId).orElseThrow();
+    Fixture fixture = league.getFixture(query.getYear(), fixtureId).orElseThrow();
+
+    return new ResponseContainer<>(query, List.of(FixtureResponse.from(fixture)));
+  }
+
+  @Transactional
+  @Override
+  public ResponseContainer<FixtureResponse> getLeagueSeasonFixtures(LeagueSeasonQuery query) {
     return leagueFixtureGetHandler.getLeagueSeasonFixtures(query);
   }
 
   @Transactional
   @Override
-  public ResponseContainer<FixturesWithLeagueResponse> getLeagueSeasonFixturesForMainPage() {
+  public ResponseContainer<LeagueFixtureResponse> getLeagueSeasonFixturesForMainPage() {
     List<League> leagues = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS);
-    List<FixturesWithLeagueResponse> result = new ArrayList<>();
+    List<LeagueFixtureResponse> result = new ArrayList<>();
 
     for (League league : leagues) {
       Year year = league.getLatestSeasonYear();
       Season season = league.getSeasonByYear(year).orElseThrow();
-      List<GetFixtureResponse> responses = season.findFixturesWithinTwoWeeks()
+      List<FixtureResponse> responses = season.findFixturesWithinTwoWeeks()
         .stream()
-        .map(GetFixtureResponse::from)
+        .map(FixtureResponse::from)
         .toList();
 
-      result.add(FixturesWithLeagueResponse.from(league, year.getValue(), responses));
+      result.add(LeagueFixtureResponse.from(league, year.getValue(), responses));
     }
     return new ResponseContainer<>("", result);
   }
 
   @Transactional
   @Override
-  public ResponseContainer<FixturesWithLeagueResponse> getLeagueSeasonInPlayFixtures() {
+  public ResponseContainer<LeagueFixtureResponse> getLeagueSeasonInPlayFixtures() {
     List<League> leagues = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS);
-    List<FixturesWithLeagueResponse> result = new ArrayList<>();
+    List<LeagueFixtureResponse> result = new ArrayList<>();
 
     for (League league : leagues) {
       Year year = league.getLatestSeasonYear();
       Season season = league.getSeasonByYear(year).orElseThrow();
-      List<GetFixtureResponse> responses = league.getInPlayFixture()
+      List<FixtureResponse> responses = league.getInPlayFixture()
         .stream()
-        .map(GetFixtureResponse::from)
+        .map(FixtureResponse::from)
         .toList();
 
-      result.add(FixturesWithLeagueResponse.from(league, year.getValue(), responses));
+      result.add(LeagueFixtureResponse.from(league, year.getValue(), responses));
     }
 
     return new ResponseContainer<>("", result);
@@ -130,29 +139,19 @@ public class LeagueApplicationServiceImpl implements LeagueApiPullUseCase, TeamA
 
   @Transactional
   @Override
-  public ResponseContainer<GetFixtureResponse> getFixtureById(FixtureId fixtureId) {
-    Fixture fixture = fixtureRepository.findById(fixtureId).orElseThrow();
-    GetFixtureResponse response = GetFixtureResponse.from(fixture);
-    return new ResponseContainer<>(fixtureId, List.of(response));
-  }
+  public ResponseContainer<FixtureResponse> getHeadToHeadSimple(LeagueFixtureQuery query) {
+    LeagueId leagueId = LeagueId.of(query.getLeagueId());
+    FixtureId fixtureId = FixtureId.of(query.getFixtureId());
 
-  @Transactional
-  @Override
-  public ResponseContainer<GetFixtureResponse> getHeadToHeadSimple(GetHeadToHeadSimpleQuery query) {
-    TeamId teamId1 = TeamId.of(query.getTeamIds().getFirst());
-    TeamId teamId2 = TeamId.of(query.getTeamIds().getLast());
+    League league = leagueRepository.findById(leagueId).orElseThrow();
+    Fixture fixture = league.getFixture(query.getYear(), fixtureId).orElseThrow();
 
-    List<GetFixtureResponse> responses = leagueFixtureGetHandler.getHeadToHeadSimple(teamId1, teamId2);
-    return new ResponseContainer<>(query, responses);
-  }
+    TeamId homeTeamId = fixture.getHomeTeam().getId();
+    TeamId awayTeamId = fixture.getAwayTeam().getId();
+    List<FixtureResponse> response = league.getH2HRecent5Games(homeTeamId, awayTeamId).stream()
+      .map(FixtureResponse::from)
+      .toList();
 
-  @Transactional
-  @Override
-  public ResponseContainer<GetFixtureResponse> getHeadToHeadSimple(FixtureId fixtureId) {
-    Fixture fixture = fixtureRepository.findById(fixtureId).orElseThrow();
-    Team homeTeam = fixture.getHomeTeam();
-    Team awayTeam = fixture.getAwayTeam();
-    List<GetFixtureResponse> responses = leagueFixtureGetHandler.getHeadToHeadSimple(homeTeam.getId(), awayTeam.getId());
-    return new ResponseContainer<>(fixtureId, responses);
+    return new ResponseContainer<>(query, response);
   }
 }
