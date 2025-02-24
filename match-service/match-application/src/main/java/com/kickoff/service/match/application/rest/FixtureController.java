@@ -1,11 +1,11 @@
 package com.kickoff.service.match.application.rest;
 
+import com.kickoff.common.application.annotation.LoginMember;
+import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.common.service.dto.ResponseContainer;
-import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureResponse;
-import com.kickoff.service.match.domain.dto.fixture.FixtureResponse;
-import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
-import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureQuery;
-import com.kickoff.service.match.domain.port.input.FixtureApiPullUseCase;
+import com.kickoff.service.match.domain.dto.fixture.*;
+import com.kickoff.service.match.domain.service.command.FixtureCommandService;
+import com.kickoff.service.match.domain.service.command.LeagueCommandService;
 import com.kickoff.service.match.domain.service.query.FixtureQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,18 +17,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/matches/fixture", produces = "application/json")
 public class FixtureController {
 
-  private final FixtureApiPullUseCase fixtureApiPullUseCase;
-
+  private final LeagueCommandService leagueCommandService;
   private final FixtureQueryService fixtureQueryService;
+  private final FixtureCommandService fixtureCommandService;
 
   @PostMapping("/pull-all")
   public ResponseEntity<?> pullAllFixtures() {
-    fixtureApiPullUseCase.initFixtures();
+    leagueCommandService.initFixtures();
     return ResponseEntity.ok().build();
   }
 
   @PostMapping("/get")
-  public ResponseEntity<ResponseContainer<FixtureResponse>> fixtureGet(@RequestBody @Valid LeagueFixtureQuery query) {
+  public ResponseEntity<ResponseContainer<FixtureResponse>> fixtureGet(@RequestBody @Valid FixtureQuery query) {
     return ResponseEntity.ok(fixtureQueryService.fixtureGet(query));
   }
 
@@ -48,7 +48,12 @@ public class FixtureController {
   }
 
   @PostMapping("/head-to-head/simple/list")
-  public ResponseEntity<ResponseContainer<FixtureResponse>> fixtureH2HSimpleList(@RequestBody @Valid LeagueFixtureQuery query) {
+  public ResponseEntity<ResponseContainer<FixtureResponse>> fixtureH2HSimpleList(@RequestBody @Valid FixtureQuery query) {
     return ResponseEntity.ok(fixtureQueryService.fixtureH2HSimpleList(query));
+  }
+
+  @PostMapping("/comment/create")
+  public ResponseEntity<ResponseContainer<FixtureCommentResponse>> fixtureCommentCreate(@LoginMember MemberId memberId, @RequestBody @Valid FixtureCommentCreateCommand command) {
+    return ResponseEntity.ok(fixtureCommandService.fixtureCommentCreate(memberId, command));
   }
 }

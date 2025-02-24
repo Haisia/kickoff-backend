@@ -17,6 +17,10 @@ public class UserComment extends BaseVo {
   private String comment;
   private MemberId createdBy;
 
+  public static UserComment of(String comment, MemberId createdBy) {
+    return new UserComment(comment, createdBy);
+  }
+
   @Override
   public void validate() {
 

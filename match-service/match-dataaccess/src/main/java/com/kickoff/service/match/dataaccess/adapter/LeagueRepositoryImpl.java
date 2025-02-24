@@ -1,9 +1,7 @@
 package com.kickoff.service.match.dataaccess.adapter;
 
 import com.kickoff.common.domain.valuobject.LeagueId;
-import com.kickoff.service.match.dataaccess.repository.FixtureJpaRepository;
 import com.kickoff.service.match.dataaccess.repository.LeagueJpaRepository;
-import com.kickoff.service.match.dataaccess.repository.TeamJpaRepository;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +15,6 @@ import java.util.Optional;
 public class LeagueRepositoryImpl implements LeagueRepository {
 
   private final LeagueJpaRepository leagueJpaRepository;
-  private final TeamJpaRepository teamJpaRepository;
-  private final FixtureJpaRepository fixtureJpaRepository;
 
   @Override
   public League save(League league) {

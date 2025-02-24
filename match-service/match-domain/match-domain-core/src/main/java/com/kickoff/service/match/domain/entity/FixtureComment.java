@@ -5,10 +5,7 @@ import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.service.match.domain.valueobject.FixtureCommentId;
 import com.kickoff.service.match.domain.valueobject.UserComment;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -37,6 +34,14 @@ public class FixtureComment extends BaseEntity {
     uniqueConstraints = @UniqueConstraint(columnNames = {"fixture_comment_id", "member_id"})
   )
   private Set<MemberId> likedUsers = new HashSet<>();
+
+  @Builder
+  public FixtureComment(FixtureCommentId id, Fixture fixture, String comment, MemberId createdBy) {
+    if (id == null) id = FixtureCommentId.generate();
+    this.id = id;
+    this.fixture = fixture;
+    this.userComment = UserComment.of(comment, createdBy);
+  }
 
   @Override
   public boolean equals(Object o) {

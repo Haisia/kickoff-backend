@@ -48,7 +48,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     // 토큰에서 MemberId 추출
     UUID memberId = jwtTokenProvider.parseToken(token);
     if (memberId == null) {
-      return null; // or throw an exception
+      throw new IllegalArgumentException("Invalid JWT token");
     }
 
     // MemberId 객체로 반환

@@ -9,8 +9,9 @@ import java.util.UUID;
 
 @NoArgsConstructor @AllArgsConstructor
 @Data
-public class LeagueFixtureQuery {
+public class FixtureCommentCreateCommand {
   public UUID leagueId;
   public Year year;
   public UUID fixtureId;
+  public String comment;
 }

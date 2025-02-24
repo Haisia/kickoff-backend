@@ -1,6 +1,7 @@
 package com.kickoff.service.match.domain.entity;
 
 import com.kickoff.common.domain.entity.BaseEntity;
+import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.service.match.domain.valueobject.FixtureDateTime;
 import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.FixtureStatus;
@@ -9,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
@@ -87,5 +89,27 @@ public class Fixture extends BaseEntity {
     this.fullTimeScore = fullTimeScore;
     this.extraTimeScore = extraTimeScore;
     this.penaltyTimeScore = penaltyTimeScore;
+  }
+
+  public FixtureComment createComment(String comment, MemberId createdBy) {
+    FixtureComment createdFixtureComment = FixtureComment.builder()
+      .comment(comment)
+      .fixture(this)
+      .createdBy(createdBy)
+      .build();
+    this.comments.add(createdFixtureComment);
+    return createdFixtureComment;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    Fixture fixture = (Fixture) o;
+    return Objects.equals(id, fixture.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
   }
 }

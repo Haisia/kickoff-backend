@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = {"com.kickoff.service.match"})
 @EntityScan(basePackages = {"com.kickoff.service.match"})
-@SpringBootApplication(scanBasePackages = "com.kickoff.service.match")
+@SpringBootApplication(scanBasePackages = "com.kickoff")
 public class MatchServiceApplication {
   public static void main(String[] args) {
     SpringApplication.run(MatchServiceApplication.class, args);

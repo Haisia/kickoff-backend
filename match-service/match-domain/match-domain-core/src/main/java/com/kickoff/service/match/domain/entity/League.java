@@ -3,11 +3,9 @@ package com.kickoff.service.match.domain.entity;
 import com.kickoff.common.domain.entity.AggregateRoot;
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.domain.valuobject.LeagueType;
+import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.common.enums.CustomHttpStatus;
-import com.kickoff.service.match.domain.exception.LeagueDomainException;
-import com.kickoff.service.match.domain.exception.SeasonMapTeamNotFoundException;
-import com.kickoff.service.match.domain.exception.SeasonNotFoundException;
-import com.kickoff.service.match.domain.exception.TeamNotFoundException;
+import com.kickoff.service.match.domain.exception.*;
 import com.kickoff.service.match.domain.valueobject.Country;
 import com.kickoff.service.match.domain.valueobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.Logo;
@@ -224,6 +222,12 @@ public class League extends AggregateRoot {
     return getSeasonByYear(seasonYear)
       .orElseThrow(() -> new SeasonNotFoundException(seasonYear))
       .getFixture(fixtureId);
+  }
+
+  public FixtureComment createFixtureComment(Year year, FixtureId fixture, String comment, MemberId createdBy) {
+    return getFixture(year, fixture)
+      .orElseThrow(() -> new FixtureNotFoundException(fixture))
+      .createComment(comment, createdBy);
   }
 
   @Override

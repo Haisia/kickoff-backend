@@ -1,6 +1,6 @@
 package com.kickoff.service.match.application.rest;
 
-import com.kickoff.service.match.domain.port.input.PlayerApiPullUseCase;
+import com.kickoff.service.match.domain.service.command.LeagueCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/matches/player", produces = "application/json")
 public class PlayerController {
 
-  private final PlayerApiPullUseCase playerApiPullUseCase;
+  private final LeagueCommandService leagueCommandService;
 
   @PostMapping("/init")
   public ResponseEntity<?> pullAllTeams() {
-    playerApiPullUseCase.playerApiPull();
+    leagueCommandService.playerApiPull();
     return ResponseEntity.ok().build();
   }
 }
