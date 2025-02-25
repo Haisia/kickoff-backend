@@ -1,5 +1,6 @@
 package com.kickoff.service.match.domain.port.output.externalapi;
 
+import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Player;
 
@@ -14,4 +15,6 @@ public interface LeagueExternalApiService {
   List<League> initPlayers(List<League> league, Map<Long, Player> allPlayers);
   List<League> initRanking(List<League> league);
   List<League> initFixture(List<League> league);
+
+  League updateFixturesStatistics(League league, List<Fixture> fixtures);
 }

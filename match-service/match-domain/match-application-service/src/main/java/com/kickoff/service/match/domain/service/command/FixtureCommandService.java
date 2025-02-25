@@ -5,6 +5,7 @@ import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.common.service.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.FixtureCommentCreateCommand;
 import com.kickoff.service.match.domain.dto.fixture.FixtureCommentResponse;
+import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.FixtureComment;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.exception.LeagueNotFoundException;
@@ -27,6 +28,7 @@ import java.util.List;
 public class FixtureCommandService {
 
   private final LeagueRepository leagueRepository;
+  private final FixtureApiPullHandler fixtureApiPullHandler;
 
   public ResponseContainer<FixtureCommentResponse> fixtureCommentCreate(MemberId memberId, FixtureCommentCreateCommand command) {
     LeagueId leagueId = LeagueId.of(command.getLeagueId());
@@ -36,5 +38,9 @@ public class FixtureCommandService {
     FixtureComment fixtureComment = league.createFixtureComment(command.getYear(), fixtureId, command.getComment(), memberId);
 
     return new ResponseContainer<>(command, List.of(FixtureCommentResponse.from(fixtureComment)));
+  }
+
+  public void fixtureStatisticsUpdate(League league, List<Fixture> fixtures) {
+    fixtureApiPullHandler.updateFixturesStatistics(league, fixtures);
   }
 }

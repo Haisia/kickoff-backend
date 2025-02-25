@@ -2,6 +2,7 @@ package com.kickoff.service.match.externalapi.client;
 
 import com.kickoff.service.match.externalapi.dto.rapidapi.RapidApiResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.fixtures.FixturesResponse;
+import com.kickoff.service.match.externalapi.dto.rapidapi.fixtures.FixturesStatisticsResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.leagues.LeaguesResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayersResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.standings.StandingResponse;
@@ -88,6 +89,20 @@ public class LeagueExternalApiClient {
           .path("/fixtures")
           .queryParam("league", leagueId)
           .queryParam("season", season)
+          .build())
+        .retrieve()
+        .bodyToMono(responseType)
+        .block()
+    ).getResponse();
+  }
+
+  public List<FixturesStatisticsResponse> requestFixturesStatistics(Long fixtureId) {
+    ParameterizedTypeReference<RapidApiResponse<FixturesStatisticsResponse>> responseType = new ParameterizedTypeReference<>() {};
+    return Objects.requireNonNull(
+      webClient.get()
+        .uri(uriBuilder -> uriBuilder
+          .path("/fixtures/statistics")
+          .queryParam("fixture", fixtureId)
           .build())
         .retrieve()
         .bodyToMono(responseType)

@@ -7,7 +7,6 @@ import com.kickoff.service.match.domain.dto.fixture.FixtureQuery;
 import com.kickoff.service.match.domain.dto.fixture.FixtureResponse;
 import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureResponse;
 import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
-import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
 import com.kickoff.service.match.domain.exception.LeagueNotFoundException;
@@ -34,7 +33,7 @@ public class FixtureQueryService {
 
   public ResponseContainer<FixtureResponse> fixtureGet(FixtureQuery query) {
     FixtureId fixtureId = FixtureId.of(query.getFixtureId());
-    Fixture fixture = fixtureGetQueryHelper.fixtureGet(fixtureId);
+    com.kickoff.service.match.domain.entity.Fixture fixture = fixtureGetQueryHelper.fixtureGet(fixtureId);
     return new ResponseContainer<>(query, List.of(FixtureResponse.from(fixture)));
   }
 
@@ -89,7 +88,7 @@ public class FixtureQueryService {
 
   public ResponseContainer<FixtureResponse> fixtureH2HSimpleList(FixtureQuery query) {
     FixtureId fixtureId = FixtureId.of(query.getFixtureId());
-    Fixture fixture = fixtureGetQueryHelper.fixtureGet(fixtureId);
+    com.kickoff.service.match.domain.entity.Fixture fixture = fixtureGetQueryHelper.fixtureGet(fixtureId);
     League league = fixture.getSeason().getLeague();
     TeamId homeTeamId = fixture.getHomeTeam().getId();
     TeamId awayTeamId = fixture.getAwayTeam().getId();

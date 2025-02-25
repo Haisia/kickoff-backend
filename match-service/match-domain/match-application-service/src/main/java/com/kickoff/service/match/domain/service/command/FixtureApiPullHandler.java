@@ -1,6 +1,7 @@
 package com.kickoff.service.match.domain.service.command;
 
 import com.kickoff.common.constant.Constant;
+import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.port.input.FixtureApiPullUseCase;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiService;
@@ -20,5 +21,10 @@ public class FixtureApiPullHandler implements FixtureApiPullUseCase {
   public void initFixtures() {
     List<League> leagues = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS);
     leagueExternalApiService.initFixture(leagues);
+  }
+
+  @Override
+  public void updateFixturesStatistics(League league, List<Fixture> fixtures) {
+    leagueExternalApiService.updateFixturesStatistics(league, fixtures);
   }
 }

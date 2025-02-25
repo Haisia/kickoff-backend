@@ -230,6 +230,14 @@ public class League extends AggregateRoot {
       .createComment(comment, createdBy);
   }
 
+  public List<Fixture> getLiveFixtures() {
+    return getLatestSeason()
+      .getFixtures()
+      .stream()
+      .filter(fixture -> fixture.getFixtureStatus().getFixtureStatusType().isInPlay())
+      .collect(Collectors.toList());
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;

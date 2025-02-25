@@ -1,12 +1,9 @@
 package com.kickoff.service.match.externalapi.adapter;
 
-import com.kickoff.service.match.domain.entity.League;
-import com.kickoff.service.match.domain.entity.Player;
-import com.kickoff.service.match.domain.entity.Season;
-import com.kickoff.service.match.domain.entity.Team;
+import com.kickoff.service.match.domain.entity.*;
 import com.kickoff.service.match.domain.port.output.externalapi.LeagueExternalApiService;
 import com.kickoff.service.match.externalapi.client.LeagueExternalApiClient;
-import com.kickoff.service.match.externalapi.dto.rapidapi.fixtures.FixturesResponse;
+import com.kickoff.service.match.externalapi.dto.rapidapi.fixtures.FixturesStatisticsResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.leagues.LeaguesResponse;
 import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayerDto;
 import com.kickoff.service.match.externalapi.dto.rapidapi.players.PlayersResponse;
@@ -15,7 +12,6 @@ import com.kickoff.service.match.externalapi.dto.rapidapi.teams.TeamsResponse;
 import com.kickoff.service.match.externalapi.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -26,13 +22,13 @@ import java.util.Map;
 @Component
 public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
 
-  private final WebClient webClient;
+  private final LeagueExternalApiClient leagueExternalApiClient;
+
   private final LeagueExternalApiMapper leagueExternalApiMapper;
   private final TeamsExternalApiMapper teamsExternalApiMapper;
-  private final PlayerExternalApiMapper playerExternalApiMapper;
-  private final LeagueExternalApiClient leagueExternalApiClient;
   private final StandingsExternalApiMapper standingsExternalApiMapper;
   private final FixtureExternalApiMapper fixtureExternalApiMapper;
+  private final PlayerExternalApiMapper playerExternalApiMapper;
 
   @Override
   public List<League> initLeagues() {
@@ -105,6 +101,19 @@ public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
       }
     }
     return leagues;
+  }
+
+  @Override
+  public League updateFixturesStatistics(League league, List<Fixture> fixtures) {
+    for (Fixture fixture : fixtures) {
+      List<FixturesStatisticsResponse> fixturesStatisticsResponses = leagueExternalApiClient.requestFixturesStatistics(fixture.getApiFootballFixtureId());
+      if (fixturesStatisticsResponses.isEmpty()) continue;
+
+      fixturesStatisticsResponses.forEach(fsr ->
+        fsr.toFixtureStatistics(fixture).forEach(fixture::addFixtureStatistic)
+      );
+    }
+    return league;
   }
 
   private Player notExistsPlayerHandler(Map<Long, Player> allPlayers, PlayerDto playerDto) {

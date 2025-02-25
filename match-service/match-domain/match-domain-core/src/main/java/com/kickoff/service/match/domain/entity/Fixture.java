@@ -2,18 +2,18 @@ package com.kickoff.service.match.domain.entity;
 
 import com.kickoff.common.domain.entity.BaseEntity;
 import com.kickoff.common.domain.valuobject.MemberId;
-import com.kickoff.service.match.domain.valueobject.FixtureDateTime;
-import com.kickoff.service.match.domain.valueobject.FixtureId;
-import com.kickoff.service.match.domain.valueobject.FixtureStatus;
-import com.kickoff.service.match.domain.valueobject.Score;
+import com.kickoff.service.match.domain.valueobject.*;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "fixtures")
 @Entity
 public class Fixture extends BaseEntity {
@@ -71,6 +71,10 @@ public class Fixture extends BaseEntity {
   private Score penaltyTimeScore;
 
   @OneToMany(mappedBy = "fixture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<FixtureStatistic> fixtureStatistics = new ArrayList<>();
+
+
+  @OneToMany(mappedBy = "fixture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<FixtureComment> comments;
 
   @Builder
@@ -99,6 +103,24 @@ public class Fixture extends BaseEntity {
       .build();
     this.comments.add(createdFixtureComment);
     return createdFixtureComment;
+  }
+
+  public void addFixtureStatistic(FixtureStatistic fixtureStatistic) {
+    fixtureStatistic.setFixture(this);
+
+    getFixtureStatistic(fixtureStatistic).ifPresentOrElse(
+      (fs) -> fs.setValue(fixtureStatistic.getValue()),
+      () -> fixtureStatistics.add(fixtureStatistic)
+    );
+  }
+
+  public Optional<FixtureStatistic> getFixtureStatistic(FixtureStatistic fixtureStatistic) {
+    return fixtureStatistics.stream()
+      .filter(fs ->
+        fs.getTeam().equals(fixtureStatistic.getTeam()) &&
+        fs.getType().equals(fixtureStatistic.getType())
+      ).findFirst()
+      ;
   }
 
   @Override
