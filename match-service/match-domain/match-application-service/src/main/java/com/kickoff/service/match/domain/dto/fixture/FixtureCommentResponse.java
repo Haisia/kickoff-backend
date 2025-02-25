@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +21,8 @@ public class FixtureCommentResponse {
   UUID fixtureCommentId;
   String comment;
   UUID createdBy;
+  LocalDateTime createdAt;
+  String createdByEmail;
   Set<UUID> likedUsers = new HashSet<>();
 
   public static FixtureCommentResponse from(FixtureComment fixtureComment) {
@@ -32,6 +35,7 @@ public class FixtureCommentResponse {
       .fixtureCommentId(fixtureComment.getId().getId())
       .comment(fixtureComment.getUserComment().getComment())
       .createdBy(fixtureComment.getUserComment().getCreatedBy().getId())
+      .createdAt(fixtureComment.getCreatedAt())
       .likedUsers(mappedLikedUsers)
       .build();
   }

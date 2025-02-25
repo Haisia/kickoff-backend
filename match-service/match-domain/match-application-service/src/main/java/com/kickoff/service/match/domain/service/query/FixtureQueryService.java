@@ -3,10 +3,7 @@ package com.kickoff.service.match.domain.service.query;
 import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.service.dto.ResponseContainer;
-import com.kickoff.service.match.domain.dto.fixture.FixtureQuery;
-import com.kickoff.service.match.domain.dto.fixture.FixtureResponse;
-import com.kickoff.service.match.domain.dto.fixture.LeagueFixtureResponse;
-import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
+import com.kickoff.service.match.domain.dto.fixture.*;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;
 import com.kickoff.service.match.domain.exception.LeagueNotFoundException;
@@ -98,5 +95,15 @@ public class FixtureQueryService {
       .toList();
 
     return new ResponseContainer<>(query, response);
+  }
+
+  public ResponseContainer<FixtureCommentResponse> fixtureCommentList(FixtureQuery query) {
+    List<FixtureCommentResponse> responses = fixtureGetQueryHelper.fixtureGet(FixtureId.of(query.getFixtureId()))
+      .getComments()
+      .stream()
+      .map(FixtureCommentResponse::from)
+      .peek(fixtureCommentResponse -> fixtureCommentResponse.setCreatedByEmail("test@email.com"))
+      .toList();
+    return new ResponseContainer<>(query, responses);
   }
 }

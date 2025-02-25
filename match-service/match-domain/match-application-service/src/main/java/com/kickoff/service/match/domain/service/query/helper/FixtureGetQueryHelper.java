@@ -1,5 +1,6 @@
 package com.kickoff.service.match.domain.service.query.helper;
 
+import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.exception.FixtureNotFoundException;
 import com.kickoff.service.match.domain.port.output.repository.FixtureRepository;
 import com.kickoff.service.match.domain.valueobject.FixtureId;
@@ -12,9 +13,8 @@ public class FixtureGetQueryHelper {
 
   private final FixtureRepository fixtureRepository;
 
-  public com.kickoff.service.match.domain.entity.Fixture fixtureGet(FixtureId fixtureId) {
+  public Fixture fixtureGet(FixtureId fixtureId) {
     return fixtureRepository.findById(fixtureId)
       .orElseThrow(() -> new FixtureNotFoundException(fixtureId));
   }
-
 }

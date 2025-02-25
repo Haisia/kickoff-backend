@@ -59,4 +59,9 @@ public class FixtureController {
   public ResponseEntity<ResponseContainer<FixtureCommentResponse>> fixtureCommentCreate(@LoginMember MemberId memberId, @RequestBody @Valid FixtureCommentCreateCommand command) {
     return ResponseEntity.ok(fixtureCommandService.fixtureCommentCreate(memberId, command));
   }
+
+  @PostMapping("/comment/list")
+  public ResponseEntity<ResponseContainer<FixtureCommentResponse>> fixtureCommentList(@RequestBody @Valid FixtureQuery query) {
+    return ResponseEntity.ok(fixtureQueryService.fixtureCommentList(query));
+  }
 }
