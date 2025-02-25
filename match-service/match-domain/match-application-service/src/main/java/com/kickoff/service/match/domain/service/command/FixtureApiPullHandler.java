@@ -24,7 +24,7 @@ public class FixtureApiPullHandler implements FixtureApiPullUseCase {
   }
 
   @Override
-  public void updateFixturesStatistics(League league, List<Fixture> fixtures) {
-    leagueExternalApiService.updateFixturesStatistics(league, fixtures);
+  public void updateFixturesStatistics(Fixture fixture) {
+    leagueExternalApiService.updateFixtureStatistics(fixture);
   }
 }

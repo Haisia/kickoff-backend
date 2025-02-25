@@ -104,16 +104,13 @@ public class LeagueExternalApiServiceImpl implements LeagueExternalApiService {
   }
 
   @Override
-  public League updateFixturesStatistics(League league, List<Fixture> fixtures) {
-    for (Fixture fixture : fixtures) {
-      List<FixturesStatisticsResponse> fixturesStatisticsResponses = leagueExternalApiClient.requestFixturesStatistics(fixture.getApiFootballFixtureId());
-      if (fixturesStatisticsResponses.isEmpty()) continue;
+  public void updateFixtureStatistics(Fixture fixture) {
+    List<FixturesStatisticsResponse> fixturesStatisticsResponses = leagueExternalApiClient.requestFixturesStatistics(fixture.getApiFootballFixtureId());
+    if (fixturesStatisticsResponses.isEmpty()) return;
 
-      fixturesStatisticsResponses.forEach(fsr ->
-        fsr.toFixtureStatistics(fixture).forEach(fixture::addFixtureStatistic)
-      );
-    }
-    return league;
+    fixturesStatisticsResponses.forEach(fsr ->
+      fsr.toFixtureStatistics(fixture).forEach(fixture::addFixtureStatistic)
+    );
   }
 
   private Player notExistsPlayerHandler(Map<Long, Player> allPlayers, PlayerDto playerDto) {

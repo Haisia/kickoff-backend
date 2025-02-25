@@ -40,7 +40,7 @@ public class FixtureCommandService {
     return new ResponseContainer<>(command, List.of(FixtureCommentResponse.from(fixtureComment)));
   }
 
-  public void fixtureStatisticsUpdate(League league, List<Fixture> fixtures) {
-    fixtureApiPullHandler.updateFixturesStatistics(league, fixtures);
+  public void fixtureStatisticsUpdate(Fixture fixture) {
+    fixtureApiPullHandler.updateFixturesStatistics(fixture);
   }
 }

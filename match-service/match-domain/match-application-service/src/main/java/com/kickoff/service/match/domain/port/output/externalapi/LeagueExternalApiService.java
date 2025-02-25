@@ -16,5 +16,5 @@ public interface LeagueExternalApiService {
   List<League> initRanking(List<League> league);
   List<League> initFixture(List<League> league);
 
-  League updateFixturesStatistics(League league, List<Fixture> fixtures);
+  void updateFixtureStatistics(Fixture fixtures);
 }
