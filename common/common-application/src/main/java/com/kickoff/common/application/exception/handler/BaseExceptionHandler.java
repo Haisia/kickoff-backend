@@ -1,7 +1,7 @@
 package com.kickoff.common.application.exception.handler;
 
 import com.kickoff.common.domain.valuobject.LogEntryLevel;
-import com.kickoff.common.service.dto.ErrorResponse;
+import com.kickoff.service.common.domain.dto.ErrorResponse;
 import com.kickoff.common.service.logentry.LogEntryPersistPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

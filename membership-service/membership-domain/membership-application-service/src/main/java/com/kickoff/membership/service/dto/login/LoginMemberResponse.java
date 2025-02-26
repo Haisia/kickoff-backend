@@ -1,6 +1,6 @@
 package com.kickoff.membership.service.dto.login;
 
-import com.kickoff.common.service.dto.BaseResponse;
+import com.kickoff.service.common.domain.dto.BaseResponse;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)

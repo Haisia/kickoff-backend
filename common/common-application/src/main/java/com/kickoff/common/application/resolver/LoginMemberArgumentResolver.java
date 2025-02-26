@@ -2,7 +2,7 @@ package com.kickoff.common.application.resolver;
 
 import com.kickoff.common.application.annotation.LoginMember;
 import com.kickoff.common.domain.valuobject.MemberId;
-import com.kickoff.common.service.jwt.JwtTokenProvider;
+import com.kickoff.service.common.domain.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;

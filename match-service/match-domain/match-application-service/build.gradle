@@ -13,7 +13,6 @@ dependencies {
   // spring
   implementation "org.springframework.boot:spring-boot-dependencies:${springboot_version}"
   implementation "org.springframework.boot:spring-boot-starter-validation:${springboot_version}"
-  implementation "org.springframework.boot:spring-boot-starter-data-redis:${springboot_version}"
   implementation "org.springframework:spring-tx:${spring_version}"
 
   implementation "org.mindrot:jbcrypt:${bcrypt_version}"

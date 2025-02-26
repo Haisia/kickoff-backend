@@ -1,8 +1,12 @@
 package com.kickoff.service.common.domain.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kickoff.common.domain.valuobject.FixtureId;
+import com.kickoff.common.domain.valuobject.MemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 public class RedisService {
 
   private final RedisTemplate<String, String> redisTemplate;
+
+  private ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
   /**
    * 오늘의 Live Fixtures를 Redis에 저장하고, isStarted와 isEnded 상태를 관리한다.
@@ -82,5 +88,48 @@ public class RedisService {
 
     HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
     hashOperations.put(redisKey, "isEnded", String.valueOf(isEnded));
+  }
+
+  public void saveLiveFixtureChat(FixtureId fixtureId, String message, MemberId sender) {
+    if (fixtureId == null || message == null || sender == null) return;
+
+    String redisKey = "live_fixture_chats:" + fixtureId.getId().toString();
+    ListOperations<String, String> listOperations = redisTemplate.opsForList();
+
+    try {
+      ChatMessage chatMessage = new ChatMessage(sender.getId().toString(), message, LocalDateTime.now());
+      String chatMessageJson = objectMapper.writeValueAsString(chatMessage);
+
+      listOperations.leftPush(redisKey, chatMessageJson);
+
+      redisTemplate.expire(redisKey, Duration.ofDays(1));
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to save chat message to Redis", e);
+    }
+  }
+
+
+  private static class ChatMessage {
+    private final String sender;
+    private final String message;
+    private final LocalDateTime timestamp;
+
+    public ChatMessage(String sender, String message, LocalDateTime timestamp) {
+      this.sender = sender;
+      this.message = message;
+      this.timestamp = timestamp;
+    }
+
+    public String getSender() {
+      return sender;
+    }
+
+    public String getMessage() {
+      return message;
+    }
+
+    public LocalDateTime getTimestamp() {
+      return timestamp;
+    }
   }
 }

@@ -1,4 +1,4 @@
-package com.kickoff.common.service.dto;
+package com.kickoff.service.common.domain.dto;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

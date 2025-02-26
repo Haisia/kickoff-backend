@@ -1,6 +1,6 @@
 package com.kickoff.service.match.application.rest;
 
-import com.kickoff.common.service.dto.ResponseContainer;
+import com.kickoff.service.common.domain.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.LeagueSeasonQuery;
 import com.kickoff.service.match.domain.dto.rank.LeagueTeamsResponse;
 import com.kickoff.service.match.domain.service.command.LeagueCommandService;

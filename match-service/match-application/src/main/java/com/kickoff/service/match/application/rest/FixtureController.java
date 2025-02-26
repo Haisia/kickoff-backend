@@ -2,7 +2,7 @@ package com.kickoff.service.match.application.rest;
 
 import com.kickoff.common.application.annotation.LoginMember;
 import com.kickoff.common.domain.valuobject.MemberId;
-import com.kickoff.common.service.dto.ResponseContainer;
+import com.kickoff.service.common.domain.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.*;
 import com.kickoff.service.match.domain.service.command.FixtureCommandService;
 import com.kickoff.service.match.domain.service.command.LeagueCommandService;

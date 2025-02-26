@@ -2,7 +2,7 @@ package com.kickoff.service.match.domain.service.query;
 
 import com.kickoff.common.constant.Constant;
 import com.kickoff.common.domain.valuobject.LeagueId;
-import com.kickoff.common.service.dto.ResponseContainer;
+import com.kickoff.service.common.domain.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.*;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.entity.Season;

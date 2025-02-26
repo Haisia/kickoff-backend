@@ -1,7 +1,7 @@
 package com.kickoff.membership.application.excetion.handler;
 
 import com.kickoff.common.application.exception.handler.BaseExceptionHandler;
-import com.kickoff.common.service.dto.ErrorResponse;
+import com.kickoff.service.common.domain.dto.ErrorResponse;
 import com.kickoff.common.service.logentry.LogEntryPersistPublisher;
 import com.kickoff.membership.domain.exception.MemberDomainException;
 import com.kickoff.membership.service.exception.AlreadyExistEmailException;

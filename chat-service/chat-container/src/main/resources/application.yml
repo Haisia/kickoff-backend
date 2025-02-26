@@ -1,0 +1,54 @@
+server:
+  port: 8083
+
+logging:
+  level:
+    org.springframework.amqp: DEBUG
+    com.kickoff: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+spring:
+  application:
+    name: chat-service
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        type:
+          org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chat_service?stringtype=unspecified
+    driver-class-name: org.postgresql.Driver
+    username: root
+    password: root
+
+  sql:
+    init:
+      mode: always
+#      schema-locations: classpath:init-schema.sql
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guestuser
+    password: guestuser
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+value:
+  rapid:
+    api:
+      key: ${RapidApiKey}
+  jwt:
+    secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest

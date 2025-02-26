@@ -1,4 +1,4 @@
-package com.kickoff.common.service.jwt;
+package com.kickoff.service.common.domain.jwt;
 
 import com.kickoff.common.domain.valuobject.MemberId;
 import io.jsonwebtoken.Claims;

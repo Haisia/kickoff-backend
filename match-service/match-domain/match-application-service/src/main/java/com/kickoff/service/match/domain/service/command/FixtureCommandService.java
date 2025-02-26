@@ -2,7 +2,7 @@ package com.kickoff.service.match.domain.service.command;
 
 import com.kickoff.common.domain.valuobject.LeagueId;
 import com.kickoff.common.domain.valuobject.MemberId;
-import com.kickoff.common.service.dto.ResponseContainer;
+import com.kickoff.service.common.domain.dto.ResponseContainer;
 import com.kickoff.service.match.domain.dto.fixture.FixtureCommentCreateCommand;
 import com.kickoff.service.match.domain.dto.fixture.FixtureCommentResponse;
 import com.kickoff.service.match.domain.entity.Fixture;
