@@ -1,6 +1,7 @@
 package com.kickoff.service.match.domain.entity;
 
 import com.kickoff.common.domain.entity.BaseEntity;
+import com.kickoff.common.domain.valuobject.FixtureId;
 import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.service.match.domain.valueobject.*;
 import jakarta.persistence.*;

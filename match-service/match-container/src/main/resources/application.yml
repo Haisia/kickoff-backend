@@ -30,15 +30,21 @@ spring:
     username: root
     password: root
 
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:init-schema.sql
+
   rabbitmq:
     host: localhost
     port: 5672
     username: guestuser
     password: guestuser
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:init-schema.sql
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 value:
   rapid:

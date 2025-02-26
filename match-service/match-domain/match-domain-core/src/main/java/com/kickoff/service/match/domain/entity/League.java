@@ -7,7 +7,7 @@ import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.common.enums.CustomHttpStatus;
 import com.kickoff.service.match.domain.exception.*;
 import com.kickoff.service.match.domain.valueobject.Country;
-import com.kickoff.service.match.domain.valueobject.FixtureId;
+import com.kickoff.common.domain.valuobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.Logo;
 import com.kickoff.service.match.domain.valueobject.TeamId;
 import jakarta.persistence.*;

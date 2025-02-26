@@ -1,4 +1,4 @@
-package com.kickoff.service.match.domain.valueobject;
+package com.kickoff.service.chat.domain.valueobject;
 
 import com.kickoff.common.domain.valuobject.BaseId;
 import jakarta.persistence.Column;
@@ -13,11 +13,11 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class FixtureId extends BaseId<UUID> {
-  @Column(name = "fixture_id")
+public class FixtureLiveChatId extends BaseId<UUID> {
+  @Column(name = "fixture_live_chat_id")
   private UUID id;
 
-  protected FixtureId(UUID id) {
+  protected FixtureLiveChatId(UUID id) {
     this.id = id;
   }
 
@@ -25,19 +25,19 @@ public class FixtureId extends BaseId<UUID> {
   public void validate() {
   }
 
-  public static FixtureId of(UUID value) {
-    return new FixtureId(value);
+  public static FixtureLiveChatId of(UUID value) {
+    return new FixtureLiveChatId(value);
   }
 
-  public static FixtureId generate() {
-    return new FixtureId(UUID.randomUUID());
+  public static FixtureLiveChatId generate() {
+    return new FixtureLiveChatId(UUID.randomUUID());
   }
 
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
-    FixtureId fixtureId = (FixtureId) o;
-    return Objects.equals(id, fixtureId.id);
+    FixtureLiveChatId that = (FixtureLiveChatId) o;
+    return Objects.equals(id, that.id);
   }
 
   @Override

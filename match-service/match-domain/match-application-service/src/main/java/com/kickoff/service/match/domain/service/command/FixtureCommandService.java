@@ -10,7 +10,7 @@ import com.kickoff.service.match.domain.entity.FixtureComment;
 import com.kickoff.service.match.domain.entity.League;
 import com.kickoff.service.match.domain.exception.LeagueNotFoundException;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
-import com.kickoff.service.match.domain.valueobject.FixtureId;
+import com.kickoff.common.domain.valuobject.FixtureId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

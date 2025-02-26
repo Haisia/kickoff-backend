@@ -1,7 +1,7 @@
 package com.kickoff.service.match.domain.entity;
 
 import com.kickoff.common.domain.entity.BaseEntity;
-import com.kickoff.service.match.domain.valueobject.FixtureId;
+import com.kickoff.common.domain.valuobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.SeasonId;
 import jakarta.persistence.*;
 import lombok.*;

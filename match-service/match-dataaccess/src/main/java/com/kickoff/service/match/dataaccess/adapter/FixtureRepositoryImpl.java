@@ -1,9 +1,9 @@
 package com.kickoff.service.match.dataaccess.adapter;
 
+import com.kickoff.common.domain.valuobject.FixtureId;
 import com.kickoff.service.match.dataaccess.repository.FixtureJpaRepository;
 import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.port.output.repository.FixtureRepository;
-import com.kickoff.service.match.domain.valueobject.FixtureId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +23,7 @@ public class FixtureRepositoryImpl implements FixtureRepository {
   }
 
   @Override
-  public List<Fixture> findByFixtureDateAfterAndFixtureDateBefore(LocalDateTime startDate, LocalDateTime endDate) {
-    return fixtureJpaRepository.findByFixtureDateTime_DateAfterAndFixtureDateTime_DateBefore(startDate, endDate);
+  public List<Fixture> findByFixtureDateTime_DateBetween(LocalDateTime startDate, LocalDateTime endDate) {
+    return fixtureJpaRepository.findByFixtureDateTime_DateBetween(startDate, endDate);
   }
 }

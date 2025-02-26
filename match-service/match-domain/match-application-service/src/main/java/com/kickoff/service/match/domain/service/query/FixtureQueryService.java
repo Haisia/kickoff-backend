@@ -10,7 +10,7 @@ import com.kickoff.service.match.domain.exception.LeagueNotFoundException;
 import com.kickoff.service.match.domain.exception.SeasonNotFoundException;
 import com.kickoff.service.match.domain.port.output.repository.LeagueRepository;
 import com.kickoff.service.match.domain.service.query.helper.FixtureGetQueryHelper;
-import com.kickoff.service.match.domain.valueobject.FixtureId;
+import com.kickoff.common.domain.valuobject.FixtureId;
 import com.kickoff.service.match.domain.valueobject.TeamId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
