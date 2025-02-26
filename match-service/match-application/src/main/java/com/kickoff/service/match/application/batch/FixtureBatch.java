@@ -1,9 +1,10 @@
 package com.kickoff.service.match.application.batch;
 
 
+import com.kickoff.common.domain.valuobject.FixtureId;
 import com.kickoff.service.match.domain.entity.Fixture;
 import com.kickoff.service.match.domain.port.output.repository.FixtureRepository;
-import com.kickoff.service.match.domain.service.RedisService;
+import com.kickoff.service.common.domain.service.RedisService;
 import com.kickoff.service.match.domain.service.command.FixtureCommandService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,13 +29,14 @@ public class FixtureBatch {
 
   @Scheduled(fixedRate = 60 * 1000)
   public void liveFixtureStatsUpdater() {
-    List<Fixture> fixtures = fixtureRepository.findByFixtureDateTime_DateBetween(LocalDateTime.now().minusMinutes(180), LocalDateTime.now());
-    if (fixtures.isEmpty()) {
+    Set<FixtureId> currentLiveFixtureIds = redisService.getCurrentLiveFixtures();
+    if (currentLiveFixtureIds.isEmpty()) {
       log.info("[*] 진행중인 경기가 없습니다.");
       return;
     }
+    List<Fixture> currentLiveFixtures = fixtureRepository.findByIdIsIn(currentLiveFixtureIds);
 
-    for (Fixture fixture : fixtures) {
+    for (Fixture fixture : currentLiveFixtures) {
       fixtureCommandService.fixtureStatisticsUpdate(fixture);
       log.info("[*] 진행중인 경기정보를 업데이트했습니다. : fixtureId={}", fixture.getId().getId());
     }
@@ -54,6 +56,9 @@ public class FixtureBatch {
 
   private void saveTodayLiveFixturesToRedis() {
     List<Fixture> fixtures = fixtureRepository.findByFixtureDateTime_DateBetween(LocalDate.now().atStartOfDay(), LocalDate.now().atTime(23, 59));
-    redisService.saveTodayLiveFixtures(fixtures);
+    for (Fixture fixture : fixtures) {
+      redisService.saveTodayLiveFixture(fixture.getId(), fixture.getFixtureDateTime().getDate());
+      log.info("[*] 오늘의 경기 일정을 Redis 에 save 합니다. : fixtureId={}", fixture.getId().getId());
+    }
   }
 }
