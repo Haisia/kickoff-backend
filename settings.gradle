@@ -24,7 +24,14 @@ include 'membership-service:membership-messaging'
 include 'membership-service:membership-container'
 
 include 'board-service'
+
 include 'chat-service'
+include 'chat-service:chat-domain'
+include 'chat-service:chat-domain:chat-domain-core'
+include 'chat-service:chat-domain:chat-application-service'
+include 'chat-service:chat-application'
+include 'chat-service:chat-dataaccess'
+include 'chat-service:chat-container'
 
 include 'match-service'
 include 'match-service:match-domain'

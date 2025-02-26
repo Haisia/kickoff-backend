@@ -1,0 +1,10 @@
+plugins {
+  id 'java-library'
+}
+
+dependencies {
+  implementation project(':common:common-constant')
+  implementation project(':common:common-domain:common-domain-core')
+
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springboot_version}"
+}
