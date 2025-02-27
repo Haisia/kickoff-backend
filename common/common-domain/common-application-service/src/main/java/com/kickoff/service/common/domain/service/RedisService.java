@@ -90,14 +90,14 @@ public class RedisService {
     hashOperations.put(redisKey, "isEnded", String.valueOf(isEnded));
   }
 
-  public void saveLiveFixtureChat(FixtureId fixtureId, String message, MemberId sender) {
+  public void saveLiveFixtureChat(FixtureId fixtureId, String message, MemberId sender, LocalDateTime timestamp) {
     if (fixtureId == null || message == null || sender == null) return;
 
     String redisKey = "live_fixture_chats:" + fixtureId.getId().toString();
     ListOperations<String, String> listOperations = redisTemplate.opsForList();
 
     try {
-      ChatMessage chatMessage = new ChatMessage(sender.getId().toString(), message, LocalDateTime.now());
+      ChatMessage chatMessage = new ChatMessage(sender.getId().toString(), message, timestamp);
       String chatMessageJson = objectMapper.writeValueAsString(chatMessage);
 
       listOperations.leftPush(redisKey, chatMessageJson);
@@ -107,7 +107,6 @@ public class RedisService {
       throw new RuntimeException("Failed to save chat message to Redis", e);
     }
   }
-
 
   private static class ChatMessage {
     private final String sender;

@@ -53,4 +53,6 @@ include 'log-service:log-dataaccess'
 include 'log-service:log-messaging'
 include 'log-service:log-container'
 include 'log-service:log-application'
+include 'chat-service:chat-messaging'
+findProject(':chat-service:chat-messaging')?.name = 'chat-messaging'
 
