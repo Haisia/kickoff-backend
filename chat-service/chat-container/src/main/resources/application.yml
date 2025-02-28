@@ -50,5 +50,6 @@ value:
   rapid:
     api:
       key: ${RapidApiKey}
+  allow-ip: ${KICKOFF_ALLOW_IP}
   jwt:
     secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest

@@ -37,3 +37,4 @@ spring:
 value:
   jwt:
     secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
+  allow-ip: ${KICKOFF_ALLOW_IP}
