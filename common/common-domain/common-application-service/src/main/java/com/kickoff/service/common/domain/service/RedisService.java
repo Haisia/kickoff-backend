@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kickoff.common.domain.valuobject.FixtureId;
 import com.kickoff.common.domain.valuobject.MemberId;
-import com.kickoff.service.common.domain.dto.ChatMessage;
+import com.kickoff.service.common.domain.dto.ChatMessageRedisDto;
+import com.kickoff.service.common.domain.dto.MemberRedisDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
@@ -15,6 +16,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -92,14 +94,15 @@ public class RedisService {
     hashOperations.put(redisKey, "isEnded", String.valueOf(isEnded));
   }
 
-  public void saveLiveFixtureChat(FixtureId fixtureId, String message, MemberId sender, LocalDateTime timestamp) {
-    if (fixtureId == null || message == null || sender == null) return;
+  public void saveLiveFixtureChat(FixtureId fixtureId, String message, MemberId memberId, LocalDateTime timestamp) {
+    if (fixtureId == null || message == null || memberId == null) return;
 
     String redisKey = "live_fixture_chats:" + fixtureId.getId().toString();
     ListOperations<String, String> listOperations = redisTemplate.opsForList();
+    MemberRedisDto member = getLoginMember(memberId).orElseThrow(() -> new IllegalArgumentException("Sender is not logged in"));
 
     try {
-      ChatMessage chatMessage = new ChatMessage(sender.getId().toString(), message, timestamp);
+      ChatMessageRedisDto chatMessage = new ChatMessageRedisDto(memberId.getId(), member.getNickname(), message, timestamp);
       String chatMessageJson = objectMapper.writeValueAsString(chatMessage);
 
       listOperations.leftPush(redisKey, chatMessageJson);
@@ -110,7 +113,7 @@ public class RedisService {
     }
   }
 
-  public List<ChatMessage> getFixtureLiveChatMessages(FixtureId fixtureId) {
+  public List<ChatMessageRedisDto> getFixtureLiveChatMessages(FixtureId fixtureId) {
     if (fixtureId == null) {
       throw new IllegalArgumentException("FixtureId cannot be null");
     }
@@ -128,7 +131,7 @@ public class RedisService {
       return messagesJson.stream()
         .map(json -> {
           try {
-            return objectMapper.readValue(json, ChatMessage.class);
+            return objectMapper.readValue(json, ChatMessageRedisDto.class);
           } catch (Exception e) {
             throw new RuntimeException("Failed to deserialize chat message", e);
           }
@@ -139,4 +142,39 @@ public class RedisService {
     }
   }
 
+  public void saveLoginMember(MemberId memberId, MemberRedisDto memberRedisDto) {
+    if (memberId == null || memberRedisDto == null) {
+      throw new IllegalArgumentException("MemberId and MemberRedisDto cannot be null");
+    }
+
+    String redisKey = "member:info:" + memberId.getId();
+    try {
+      String memberJson = objectMapper.writeValueAsString(memberRedisDto);
+
+      redisTemplate.opsForValue().set(redisKey, memberJson);
+
+      redisTemplate.expire(redisKey, Duration.ofHours(1));
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to save member info to Redis", e);
+    }
+  }
+
+  public Optional<MemberRedisDto> getLoginMember(MemberId memberId) {
+    if (memberId == null) {
+      throw new IllegalArgumentException("MemberId cannot be null");
+    }
+
+    String redisKey = "member:info:" + memberId.getId();
+    try {
+      String memberJson = redisTemplate.opsForValue().get(redisKey);
+
+      if (memberJson == null) {
+        return Optional.empty();
+      }
+
+      return Optional.of(objectMapper.readValue(memberJson, MemberRedisDto.class));
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to retrieve member info from Redis", e);
+    }
+  }
 }

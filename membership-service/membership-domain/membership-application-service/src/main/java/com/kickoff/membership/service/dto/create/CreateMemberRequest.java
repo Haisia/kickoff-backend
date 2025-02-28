@@ -13,4 +13,5 @@ public class CreateMemberRequest {
   public String email;
   @Pattern(regexp = Constant.PASSWORD_REGEX, message = Constant.PASSWORD_FAULT_MESSAGE)
   public String password;
+  public String nickname;
 }

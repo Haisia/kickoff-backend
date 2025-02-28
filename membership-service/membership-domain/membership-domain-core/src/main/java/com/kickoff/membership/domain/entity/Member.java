@@ -28,6 +28,8 @@ public class Member extends AggregateRoot {
   private Email email;
   @Embedded
   private Password password;
+  @Column(unique = true, nullable = false)
+  private String nickname;
   @Embedded
   private Point point;
 
@@ -68,11 +70,12 @@ public class Member extends AggregateRoot {
   }
 
   @Builder
-  public Member(MemberId id, Email email, Password password, Point point) {
+  public Member(MemberId id, Email email, Password password, String nickname, Point point) {
     if (id == null) id = MemberId.generate();
     this.id = id;
     this.email = email;
     this.password = password;
+    this.nickname = nickname;
     if (point == null) point = Point.of(BigDecimal.ZERO);
     this.point = point;
   }

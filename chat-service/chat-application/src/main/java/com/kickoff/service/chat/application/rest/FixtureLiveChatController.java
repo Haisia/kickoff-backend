@@ -2,7 +2,7 @@ package com.kickoff.service.chat.application.rest;
 
 import com.kickoff.service.chat.domain.dto.FixtureLiveChatQuery;
 import com.kickoff.service.chat.domain.service.query.FixtureLiveChatQueryService;
-import com.kickoff.service.common.domain.dto.ChatMessage;
+import com.kickoff.service.common.domain.dto.ChatMessageRedisDto;
 import com.kickoff.service.common.domain.dto.ResponseContainer;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class FixtureLiveChatController {
   private final FixtureLiveChatQueryService fixtureLiveChatQueryService;
 
   @PostMapping("/live/message/list")
-  public ResponseEntity<ResponseContainer<ChatMessage>> fixtureLiveMessageList(@Valid @RequestBody FixtureLiveChatQuery query) {
+  public ResponseEntity<ResponseContainer<ChatMessageRedisDto>> fixtureLiveMessageList(@Valid @RequestBody FixtureLiveChatQuery query) {
     return ResponseEntity.ok(fixtureLiveChatQueryService.fixtureLiveMessageList(query));
   }
 }

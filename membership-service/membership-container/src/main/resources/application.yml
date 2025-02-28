@@ -29,6 +29,11 @@ spring:
     username: guestuser
     password: guestuser
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 value:
   jwt:
     secret: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest

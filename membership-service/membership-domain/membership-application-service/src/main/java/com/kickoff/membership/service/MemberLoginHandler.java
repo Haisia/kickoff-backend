@@ -5,9 +5,11 @@ import com.kickoff.membership.service.dto.login.LoginMemberRequest;
 import com.kickoff.membership.service.dto.login.LoginMemberResponse;
 import com.kickoff.membership.domain.entity.Member;
 import com.kickoff.membership.service.exception.LoginFailureException;
+import com.kickoff.service.common.domain.dto.MemberRedisDto;
 import com.kickoff.service.common.domain.jwt.JwtTokenProvider;
 import com.kickoff.membership.service.port.output.repository.MemberRepository;
 import com.kickoff.membership.service.util.PasswordEncoder;
+import com.kickoff.service.common.domain.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ public class MemberLoginHandler {
   private final MemberRepository memberRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
+  private final RedisService redisService;
 
   @Transactional
   public LoginMemberResponse loginMember(LoginMemberRequest request) {
@@ -29,6 +32,8 @@ public class MemberLoginHandler {
     if (!passwordEncoder.matches(request.getPassword(), findMember.getPassword().getHashedPassword())) {
       throw new LoginFailureException(request.email);
     }
+
+    redisService.saveLoginMember(findMember.getId(), new MemberRedisDto(findMember.getEmail().getEmail(), findMember.getNickname()));
 
     String token = jwtTokenProvider.generateToken(findMember.getId());
     return LoginMemberResponse.builder()

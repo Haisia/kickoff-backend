@@ -5,17 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ChatMessage {
-  private String sender;
+public class ChatMessageRedisDto {
+  private UUID memberId;
+  private String nickname;
   private String message;
   private LocalDateTime timestamp;
 
-  public String getSender() {
-    return sender;
+  public String getNickname() {
+    return nickname;
   }
 
   public String getMessage() {

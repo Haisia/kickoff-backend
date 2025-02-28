@@ -14,6 +14,7 @@ public class MemberDataMapper {
     return Member.builder()
       .email(Email.of(request.getEmail()))
       .password(Password.builder().rawPassword(request.getPassword()).build())
+      .nickname(request.getNickname())
       .build();
   }
 
