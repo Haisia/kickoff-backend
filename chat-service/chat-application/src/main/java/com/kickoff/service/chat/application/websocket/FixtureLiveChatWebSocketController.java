@@ -16,7 +16,7 @@ public class FixtureLiveChatWebSocketController {
 
   private final FixtureLiveChatCommandService fixtureLiveChatCommandService;
 
-  @MessageMapping("/chat/fixture/live/send")
+  @MessageMapping("/chat/fixture/live/message/send")
   public void fixtureLiveChatSend(@Valid FixtureLiveChatCommand command) {
     fixtureLiveChatCommandService.fixtureLiveChatCreate(command, MemberId.of(UUID.randomUUID()));
   }

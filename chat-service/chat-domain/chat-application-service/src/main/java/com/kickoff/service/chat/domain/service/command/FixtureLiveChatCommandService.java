@@ -29,6 +29,6 @@ public class FixtureLiveChatCommandService {
 
     LocalDateTime now = LocalDateTime.now();
     redisService.saveLiveFixtureChat(FixtureId.of(command.getFixtureId()), command.getMessage(), sender, now);
-    fixtureLiveChatPublisher.publishFixtureLiveChat(new PublishFixtureLiveChatCommand(command.getFixtureId(), command.getMessage(), now));
+    fixtureLiveChatPublisher.publishFixtureLiveChat(new PublishFixtureLiveChatCommand(command.getFixtureId(), sender.getId(),command.getMessage(), now));
   }
 }

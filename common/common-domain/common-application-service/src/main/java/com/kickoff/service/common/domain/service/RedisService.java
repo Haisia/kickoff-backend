@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kickoff.common.domain.valuobject.FixtureId;
 import com.kickoff.common.domain.valuobject.MemberId;
+import com.kickoff.service.common.domain.dto.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -108,27 +110,33 @@ public class RedisService {
     }
   }
 
-  private static class ChatMessage {
-    private final String sender;
-    private final String message;
-    private final LocalDateTime timestamp;
-
-    public ChatMessage(String sender, String message, LocalDateTime timestamp) {
-      this.sender = sender;
-      this.message = message;
-      this.timestamp = timestamp;
+  public List<ChatMessage> getFixtureLiveChatMessages(FixtureId fixtureId) {
+    if (fixtureId == null) {
+      throw new IllegalArgumentException("FixtureId cannot be null");
     }
 
-    public String getSender() {
-      return sender;
-    }
+    String redisKey = "live_fixture_chats:" + fixtureId.getId().toString();
+    ListOperations<String, String> listOperations = redisTemplate.opsForList();
 
-    public String getMessage() {
-      return message;
-    }
+    try {
+      List<String> messagesJson = listOperations.range(redisKey, 0, 49);
 
-    public LocalDateTime getTimestamp() {
-      return timestamp;
+      if (messagesJson == null || messagesJson.isEmpty()) {
+        return List.of();
+      }
+
+      return messagesJson.stream()
+        .map(json -> {
+          try {
+            return objectMapper.readValue(json, ChatMessage.class);
+          } catch (Exception e) {
+            throw new RuntimeException("Failed to deserialize chat message", e);
+          }
+        })
+        .collect(Collectors.toList());
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to retrieve chat messages from Redis", e);
     }
   }
+
 }
