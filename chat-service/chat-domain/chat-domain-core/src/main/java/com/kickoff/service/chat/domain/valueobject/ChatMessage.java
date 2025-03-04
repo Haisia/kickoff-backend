@@ -20,14 +20,8 @@ public class ChatMessage extends BaseVo {
   private MemberId sender;
   private LocalDateTime createdAt;
 
-  private ChatMessage(String message, MemberId sender) {
-    this.message = message;
-    this.sender = sender;
-    this.createdAt = LocalDateTime.now();
-  }
-
-  public static ChatMessage of(String message, MemberId sender) {
-    return new ChatMessage(message, sender);
+  public static ChatMessage of(String message, MemberId sender, LocalDateTime createdAt) {
+    return new ChatMessage(message, sender, createdAt);
   }
 
   @Override

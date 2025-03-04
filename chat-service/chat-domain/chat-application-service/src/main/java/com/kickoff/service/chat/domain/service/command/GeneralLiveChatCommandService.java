@@ -3,7 +3,9 @@ package com.kickoff.service.chat.domain.service.command;
 import com.kickoff.common.domain.valuobject.MemberId;
 import com.kickoff.service.chat.domain.dto.GeneralLiveChatCommand;
 import com.kickoff.service.chat.domain.dto.PublishGeneralLiveChatCommand;
+import com.kickoff.service.chat.domain.entity.GeneralLiveChat;
 import com.kickoff.service.chat.domain.port.output.messaging.GeneralLiveChatPublisher;
+import com.kickoff.service.chat.domain.port.output.repository.GeneralLiveChatRepository;
 import com.kickoff.service.common.domain.dto.MemberRedisDto;
 import com.kickoff.service.common.domain.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import java.time.LocalDateTime;
 @Transactional
 @Service
 public class GeneralLiveChatCommandService {
+
+  private final GeneralLiveChatRepository generalLiveChatRepository;
 
   private final RedisService redisService;
   private final GeneralLiveChatPublisher generalLiveChatPublisher;
@@ -34,5 +38,9 @@ public class GeneralLiveChatCommandService {
       .build();
 
     generalLiveChatPublisher.publishGeneralLiveChat(publishGeneralLiveChatCommand);
+  }
+
+  public GeneralLiveChat persistGeneralLiveChat(GeneralLiveChat generalLiveChat) {
+    return generalLiveChatRepository.save(generalLiveChat);
   }
 }

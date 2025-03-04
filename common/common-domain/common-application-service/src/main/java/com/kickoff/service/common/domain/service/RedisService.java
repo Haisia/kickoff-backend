@@ -124,25 +124,30 @@ public class RedisService {
     }
   }
 
-  public List<ChatMessageRedisDto> getFixtureLiveChatMessages(FixtureId fixtureId) {
+  public List<ChatMessageRedisDto> getGeneralLiveChatMessages(FixtureId fixtureId) {
     if (fixtureId == null) {
       throw new IllegalArgumentException("FixtureId cannot be null");
     }
 
     String redisKey = "live_fixture_chats:" + fixtureId.getId().toString();
-    return getChatMessageRedisDtos(redisKey);
+    return getChatMessageRedisDtos(redisKey, 0, 49);
   }
 
-  public List<ChatMessageRedisDto> getFixtureLiveChatMessages() {
+  public List<ChatMessageRedisDto> getGeneralLiveChatMessages() {
     String redisKey = "live_general_chats";
-    return getChatMessageRedisDtos(redisKey);
+    return getChatMessageRedisDtos(redisKey, 0, 49);
   }
 
-  private List<ChatMessageRedisDto> getChatMessageRedisDtos(String redisKey) {
+  public List<ChatMessageRedisDto> getAllGeneralLiveChatMessages() {
+    String redisKey = "live_general_chats";
+    return getChatMessageRedisDtos(redisKey, 0, -1);
+  }
+
+  private List<ChatMessageRedisDto> getChatMessageRedisDtos(String redisKey, int startIdx, int endIdx) {
     ListOperations<String, String> listOperations = redisTemplate.opsForList();
 
     try {
-      List<String> messagesJson = listOperations.range(redisKey, 0, 49);
+      List<String> messagesJson = listOperations.range(redisKey, startIdx, endIdx);
 
       if (messagesJson == null || messagesJson.isEmpty()) {
         return List.of();
@@ -196,5 +201,10 @@ public class RedisService {
     } catch (Exception e) {
       throw new RuntimeException("Failed to retrieve member info from Redis", e);
     }
+  }
+
+  public void clearGeneralLiveChatMessages() {
+    String redisKey = "live_general_chats";
+    redisTemplate.delete(redisKey);
   }
 }

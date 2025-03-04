@@ -19,7 +19,7 @@ public class FixtureLiveChatQueryService {
   private final RedisService redisService;
 
   public ResponseContainer<ChatMessageRedisDto> fixtureLiveMessageList(FixtureLiveChatQuery query) {
-    List<ChatMessageRedisDto> messageHistories = redisService.getFixtureLiveChatMessages(FixtureId.of(query.getFixtureId()));
+    List<ChatMessageRedisDto> messageHistories = redisService.getGeneralLiveChatMessages(FixtureId.of(query.getFixtureId()));
     return new ResponseContainer<>(query, messageHistories);
   }
 }

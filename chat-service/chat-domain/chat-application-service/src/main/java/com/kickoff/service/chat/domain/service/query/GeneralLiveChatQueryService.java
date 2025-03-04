@@ -17,7 +17,7 @@ public class GeneralLiveChatQueryService {
   private final RedisService redisService;
 
   public ResponseContainer<ChatMessageRedisDto> generalLiveMessageList() {
-    List<ChatMessageRedisDto> messageHistories = redisService.getFixtureLiveChatMessages();
+    List<ChatMessageRedisDto> messageHistories = redisService.getGeneralLiveChatMessages();
     return new ResponseContainer<>("", messageHistories);
   }
 }

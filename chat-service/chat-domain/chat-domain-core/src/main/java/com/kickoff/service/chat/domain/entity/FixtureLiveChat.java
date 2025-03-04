@@ -7,8 +7,9 @@ import com.kickoff.service.chat.domain.valueobject.ChatMessage;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
@@ -21,10 +22,10 @@ public class FixtureLiveChat extends AggregateRoot implements ChatEntity {
 
   @ElementCollection
   @CollectionTable(name = "fixture_live_chat_messages", joinColumns = @JoinColumn(name = "fixture_live_chat_id"))
-  private List<ChatMessage> messages;
+  private Set<ChatMessage> messages;
 
   @Builder
-  private FixtureLiveChat(FixtureId fixtureId, List<ChatMessage> messages) {
+  private FixtureLiveChat(FixtureId fixtureId, Set<ChatMessage> messages) {
     if (fixtureId == null) throw new IllegalArgumentException("fixtureId must not be null");
     this.fixtureId = fixtureId;
     this.messages = messages;
@@ -34,8 +35,8 @@ public class FixtureLiveChat extends AggregateRoot implements ChatEntity {
     return fixtureId;
   }
 
-  public void addMessage(String message, MemberId sender) {
-    messages.add(ChatMessage.of(message, sender));
+  public void addMessage(String message, MemberId sender, LocalDateTime createdAt) {
+    messages.add(ChatMessage.of(message, sender, createdAt));
   }
 
   @Override
