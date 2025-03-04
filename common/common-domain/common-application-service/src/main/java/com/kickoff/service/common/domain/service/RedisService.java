@@ -98,6 +98,17 @@ public class RedisService {
     if (fixtureId == null || message == null || memberId == null) return;
 
     String redisKey = "live_fixture_chats:" + fixtureId.getId().toString();
+    saveLiveChat(message, memberId, timestamp, redisKey);
+  }
+
+  public void saveLiveGeneralChat(String message, MemberId memberId, LocalDateTime timestamp) {
+    if ( message == null || memberId == null) return;
+
+    String redisKey = "live_general_chats";
+    saveLiveChat(message, memberId, timestamp, redisKey);
+  }
+
+  private void saveLiveChat(String message, MemberId memberId, LocalDateTime timestamp, String redisKey) {
     ListOperations<String, String> listOperations = redisTemplate.opsForList();
     MemberRedisDto member = getLoginMember(memberId).orElseThrow(() -> new IllegalArgumentException("Sender is not logged in"));
 
@@ -119,6 +130,15 @@ public class RedisService {
     }
 
     String redisKey = "live_fixture_chats:" + fixtureId.getId().toString();
+    return getChatMessageRedisDtos(redisKey);
+  }
+
+  public List<ChatMessageRedisDto> getFixtureLiveChatMessages() {
+    String redisKey = "live_general_chats";
+    return getChatMessageRedisDtos(redisKey);
+  }
+
+  private List<ChatMessageRedisDto> getChatMessageRedisDtos(String redisKey) {
     ListOperations<String, String> listOperations = redisTemplate.opsForList();
 
     try {
