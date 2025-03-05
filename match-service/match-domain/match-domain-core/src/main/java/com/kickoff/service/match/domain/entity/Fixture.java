@@ -20,6 +20,7 @@ import java.util.Optional;
 public class Fixture extends BaseEntity {
   @EmbeddedId
   private FixtureId id;
+  @Column(unique = true)
   private Long apiFootballFixtureId;
 
   @ManyToOne(cascade = CascadeType.ALL)
@@ -122,6 +123,14 @@ public class Fixture extends BaseEntity {
         fs.getType().equals(fixtureStatistic.getType())
       ).findFirst()
       ;
+  }
+
+  public void updateFixture(Fixture fixture) {
+    if(fixture.fixtureStatus != null) this.fixtureStatus = fixture.fixtureStatus;
+    if(fixture.halfTimeScore != null) this.halfTimeScore = fixture.halfTimeScore;
+    if(fixture.fullTimeScore != null) this.fullTimeScore = fixture.fullTimeScore;
+    if(fixture.extraTimeScore != null) this.extraTimeScore = fixture.extraTimeScore;
+    if(fixture.penaltyTimeScore != null) this.penaltyTimeScore = fixture.penaltyTimeScore;
   }
 
   @Override

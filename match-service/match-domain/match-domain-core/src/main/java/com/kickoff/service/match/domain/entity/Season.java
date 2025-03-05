@@ -32,7 +32,7 @@ public class Season extends BaseEntity {
   private LocalDate endDate;
 
   @OneToMany(mappedBy = "season", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private List<com.kickoff.service.match.domain.entity.Fixture> fixtures = new ArrayList<>();
+  private List<Fixture> fixtures = new ArrayList<>();
 
   @Builder
   public Season(SeasonId id, League league, Year year, LocalDate startDate, LocalDate endDate) {
@@ -44,19 +44,30 @@ public class Season extends BaseEntity {
     this.endDate = endDate;
   }
 
-  public void addFixture(com.kickoff.service.match.domain.entity.Fixture fixture) {
+  public void addFixture(Fixture fixture) {
     if (fixture == null) return;
-    fixture.setSeason(this);
-    fixtures.add(fixture);
+    getFixtureByApiFootballFixtureId(fixture.getApiFootballFixtureId()).ifPresentOrElse(
+      findFixture-> findFixture.updateFixture(fixture),
+      () -> {
+        fixture.setSeason(this);
+        fixtures.add(fixture);
+      }
+    );
   }
 
-  public Optional<com.kickoff.service.match.domain.entity.Fixture> getFixture(FixtureId fixtureId) {
+  public Optional<Fixture> getFixtureByApiFootballFixtureId(Long apiFootballFixtureId) {
+    return fixtures.stream()
+      .filter(fixture -> fixture.getApiFootballFixtureId().equals(apiFootballFixtureId))
+      .findFirst();
+  }
+
+  public Optional<Fixture> getFixture(FixtureId fixtureId) {
     return fixtures.stream()
       .filter(fixture -> fixture.getId().equals(fixtureId))
       .findFirst();
   }
 
-  public List<com.kickoff.service.match.domain.entity.Fixture> findFixturesWithinTwoWeeks() {
+  public List<Fixture> findFixturesWithinTwoWeeks() {
     LocalDateTime startRange = LocalDate.now().minusWeeks(2).atStartOfDay();
     LocalDateTime endRange = LocalDate.now().plusWeeks(2).plusDays(1).atStartOfDay();
 
