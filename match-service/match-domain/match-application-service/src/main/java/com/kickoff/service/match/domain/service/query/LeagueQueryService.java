@@ -32,7 +32,7 @@ public class LeagueQueryService {
     return new ResponseContainer<>(query, List.of(leagueSeasonRanking));
   }
 
-  public ResponseContainer<LeagueTeamsResponse> leagueRankMainList() {
+  public ResponseContainer<LeagueTeamsResponse> getLeagueTeams() {
     List<LeagueTeamsResponse> leagueTeamsResponses = leagueRepository.findByApiFootballLeagueIdIn(Constant.AVAILABLE_LEAGUE_API_FOOTBALL_LEAGUE_IDS)
       .stream()
       .map(league -> leagueDataMapper.leagueToLeagueTeamsResponse(league, league.getLatestSeasonYear()))

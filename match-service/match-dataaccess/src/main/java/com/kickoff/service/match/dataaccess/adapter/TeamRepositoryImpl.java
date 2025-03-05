@@ -36,4 +36,9 @@ public class TeamRepositoryImpl implements TeamRepository {
   public Optional<Team> findByApiFootballTeamId(Long apiFootballTeamId) {
     return teamJpaRepository.findByApiFootballTeamId(apiFootballTeamId);
   }
+
+  @Override
+  public List<Team> findAll() {
+    return teamJpaRepository.findAll();
+  }
 }

@@ -10,4 +10,5 @@ public interface TeamRepository {
   List<Team> saveAll(Collection<Team> teams);
   List<Team> saveAllFromApiFootball(List<Team> teams);
   Optional<Team> findByApiFootballTeamId(Long apiFootballTeamId);
+  List<Team> findAll();
 }

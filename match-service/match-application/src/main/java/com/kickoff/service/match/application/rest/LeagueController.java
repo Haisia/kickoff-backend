@@ -40,6 +40,6 @@ public class LeagueController {
 
   @PostMapping("/rank/main/list")
   public ResponseEntity<ResponseContainer<LeagueTeamsResponse>> leagueRankMainList() {
-    return ResponseEntity.ok(leagueQueryService.leagueRankMainList());
+    return ResponseEntity.ok(leagueQueryService.getLeagueTeams());
   }
 }

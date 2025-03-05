@@ -33,6 +33,8 @@ public class Member extends AggregateRoot {
   @Embedded
   private Point point;
 
+  private UUID favoriteTeamId;
+
   @ElementCollection
   @CollectionTable(name = "member_attendance_record", joinColumns = @JoinColumn(name = "member_id"))
   private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
@@ -70,7 +72,7 @@ public class Member extends AggregateRoot {
   }
 
   @Builder
-  public Member(MemberId id, Email email, Password password, String nickname, Point point) {
+  public Member(MemberId id, Email email, Password password, String nickname, Point point, UUID favoriteTeamId) {
     if (id == null) id = MemberId.generate();
     this.id = id;
     this.email = email;
@@ -78,6 +80,7 @@ public class Member extends AggregateRoot {
     this.nickname = nickname;
     if (point == null) point = Point.of(BigDecimal.ZERO);
     this.point = point;
+    this.favoriteTeamId = favoriteTeamId;
   }
 
   private void validateEmail(List<String> errors) {
